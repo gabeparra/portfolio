@@ -1,13 +1,82 @@
 import './Portfolio.css'
+import { useState, useEffect } from 'react'
 
-function Portfolio() {
+function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
+  const [repos, setRepos] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [showAll, setShowAll] = useState(false)
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('https://api.github.com/users/gabeparra/repos?sort=updated&per_page=12')
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch repositories')
+        }
+        
+        const data = await response.json()
+        const filteredRepos = data.filter(repo => !repo.fork || repo.name === 'portfolio')
+        setRepos(filteredRepos)
+        setError(null)
+      } catch (err) {
+        setError(err.message)
+        console.error('Error fetching repos:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchRepos()
+  }, [])
+
+  const handleGClick = () => {
+    if (onEasterEggClick) {
+      onEasterEggClick('G')
+    }
+  }
+
+  const handleCClick = () => {
+    if (onEasterEggClick) {
+      onEasterEggClick('C')
+    }
+  }
+
+  const handleAboutClick = (e) => {
+    e.preventDefault()
+    if (onNavigateToAbout) {
+      onNavigateToAbout()
+    }
+  }
+
+  const getLanguageColor = (language) => {
+    const colors = {
+      'JavaScript': '#f7df1e',
+      'TypeScript': '#3178c6',
+      'Python': '#3776ab',
+      'Java': '#ed8b00',
+      'PHP': '#777bb4',
+      'C#': '#239120',
+      'HTML': '#e34c26'
+    }
+    return colors[language] || '#60a5fa'
+  }
+
+  const displayedRepos = showAll ? repos : repos.slice(0, 3)
+  const hasMore = repos.length > 3
+
   return (
     <div className="portfolio">
       <header className="header">
         <nav className="nav">
-          <div className="nav-brand">Gabriel Parra</div>
+          <div className="nav-brand">
+            <span className="easter-egg-letter" onClick={handleGClick}>G</span>
+            abriel Parra
+          </div>
           <ul className="nav-links">
-            <li><a href="#about">About</a></li>
+            <li><a href="#about" onClick={handleAboutClick}>About</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#contact">Contact</a></li>
@@ -18,9 +87,10 @@ function Portfolio() {
       <main>
         <section className="hero">
           <div className="hero-content">
-            <h1 className="hero-title">
+            <h1 className="hero-title hero-title-with-easter-egg">
               Computer Scientist &<br />
               Software Developer
+              <span className="easter-egg-overlay-c" onClick={handleCClick}></span>
             </h1>
             <p className="hero-subtitle">
               Crafting elegant solutions through code and innovation
@@ -31,25 +101,6 @@ function Portfolio() {
             </div>
           </div>
           <div className="hero-accent"></div>
-        </section>
-
-        <section id="about" className="section">
-          <div className="container">
-            <h2 className="section-title">About Me</h2>
-            <div className="about-content">
-              <p className="about-text">
-                I'm a computer scientist passionate about solving complex problems through 
-                innovative software solutions. With expertise in software development, 
-                algorithms, and system design, I thrive on building applications that make 
-                a meaningful impact.
-              </p>
-              <p className="about-text">
-                My journey in technology has been driven by curiosity and a constant desire 
-                to learn. I enjoy working on challenging projects that push the boundaries 
-                of what's possible with code.
-              </p>
-            </div>
-          </div>
         </section>
 
         <section id="skills" className="section section-dark">
@@ -93,64 +144,82 @@ function Portfolio() {
         <section id="projects" className="section">
           <div className="container">
             <h2 className="section-title">Projects</h2>
-            <div className="projects-grid">
-              <div className="project-card">
-                <div className="project-header">
-                  <h3>Project Name</h3>
-                  <div className="project-links">
-                    <a href="#" className="project-link">GitHub</a>
-                    <a href="#" className="project-link">Live</a>
-                  </div>
-                </div>
-                <p className="project-description">
-                  Description of your project. Explain what it does, technologies used, 
-                  and what makes it special.
-                </p>
-                <div className="project-tags">
-                  <span className="tag">React</span>
-                  <span className="tag">Node.js</span>
-                  <span className="tag">API</span>
-                </div>
+            {loading && (
+              <div className="loading-state">
+                <p>Loading projects...</p>
               </div>
-
-              <div className="project-card">
-                <div className="project-header">
-                  <h3>Project Name</h3>
-                  <div className="project-links">
-                    <a href="#" className="project-link">GitHub</a>
-                    <a href="#" className="project-link">Live</a>
-                  </div>
-                </div>
-                <p className="project-description">
-                  Description of your project. Explain what it does, technologies used, 
-                  and what makes it special.
-                </p>
-                <div className="project-tags">
-                  <span className="tag">Python</span>
-                  <span className="tag">Machine Learning</span>
-                  <span className="tag">Data</span>
-                </div>
+            )}
+            {error && (
+              <div className="error-state">
+                <p>Error loading projects: {error}</p>
               </div>
-
-              <div className="project-card">
-                <div className="project-header">
-                  <h3>Project Name</h3>
-                  <div className="project-links">
-                    <a href="#" className="project-link">GitHub</a>
-                    <a href="#" className="project-link">Live</a>
+            )}
+            {!loading && !error && (
+              <>
+                <div className="projects-grid">
+                  {displayedRepos.length > 0 ? (
+                    displayedRepos.map((repo) => (
+                      <div key={repo.id} className="project-card">
+                        <div className="project-header">
+                          <h3>{repo.name}</h3>
+                          <div className="project-links">
+                            <a 
+                              href={repo.html_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="project-link"
+                            >
+                              GitHub
+                            </a>
+                            {repo.homepage && (
+                              <a 
+                                href={repo.homepage} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="project-link"
+                              >
+                                Live
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                        <p className="project-description">
+                          {repo.description || 'No description available.'}
+                        </p>
+                        <div className="project-tags">
+                          {repo.language && (
+                            <span 
+                              className="tag"
+                              style={{ 
+                                borderColor: getLanguageColor(repo.language),
+                                color: getLanguageColor(repo.language)
+                              }}
+                            >
+                              {repo.language}
+                            </span>
+                          )}
+                          {repo.topics && repo.topics.slice(0, 3).map((topic) => (
+                            <span key={topic} className="tag">{topic}</span>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="loading-state">No repositories found.</p>
+                  )}
+                </div>
+                {hasMore && (
+                  <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                    <button 
+                      onClick={() => setShowAll(!showAll)}
+                      className="btn btn-secondary"
+                    >
+                      {showAll ? 'Show Less' : 'View More'}
+                    </button>
                   </div>
-                </div>
-                <p className="project-description">
-                  Description of your project. Explain what it does, technologies used, 
-                  and what makes it special.
-                </p>
-                <div className="project-tags">
-                  <span className="tag">Java</span>
-                  <span className="tag">Spring</span>
-                  <span className="tag">Backend</span>
-                </div>
-              </div>
-            </div>
+                )}
+              </>
+            )}
           </div>
         </section>
 
@@ -163,10 +232,10 @@ function Portfolio() {
                 Feel free to reach out!
               </p>
               <div className="contact-links">
-                <a href="mailto:your.email@example.com" className="contact-link">
+                <a href="mailto:gabpar49@gmail.com" className="contact-link">
                   Email
                 </a>
-                <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="contact-link">
+                <a href="https://github.com/gabeparra" target="_blank" rel="noopener noreferrer" className="contact-link">
                   GitHub
                 </a>
                 <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="contact-link">

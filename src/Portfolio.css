@@ -369,6 +369,47 @@
   color: #64748b;
 }
 
+.easter-egg-letter {
+  cursor: text;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: auto;
+  position: relative;
+  display: inline;
+  text-decoration: inherit;
+}
+
+.hero-title-with-easter-egg {
+  position: relative;
+}
+
+.hero-title .easter-egg-overlay-c {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0.6em;
+  height: 1em;
+  cursor: text;
+  z-index: 10;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.nav-brand .easter-egg-letter {
+  color: #60a5fa;
+}
+
+.easter-egg-letter:hover {
+  cursor: text;
+  text-decoration: inherit;
+}
+
+.easter-egg-letter:active {
+  cursor: text;
+}
+
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2.5rem;
@@ -392,3 +433,13 @@
   }
 }
 
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 3rem;
+  color: #cbd5e1;
+}
+
+.error-state {
+  color: #ef4444;
+}

@@ -5,19 +5,37 @@ function RetroPage() {
   const [gif1Position, setGif1Position] = useState({ x: 50, y: 50 })
   const [gif2Position, setGif2Position] = useState({ x: 150, y: 150 })
   const [gif3Position, setGif3Position] = useState({ x: 250, y: 250 })
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const gif1Ref = useRef(null)
   const gif2Ref = useRef(null)
   const gif3Ref = useRef(null)
   const animationFrameRef = useRef(null)
   const positionsRef = useRef({ gif1: { x: 50, y: 50 }, gif2: { x: 150, y: 150 }, gif3: { x: 250, y: 250 } })
+  const velocitiesRef = useRef({ 
+    gif1: { vx: 0, vy: 0 }, 
+    gif2: { vx: 0, vy: 0 }, 
+    gif3: { vx: 0, vy: 0 } 
+  })
+  const initializedRef = useRef(false)
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+    if (!initializedRef.current) {
+      const speed = 3
+      velocitiesRef.current = {
+        gif1: { 
+          vx: (Math.random() > 0.5 ? 1 : -1) * (speed + Math.random() * 1), 
+          vy: (Math.random() > 0.5 ? 1 : -1) * (speed + Math.random() * 1) 
+        },
+        gif2: { 
+          vx: (Math.random() > 0.5 ? 1 : -1) * (speed + Math.random() * 1), 
+          vy: (Math.random() > 0.5 ? 1 : -1) * (speed + Math.random() * 1) 
+        },
+        gif3: { 
+          vx: (Math.random() > 0.5 ? 1 : -1) * (speed + Math.random() * 1), 
+          vy: (Math.random() > 0.5 ? 1 : -1) * (speed + Math.random() * 1) 
+        }
+      }
+      initializedRef.current = true
     }
-
-    window.addEventListener('mousemove', handleMouseMove)
 
     const getGifInfo = (ref, currentPos) => {
       if (!ref.current) return null
@@ -39,54 +57,61 @@ function RetroPage() {
       return distance < minDistance
     }
 
-    const calculateNewPosition = (currentPos, gifRef, otherGifs) => {
-      if (!gifRef.current) return currentPos
-
-      const gifRect = gifRef.current.getBoundingClientRect()
-      
-      const defaultSize = 150
-      const gifWidth = gifRect.width > 0 ? gifRect.width : defaultSize
-      const gifHeight = gifRect.height > 0 ? gifRect.height : defaultSize
-
-      const gifCenterX = currentPos.x + gifWidth / 2
-      const gifCenterY = currentPos.y + gifHeight / 2
-
-      const screenCenterX = window.innerWidth / 2
-      const screenCenterY = window.innerHeight / 2
-
-      const distanceX = mousePosition.x - gifCenterX
-      const distanceY = mousePosition.y - gifCenterY
-      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
-
-      const avoidDistance = 150
-      const centerSeekDistance = 300
-      const collisionDistance = (gifWidth + gifHeight) / 2 + 20
-      let newX = currentPos.x
-      let newY = currentPos.y
-      let deltaX = 0
-      let deltaY = 0
-
-      if (distance < avoidDistance && distance > 0) {
-        const angle = Math.atan2(distanceY, distanceX)
-        const moveSpeed = (avoidDistance - distance) / 5
-        deltaX = -Math.cos(angle) * moveSpeed
-        deltaY = -Math.sin(angle) * moveSpeed
-      } 
-      else if (distance > centerSeekDistance || (mousePosition.x === 0 && mousePosition.y === 0)) {
-        const centerDistX = screenCenterX - gifWidth / 2 - currentPos.x
-        const centerDistY = screenCenterY - gifHeight / 2 - currentPos.y
-        const centerDistance = Math.sqrt(centerDistX * centerDistX + centerDistY * centerDistY)
-        
-        if (centerDistance > 10) {
-          const centerAngle = Math.atan2(centerDistY, centerDistX)
-          const centerSpeed = Math.min(centerDistance / 30, 3)
-          deltaX = Math.cos(centerAngle) * centerSpeed
-          deltaY = Math.sin(centerAngle) * centerSpeed
-        }
+    const calculateNewPosition = (currentPos, gifRef, currentVelocity, otherGifs) => {
+      if (!gifRef.current) {
+        return { newPos: currentPos, velocity: currentVelocity }
       }
 
-      newX = currentPos.x + deltaX
-      newY = currentPos.y + deltaY
+      const defaultSize = 150
+      let gifWidth = defaultSize
+      let gifHeight = defaultSize
+
+      try {
+        const gifRect = gifRef.current.getBoundingClientRect()
+        if (gifRect && gifRect.width > 0 && gifRect.height > 0) {
+          gifWidth = gifRect.width
+          gifHeight = gifRect.height
+        } else if (gifRef.current.naturalWidth > 0 && gifRef.current.naturalHeight > 0) {
+          gifWidth = gifRef.current.naturalWidth
+          gifHeight = gifRef.current.naturalHeight
+        }
+      } catch (e) {
+        console.warn('Error getting image dimensions:', e)
+      }
+
+      let vx = currentVelocity.vx
+      let vy = currentVelocity.vy
+      const speed = Math.sqrt(vx * vx + vy * vy)
+      const minSpeed = 10
+      
+      if (speed < minSpeed) {
+        const angle = Math.random() * Math.PI * 2
+        vx = Math.cos(angle) * minSpeed
+        vy = Math.sin(angle) * minSpeed
+      }
+
+      let newX = currentPos.x + vx
+      let newY = currentPos.y + vy
+
+      const padding = Math.max(10, window.innerWidth * 0.02)
+      const maxX = window.innerWidth - gifWidth - padding
+      const maxY = window.innerHeight - gifHeight - padding
+
+      if (newX <= padding) {
+        newX = padding
+        vx = -vx
+      } else if (newX >= maxX) {
+        newX = maxX
+        vx = -vx
+      }
+
+      if (newY <= padding) {
+        newY = padding
+        vy = -vy
+      } else if (newY >= maxY) {
+        newY = maxY
+        vy = -vy
+      }
 
       const newGifInfo = {
         centerX: newX + gifWidth / 2,
@@ -96,6 +121,8 @@ function RetroPage() {
         left: newX,
         top: newY
       }
+
+      const collisionDistance = (gifWidth + gifHeight) / 2 + 10
 
       for (const otherGif of otherGifs) {
         if (otherGif.ref === gifRef) continue
@@ -108,38 +135,38 @@ function RetroPage() {
             newGifInfo.centerY - otherInfo.centerY,
             newGifInfo.centerX - otherInfo.centerX
           )
-          const avoidSpeed = (collisionDistance - Math.sqrt(
-            Math.pow(newGifInfo.centerX - otherInfo.centerX, 2) +
-            Math.pow(newGifInfo.centerY - otherInfo.centerY, 2)
-          )) / 3
           
-          newX += Math.cos(collisionAngle) * avoidSpeed
-          newY += Math.sin(collisionAngle) * avoidSpeed
+          const newAngle = collisionAngle
           
-          newGifInfo.centerX = newX + gifWidth / 2
-          newGifInfo.centerY = newY + gifHeight / 2
-          newGifInfo.left = newX
-          newGifInfo.top = newY
+          const speed = Math.sqrt(vx * vx + vy * vy)
+          vx = Math.cos(newAngle) * speed
+          vy = Math.sin(newAngle) * speed
+          
+          newX = currentPos.x + vx
+          newY = currentPos.y + vy
+          
+          if (newX < padding) {
+            newX = padding
+            vx = -vx
+          } else if (newX > maxX) {
+            newX = maxX
+            vx = -vx
+          }
+
+          if (newY < padding) {
+            newY = padding
+            vy = -vy
+          } else if (newY > maxY) {
+            newY = maxY
+            vy = -vy
+          }
         }
       }
-
-      const padding = Math.max(10, window.innerWidth * 0.02)
-      const maxX = window.innerWidth - gifWidth - padding
-      const maxY = window.innerHeight - gifHeight - padding
-
-      if (newX < padding) {
-        newX = padding
-      } else if (newX > maxX) {
-        newX = maxX
+      
+      return { 
+        newPos: { x: newX, y: newY }, 
+        velocity: { vx, vy } 
       }
-
-      if (newY < padding) {
-        newY = padding
-      } else if (newY > maxY) {
-        newY = maxY
-      }
-
-      return { x: newX, y: newY }
     }
 
     const moveGifs = () => {
@@ -160,15 +187,28 @@ function RetroPage() {
         { ref: gif2Ref, position: currentPos2 }
       ]
 
-      const newPos1 = calculateNewPosition(currentPos1, gif1Ref, otherGifs1)
-      const newPos2 = calculateNewPosition(currentPos2, gif2Ref, otherGifs2)
-      const newPos3 = calculateNewPosition(currentPos3, gif3Ref, otherGifs3)
+      const v1 = velocitiesRef.current.gif1
+      const v2 = velocitiesRef.current.gif2
+      const v3 = velocitiesRef.current.gif3
 
-      positionsRef.current = { gif1: newPos1, gif2: newPos2, gif3: newPos3 }
+      const result1 = calculateNewPosition(currentPos1, gif1Ref, v1, otherGifs1)
+      const result2 = calculateNewPosition(currentPos2, gif2Ref, v2, otherGifs2)
+      const result3 = calculateNewPosition(currentPos3, gif3Ref, v3, otherGifs3)
 
-      setGif1Position(newPos1)
-      setGif2Position(newPos2)
-      setGif3Position(newPos3)
+      positionsRef.current = { 
+        gif1: result1.newPos, 
+        gif2: result2.newPos, 
+        gif3: result3.newPos 
+      }
+      velocitiesRef.current = { 
+        gif1: result1.velocity, 
+        gif2: result2.velocity, 
+        gif3: result3.velocity 
+      }
+
+      setGif1Position(result1.newPos)
+      setGif2Position(result2.newPos)
+      setGif3Position(result3.newPos)
 
       animationFrameRef.current = requestAnimationFrame(moveGifs)
     }
@@ -176,12 +216,11 @@ function RetroPage() {
     animationFrameRef.current = requestAnimationFrame(moveGifs)
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
-  }, [mousePosition])
+  }, [])
 
   return (
     <div className="retro-page">
@@ -210,12 +249,13 @@ function RetroPage() {
         />
         <img
           ref={gif3Ref}
-          src="/OIP.webp"
+          src="/homer-simpson-homer-dance.gif"
           alt="Interactive GIF 3"
           className="interactive-gif"
           style={{
             left: `${gif3Position.x}px`,
-            top: `${gif3Position.y}px`
+            top: `${gif3Position.y}px`,
+            zIndex: 101
           }}
         />
         
