@@ -1,34 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="portfolio-page">
+      <h1>Gabriel's Web Page</h1>
+      
+      <div className="animated-elements">
+        {/* Flying Toasters */}
+        <div className="toaster toaster-1">🍞</div>
+        <div className="toaster toaster-2">🍞</div>
+        <div className="toaster toaster-3">🍞</div>
+        
+        {/* Alarm Clocks */}
+        <div className="clock clock-1">⏰</div>
+        <div className="clock clock-2">⏰</div>
+        <div className="clock clock-3">⏰</div>
+        <div className="clock clock-4">⏰</div>
+        
+        {/* Worms */}
+        <div className="worm worm-1">🐛</div>
+        <div className="worm worm-2">🐛</div>
+        <div className="worm worm-3">🐛</div>
+        <div className="worm worm-4">🐛</div>
+        
+        {/* Lips */}
+        <div className="lips lips-1">👄</div>
+        <div className="lips lips-2">👄</div>
+        
+        {/* Bells */}
+        <div className="bell bell-1">🔔</div>
+        <div className="bell bell-2">🔔</div>
+        
+        {/* Character */}
+        <div className="character">👤</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      
+      <div className="content">
+        <p>Welcome to my portfolio!</p>
+        <p>Check out my projects below:</p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
