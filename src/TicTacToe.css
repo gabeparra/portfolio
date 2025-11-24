@@ -1,0 +1,161 @@
+.tic-tac-toe-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: calc(100vh - 100px);
+  background-color: #87CEEB;
+}
+
+.tic-tac-toe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 3px solid #000;
+  border-radius: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.score-display {
+  display: flex;
+  gap: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+.x-score {
+  color: #3498db;
+}
+
+.o-score {
+  color: #e74c3c;
+}
+
+.game-status {
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+  flex: 1;
+  min-width: 100%;
+}
+
+.tic-tac-toe-board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 5px;
+  background-color: #000;
+  padding: 5px;
+  border: 4px solid #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.cell {
+  background-color: #fff;
+  border: 3px solid #000;
+  border-radius: 5px;
+  font-size: 48px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+}
+
+.cell:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.cell:disabled {
+  cursor: not-allowed;
+}
+
+.cell-x {
+  color: #3498db;
+}
+
+.cell-o {
+  color: #e74c3c;
+}
+
+.cell.winning {
+  background-color: #f1c40f;
+  animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+.tic-tac-toe-controls {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.reset-button,
+.reset-scores-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #3498db;
+  color: #fff;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px;
+}
+
+.reset-scores-button {
+  background-color: #e74c3c;
+}
+
+.reset-button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.reset-scores-button:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
+.reset-button:active,
+.reset-scores-button:active {
+  transform: scale(0.95);
+}
+
+.instructions {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 3px solid #000;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 400px;
+  margin-top: 15px;
+}
+
+.instructions p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #000;
+  font-weight: 500;
+}
+

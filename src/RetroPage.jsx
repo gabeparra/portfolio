@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import './RetroPage.css'
+import SnakeGame from './SnakeGame'
+import PongGame from './PongGame'
+import TicTacToe from './TicTacToe'
 
 function RetroPage() {
+  const [activeTab, setActiveTab] = useState('retro')
   const [gif1Position, setGif1Position] = useState({ x: 50, y: 50 })
   const [gif2Position, setGif2Position] = useState({ x: 150, y: 150 })
   const [gif3Position, setGif3Position] = useState({ x: 250, y: 250 })
@@ -224,67 +228,111 @@ function RetroPage() {
 
   return (
     <div className="retro-page">
-      <h1>Gabriel's Web Page</h1>
-      
-      <div className="animated-elements">
-        <img
-          ref={gif1Ref}
-          src="/simpsons-dance.gif"
-          alt="Interactive GIF 1"
-          className="interactive-gif"
-          style={{
-            left: `${gif1Position.x}px`,
-            top: `${gif1Position.y}px`
-          }}
-        />
-        <img
-          ref={gif2Ref}
-          src="/homer-simpson-dancing.gif"
-          alt="Interactive GIF 2"
-          className="interactive-gif"
-          style={{
-            left: `${gif2Position.x}px`,
-            top: `${gif2Position.y}px`
-          }}
-        />
-        <img
-          ref={gif3Ref}
-          src="/homer-simpson-homer-dance.gif"
-          alt="Interactive GIF 3"
-          className="interactive-gif"
-          style={{
-            left: `${gif3Position.x}px`,
-            top: `${gif3Position.y}px`,
-            zIndex: 101
-          }}
-        />
-        
-        <div className="toaster toaster-1">🍞</div>
-        <div className="toaster toaster-2">🍞</div>
-        <div className="toaster toaster-3">🍞</div>
-        
-        <div className="clock clock-1">⏰</div>
-        <div className="clock clock-2">⏰</div>
-        <div className="clock clock-3">⏰</div>
-        <div className="clock clock-4">⏰</div>
-        
-        <div className="worm worm-1">🐛</div>
-        <div className="worm worm-2">🐛</div>
-        <div className="worm worm-3">🐛</div>
-        <div className="worm worm-4">🐛</div>
-        
-        <div className="lips lips-1">👄</div>
-        <div className="lips lips-2">👄</div>
-        
-        <div className="bell bell-1">🔔</div>
-        <div className="bell bell-2">🔔</div>
-        
-        <div className="character">👤</div>
+      <div className="header-with-tabs">
+        <h1>Gabriel's Web Page</h1>
+        <div className="tabs">
+          <button 
+            className={`tab-button ${activeTab === 'retro' ? 'active' : ''}`}
+            onClick={() => setActiveTab('retro')}
+          >
+            Retro
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'snake' ? 'active' : ''}`}
+            onClick={() => setActiveTab('snake')}
+          >
+            Snake
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'pong' ? 'active' : ''}`}
+            onClick={() => setActiveTab('pong')}
+          >
+            Pong
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'tictactoe' ? 'active' : ''}`}
+            onClick={() => setActiveTab('tictactoe')}
+          >
+            Tic Tac Toe
+          </button>
+        </div>
       </div>
-      
-      <div className="content">
-        <p>Welcome to my portfolio!</p>
-      </div>
+
+      {activeTab === 'retro' && (
+        <>
+          <div className="animated-elements">
+            <img
+              ref={gif1Ref}
+              src="/simpsons-dance.gif"
+              alt="Interactive GIF 1"
+              className="interactive-gif"
+              style={{
+                left: `${gif1Position.x}px`,
+                top: `${gif1Position.y}px`
+              }}
+            />
+            <img
+              ref={gif2Ref}
+              src="/homer-simpson-dancing.gif"
+              alt="Interactive GIF 2"
+              className="interactive-gif"
+              style={{
+                left: `${gif2Position.x}px`,
+                top: `${gif2Position.y}px`
+              }}
+            />
+            <img
+              ref={gif3Ref}
+              src="/homer-simpson-homer-dance.gif"
+              alt="Interactive GIF 3"
+              className="interactive-gif"
+              style={{
+                left: `${gif3Position.x}px`,
+                top: `${gif3Position.y}px`,
+                zIndex: 101
+              }}
+            />
+            
+            <div className="toaster toaster-1">🍞</div>
+            <div className="toaster toaster-2">🍞</div>
+            <div className="toaster toaster-3">🍞</div>
+            
+            <div className="clock clock-1">⏰</div>
+            <div className="clock clock-2">⏰</div>
+            <div className="clock clock-3">⏰</div>
+            <div className="clock clock-4">⏰</div>
+            
+            <div className="worm worm-1">🐛</div>
+            <div className="worm worm-2">🐛</div>
+            <div className="worm worm-3">🐛</div>
+            <div className="worm worm-4">🐛</div>
+            
+            <div className="lips lips-1">👄</div>
+            <div className="lips lips-2">👄</div>
+            
+            <div className="bell bell-1">🔔</div>
+            <div className="bell bell-2">🔔</div>
+            
+            <div className="character">👤</div>
+          </div>
+          
+          <div className="content">
+            <p>Welcome to my portfolio!</p>
+          </div>
+        </>
+      )}
+
+      {activeTab === 'snake' && (
+        <SnakeGame />
+      )}
+
+      {activeTab === 'pong' && (
+        <PongGame />
+      )}
+
+      {activeTab === 'tictactoe' && (
+        <TicTacToe />
+      )}
     </div>
   )
 }

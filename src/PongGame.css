@@ -1,0 +1,133 @@
+.pong-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: calc(100vh - 100px);
+  background-color: #87CEEB;
+}
+
+.pong-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 3px solid #000;
+  border-radius: 10px;
+}
+
+.score-display {
+  display: flex;
+  gap: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+.player-score,
+.ai-score {
+  font-size: 18px;
+}
+
+.paused,
+.game-over {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0000;
+  text-transform: uppercase;
+}
+
+.pong-game-board {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  background-color: #000;
+  border: 4px solid #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  outline: none;
+}
+
+.paddle {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+.player-paddle {
+  background-color: #3498db;
+}
+
+.ai-paddle {
+  background-color: #e74c3c;
+}
+
+.ball {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.center-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff 0,
+    #fff 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  transform: translateX(-50%);
+}
+
+.pong-controls {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.reset-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #3498db;
+  color: #fff;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.reset-button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.reset-button:active {
+  transform: scale(0.95);
+}
+
+.instructions {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 3px solid #000;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 600px;
+}
+
+.instructions p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #000;
+  font-weight: 500;
+}
+
