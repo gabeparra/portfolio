@@ -19,32 +19,33 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 15px;
-  margin: clamp(10px, 2vh, 20px) clamp(10px, 2vw, 20px);
+  gap: 8px;
+  padding: clamp(8px, 1vh, 12px) clamp(10px, 2vw, 20px);
   z-index: 1000;
   position: relative;
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
   .header-with-tabs {
     flex-direction: row;
-    gap: 20px;
+    gap: 12px;
   }
 }
 
 .retro-page h1 {
-  font-size: clamp(24px, 5vw, 48px);
+  font-size: clamp(20px, 3.5vw, 32px);
   color: #000;
   margin: 0;
-  text-shadow: 3px 3px 0px #fff;
+  text-shadow: 2px 2px 0px #fff;
   font-weight: bold;
-  padding: clamp(5px, 1vh, 10px) clamp(10px, 2vw, 20px);
-  line-height: 1.2;
+  padding: clamp(3px, 0.5vh, 6px) clamp(8px, 1.5vw, 16px);
+  line-height: 1.1;
 }
 
 .tabs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   z-index: 1000;
   position: relative;
   flex-wrap: wrap;
@@ -52,17 +53,17 @@
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 5px;
+  padding: 3px;
 }
 
 .tab-button {
-  padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 24px);
-  font-size: clamp(14px, 3vw, 18px);
+  padding: clamp(6px, 1vh, 8px) clamp(10px, 2vw, 16px);
+  font-size: clamp(11px, 2vw, 14px);
   font-weight: bold;
   background-color: rgba(255, 255, 255, 0.9);
   color: #000;
-  border: 3px solid #000;
-  border-radius: 10px;
+  border: 2px solid #000;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
