@@ -11,7 +11,7 @@
 
 .pong-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: min(90vw, 600px);
@@ -20,16 +20,17 @@
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
-  flex-wrap: wrap;
   gap: 10px;
 }
 
 .score-display {
   display: flex;
+  justify-content: center;
   gap: clamp(15px, 4vw, 30px);
   font-size: clamp(16px, 3.5vw, 20px);
   font-weight: bold;
   color: #000;
+  width: 100%;
 }
 
 .player-score,
@@ -43,6 +44,17 @@
   font-weight: bold;
   color: #ff0000;
   text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+}
+
+.ai-vs-ai-mode {
+  font-size: clamp(12px, 2.5vw, 16px);
+  font-weight: bold;
+  color: #27ae60;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
 }
 
 .pong-game-board {
@@ -54,27 +66,38 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   outline: none;
   margin: 0 auto;
+  box-sizing: content-box !important;
+  padding: 0;
+  overflow: hidden;
 }
 
-.paddle {
+.pong-game-board .paddle {
   position: absolute;
   background-color: #fff;
   border-radius: 2px;
+  border: none !important;
+  box-sizing: content-box !important;
+  margin: 0;
+  padding: 0;
 }
 
-.player-paddle {
+.pong-game-board .player-paddle {
   background-color: #3498db;
 }
 
-.ai-paddle {
+.pong-game-board .ai-paddle {
   background-color: #e74c3c;
 }
 
-.ball {
+.pong-game-board .ball {
   position: absolute;
   background-color: #fff;
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  border: none !important;
+  box-sizing: content-box !important;
+  margin: 0;
+  padding: 0;
 }
 
 .center-line {
@@ -96,6 +119,43 @@
 .pong-controls {
   margin-top: 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: min(90vw, 600px);
+}
+
+.ai-vs-ai-button {
+  padding: clamp(12px, 2.5vw, 14px) clamp(20px, 4vw, 24px);
+  font-size: clamp(16px, 3.5vw, 18px);
+  font-weight: bold;
+  background-color: #27ae60;
+  color: #fff;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  touch-action: manipulation;
+  min-height: 44px;
+}
+
+.ai-vs-ai-button:hover {
+  background-color: #229954;
+  transform: scale(1.05);
+}
+
+.ai-vs-ai-button:active {
+  transform: scale(0.95);
+}
+
+.ai-vs-ai-button.active {
+  background-color: #e74c3c;
+}
+
+.ai-vs-ai-button.active:hover {
+  background-color: #c0392b;
 }
 
 .reset-button {
@@ -128,6 +188,8 @@
   border-radius: 10px;
   padding: clamp(12px, 2vw, 15px);
   max-width: min(90vw, 600px);
+  width: 100%;
+  text-align: center;
 }
 
 .instructions p {
@@ -137,10 +199,6 @@
   font-weight: 500;
 }
 
-.pong-controls {
-  width: 100%;
-  max-width: min(90vw, 600px);
-}
 
 .mobile-controls {
   display: flex;
@@ -187,6 +245,49 @@
 @media (min-width: 768px) {
   .mobile-instruction {
     display: none;
+  }
+
+  .pong-game-container {
+    padding: 20px;
+  }
+
+  .pong-header {
+    max-width: 600px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .score-display {
+    gap: 30px;
+    font-size: 24px;
+  }
+
+  .player-score,
+  .ai-score {
+    font-size: 20px;
+  }
+
+  .paused,
+  .game-over {
+    font-size: 20px;
+  }
+
+  .reset-button {
+    padding: 14px 28px;
+    font-size: 18px;
+  }
+
+  .instructions {
+    max-width: 600px;
+    padding: 20px;
+  }
+
+  .instructions p {
+    font-size: 16px;
+  }
+
+  .pong-controls {
+    max-width: 600px;
   }
 }
 

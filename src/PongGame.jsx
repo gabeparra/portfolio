@@ -8,6 +8,8 @@ const GAME_HEIGHT = 400
 const GAME_WIDTH = 600
 const PADDLE_SPEED = 5
 const INITIAL_BALL_SPEED = 4
+const MAX_BALL_SPEED = 12
+const MIN_BALL_SPEED = 2
 
 const getGameDimensions = () => {
   const maxWidth = Math.min(window.innerWidth * 0.9, 600)
@@ -31,6 +33,7 @@ function PongGame() {
   const [aiScore, setAiScore] = useState(0)
   const [gameOver, setGameOver] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
+  const [aiVsAi, setAiVsAi] = useState(false)
   const keysRef = useRef({ w: false, s: false })
   const gameLoopRef = useRef(null)
   const ballRef = useRef({ x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2 })
@@ -40,6 +43,13 @@ function PongGame() {
 
   const handleKeyDown = useCallback((e) => {
     const key = e.key.toLowerCase()
+    if (aiVsAi) {
+      if (key === ' ') {
+        setIsPaused(prev => !prev)
+        e.preventDefault()
+      }
+      return
+    }
     if (key === 'w' || key === 'arrowup') {
       keysRef.current.w = true
       e.preventDefault()
@@ -50,7 +60,7 @@ function PongGame() {
       setIsPaused(prev => !prev)
       e.preventDefault()
     }
-  }, [])
+  }, [aiVsAi])
 
   const handleKeyUp = useCallback((e) => {
     const key = e.key.toLowerCase()
@@ -94,15 +104,25 @@ function PongGame() {
     if (isPaused || gameOver) return
 
     let newPlayerY = playerPaddleRef.current
-    if (keysRef.current.w && newPlayerY > 0) {
-      newPlayerY = Math.max(0, newPlayerY - PADDLE_SPEED)
+    if (aiVsAi) {
+      const playerCenter = playerPaddleRef.current + PADDLE_HEIGHT / 2
+      if (ballRef.current.y < playerCenter - 10) {
+        newPlayerY = playerPaddleRef.current - PADDLE_SPEED * 0.8
+      } else if (ballRef.current.y > playerCenter + 10) {
+        newPlayerY = playerPaddleRef.current + PADDLE_SPEED * 0.8
+      }
+    } else {
+      if (keysRef.current.w) {
+        newPlayerY = newPlayerY - PADDLE_SPEED
+      }
+      if (keysRef.current.s) {
+        newPlayerY = newPlayerY + PADDLE_SPEED
+      }
     }
-    if (keysRef.current.s && newPlayerY < GAME_HEIGHT - PADDLE_HEIGHT) {
-      newPlayerY = Math.min(GAME_HEIGHT - PADDLE_HEIGHT, newPlayerY + PADDLE_SPEED)
-    }
-    if (!keysRef.current.w && !keysRef.current.s) {
-      keysRef.current.w = false
-      keysRef.current.s = false
+    const maxPaddleY = GAME_HEIGHT - PADDLE_HEIGHT
+    newPlayerY = Math.max(0, Math.min(maxPaddleY, Math.round(newPlayerY)))
+    if (newPlayerY + PADDLE_HEIGHT > GAME_HEIGHT) {
+      newPlayerY = maxPaddleY
     }
     playerPaddleRef.current = newPlayerY
     setPlayerPaddle(newPlayerY)
@@ -110,9 +130,13 @@ function PongGame() {
     const aiCenter = aiPaddleRef.current + PADDLE_HEIGHT / 2
     let newAiY = aiPaddleRef.current
     if (ballRef.current.y < aiCenter - 10) {
-      newAiY = Math.max(0, aiPaddleRef.current - PADDLE_SPEED * 0.8)
+      newAiY = aiPaddleRef.current - PADDLE_SPEED * 0.8
     } else if (ballRef.current.y > aiCenter + 10) {
-      newAiY = Math.min(GAME_HEIGHT - PADDLE_HEIGHT, aiPaddleRef.current + PADDLE_SPEED * 0.8)
+      newAiY = aiPaddleRef.current + PADDLE_SPEED * 0.8
+    }
+    newAiY = Math.max(0, Math.min(maxPaddleY, Math.round(newAiY)))
+    if (newAiY + PADDLE_HEIGHT > GAME_HEIGHT) {
+      newAiY = maxPaddleY
     }
     aiPaddleRef.current = newAiY
     setAiPaddle(newAiY)
@@ -122,22 +146,58 @@ function PongGame() {
     let newVelX = ballVelRef.current.x
     let newVelY = ballVelRef.current.y
 
-    if (newY <= 0 || newY >= GAME_HEIGHT - BALL_SIZE) {
-      newVelY = -newVelY
-      newY = Math.max(0, Math.min(GAME_HEIGHT - BALL_SIZE, newY))
+    const ballTop = newY
+    const ballBottom = newY + BALL_SIZE
+    const ballLeft = newX
+    const ballRight = newX + BALL_SIZE
+    const ballCenterY = newY + BALL_SIZE / 2
+
+    if (ballTop < 0) {
+      newVelY = Math.abs(newVelY) * 1.05
+      newY = 0
+      if (newVelY < MIN_BALL_SPEED) {
+        newVelY = MIN_BALL_SPEED
+      }
+      if (newVelY > MAX_BALL_SPEED) {
+        newVelY = MAX_BALL_SPEED
+      }
+    } else if (ballBottom > GAME_HEIGHT) {
+      newVelY = -Math.abs(newVelY) * 1.05
+      newY = GAME_HEIGHT - BALL_SIZE
+      if (Math.abs(newVelY) < MIN_BALL_SPEED) {
+        newVelY = -MIN_BALL_SPEED
+      }
+      if (Math.abs(newVelY) > MAX_BALL_SPEED) {
+        newVelY = -MAX_BALL_SPEED
+      }
     }
 
-    if (newX <= PADDLE_WIDTH && newVelX < 0) {
+    if (newVelX < 0 && ballLeft <= PADDLE_WIDTH) {
       const paddleTop = playerPaddleRef.current
       const paddleBottom = playerPaddleRef.current + PADDLE_HEIGHT
-      const ballCenterY = newY + BALL_SIZE / 2
+      const paddleLeft = 0
+      const paddleRight = PADDLE_WIDTH
       
-      if (ballCenterY >= paddleTop && ballCenterY <= paddleBottom) {
-        newVelX = Math.abs(newVelX) * 1.1
+      if (ballRight >= paddleLeft && ballLeft <= paddleRight && 
+          ballBottom >= paddleTop && ballTop <= paddleBottom) {
         const hitPos = (ballCenterY - paddleTop) / PADDLE_HEIGHT
-        newVelY = (hitPos - 0.5) * INITIAL_BALL_SPEED * 2
+        const speedMultiplier = 1.15
+        const currentSpeed = Math.abs(newVelX)
+        newVelX = currentSpeed * speedMultiplier
+        const baseSpeed = Math.max(currentSpeed, INITIAL_BALL_SPEED)
+        newVelY = (hitPos - 0.5) * baseSpeed * 2
+        
+        if (newVelX > MAX_BALL_SPEED) {
+          newVelX = MAX_BALL_SPEED
+        }
+        if (Math.abs(newVelY) > MAX_BALL_SPEED) {
+          newVelY = newVelY > 0 ? MAX_BALL_SPEED : -MAX_BALL_SPEED
+        }
+        if (Math.abs(newVelY) < MIN_BALL_SPEED) {
+          newVelY = newVelY > 0 ? MIN_BALL_SPEED : -MIN_BALL_SPEED
+        }
         newX = PADDLE_WIDTH
-      } else if (newX < 0) {
+      } else if (ballLeft < 0) {
         setAiScore(prev => {
           const newScore = prev + 1
           if (newScore >= 10) {
@@ -150,17 +210,32 @@ function PongGame() {
       }
     }
 
-    if (newX >= GAME_WIDTH - PADDLE_WIDTH - BALL_SIZE && newVelX > 0) {
+    if (newVelX > 0 && ballRight >= GAME_WIDTH - PADDLE_WIDTH) {
       const paddleTop = aiPaddleRef.current
       const paddleBottom = aiPaddleRef.current + PADDLE_HEIGHT
-      const ballCenterY = newY + BALL_SIZE / 2
+      const paddleLeft = GAME_WIDTH - PADDLE_WIDTH
+      const paddleRight = GAME_WIDTH
       
-      if (ballCenterY >= paddleTop && ballCenterY <= paddleBottom) {
-        newVelX = -Math.abs(newVelX) * 1.1
+      if (ballRight >= paddleLeft && ballLeft <= paddleRight && 
+          ballBottom >= paddleTop && ballTop <= paddleBottom) {
         const hitPos = (ballCenterY - paddleTop) / PADDLE_HEIGHT
-        newVelY = (hitPos - 0.5) * INITIAL_BALL_SPEED * 2
+        const speedMultiplier = 1.15
+        const currentSpeed = Math.abs(newVelX)
+        newVelX = -currentSpeed * speedMultiplier
+        const baseSpeed = Math.max(currentSpeed, INITIAL_BALL_SPEED)
+        newVelY = (hitPos - 0.5) * baseSpeed * 2
+        
+        if (Math.abs(newVelX) > MAX_BALL_SPEED) {
+          newVelX = -MAX_BALL_SPEED
+        }
+        if (Math.abs(newVelY) > MAX_BALL_SPEED) {
+          newVelY = newVelY > 0 ? MAX_BALL_SPEED : -MAX_BALL_SPEED
+        }
+        if (Math.abs(newVelY) < MIN_BALL_SPEED) {
+          newVelY = newVelY > 0 ? MIN_BALL_SPEED : -MIN_BALL_SPEED
+        }
         newX = GAME_WIDTH - PADDLE_WIDTH - BALL_SIZE
-      } else if (newX > GAME_WIDTH - BALL_SIZE) {
+      } else if (ballRight > GAME_WIDTH) {
         setPlayerScore(prev => {
           const newScore = prev + 1
           if (newScore >= 10) {
@@ -173,11 +248,18 @@ function PongGame() {
       }
     }
 
+    if (Math.abs(newVelX) < MIN_BALL_SPEED) {
+      newVelX = newVelX > 0 ? MIN_BALL_SPEED : -MIN_BALL_SPEED
+    }
+    if (Math.abs(newVelX) > MAX_BALL_SPEED) {
+      newVelX = newVelX > 0 ? MAX_BALL_SPEED : -MAX_BALL_SPEED
+    }
+
     ballRef.current = { x: newX, y: newY }
     ballVelRef.current = { x: newVelX, y: newVelY }
     setBall({ x: newX, y: newY })
     setBallVelocity({ x: newVelX, y: newVelY })
-  }, [isPaused, gameOver, resetBall])
+  }, [isPaused, gameOver, resetBall, aiVsAi])
 
   useEffect(() => {
     if (!gameOver && !isPaused) {
@@ -209,8 +291,16 @@ function PongGame() {
     setIsPaused(false)
   }
 
+  const toggleAiVsAi = () => {
+    setAiVsAi(prev => !prev)
+    if (!aiVsAi) {
+      setIsPaused(false)
+      setGameOver(false)
+    }
+  }
+
   const handlePaddleMove = (direction) => {
-    if (gameOver || isPaused) return
+    if (gameOver || isPaused || aiVsAi) return
     keysRef.current[direction] = true
     setTimeout(() => {
       keysRef.current[direction] = false
@@ -226,13 +316,17 @@ function PongGame() {
     <div className="pong-game-container">
       <div className="pong-header">
         <div className="score-display">
-          <div className="player-score">Player: {playerScore}</div>
-          <div className="ai-score">AI: {aiScore}</div>
+          <div className="player-score">{aiVsAi ? 'AI 1' : 'Player'}: {playerScore}</div>
+          <div className="ai-score">AI {aiVsAi ? '2' : ''}: {aiScore}</div>
         </div>
+        {aiVsAi && <div className="ai-vs-ai-mode">AI vs AI MODE</div>}
         {isPaused && <div className="paused">PAUSED</div>}
         {gameOver && (
           <div className="game-over">
-            {playerScore >= 10 ? 'YOU WIN!' : 'AI WINS!'}
+            {aiVsAi 
+              ? (playerScore >= 10 ? 'AI 1 WINS!' : 'AI 2 WINS!')
+              : (playerScore >= 10 ? 'YOU WIN!' : 'AI WINS!')
+            }
           </div>
         )}
       </div>
@@ -278,38 +372,55 @@ function PongGame() {
       </div>
 
       <div className="pong-controls">
-        <div className="mobile-controls">
-          <button 
-            className="control-button" 
-            onTouchStart={() => handlePaddleMove('w')}
-            onMouseDown={() => handlePaddleMove('w')}
-            aria-label="Move paddle up"
-          >
-            ↑ Up
-          </button>
-          <button 
-            className="control-button" 
-            onTouchStart={() => handlePaddleMove('s')}
-            onMouseDown={() => handlePaddleMove('s')}
-            aria-label="Move paddle down"
-          >
-            ↓ Down
-          </button>
-          <button 
-            className="control-button" 
-            onClick={handlePause}
-            aria-label="Pause"
-          >
-            ⏸ Pause
-          </button>
-        </div>
+        <button 
+          onClick={toggleAiVsAi} 
+          className={`ai-vs-ai-button ${aiVsAi ? 'active' : ''}`}
+        >
+          {aiVsAi ? 'Exit AI vs AI' : 'AI vs AI'}
+        </button>
+        {!aiVsAi && (
+          <div className="mobile-controls">
+            <button 
+              className="control-button" 
+              onTouchStart={() => handlePaddleMove('w')}
+              onMouseDown={() => handlePaddleMove('w')}
+              aria-label="Move paddle up"
+            >
+              ↑ Up
+            </button>
+            <button 
+              className="control-button" 
+              onTouchStart={() => handlePaddleMove('s')}
+              onMouseDown={() => handlePaddleMove('s')}
+              aria-label="Move paddle down"
+            >
+              ↓ Down
+            </button>
+            <button 
+              className="control-button" 
+              onClick={handlePause}
+              aria-label="Pause"
+            >
+              ⏸ Pause
+            </button>
+          </div>
+        )}
         <button onClick={resetGame} className="reset-button">
           {gameOver ? 'Play Again' : 'Reset'}
         </button>
         <div className="instructions">
-          <p>Use W/S or Arrow Keys to move paddle</p>
-          <p>Press Space to pause</p>
-          <p className="mobile-instruction">Or use the on-screen controls</p>
+          {aiVsAi ? (
+            <>
+              <p>Watch the AI play against itself!</p>
+              <p>Press Space to pause</p>
+            </>
+          ) : (
+            <>
+              <p>Use W/S or Arrow Keys to move paddle</p>
+              <p>Press Space to pause</p>
+              <p className="mobile-instruction">Or use the on-screen controls</p>
+            </>
+          )}
           <p>First to 10 points wins!</p>
         </div>
       </div>

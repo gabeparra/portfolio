@@ -3,31 +3,33 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(10px, 2vw, 20px);
+  padding: 20px;
   min-height: calc(100vh - 100px);
+  width: 100%;
   background-color: #87CEEB;
   overflow-x: hidden;
+  overflow-y: auto;
+  gap: 15px;
 }
 
 .tic-tac-toe-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: min(90vw, 400px);
-  margin-bottom: clamp(10px, 2vh, 20px);
-  padding: clamp(8px, 1.5vw, 10px);
+  max-width: 350px;
+  padding: 10px;
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .score-display {
   display: flex;
-  gap: clamp(15px, 4vw, 30px);
-  font-size: clamp(16px, 3.5vw, 20px);
+  gap: 30px;
+  font-size: 20px;
   font-weight: bold;
   color: #000;
 }
@@ -41,33 +43,34 @@
 }
 
 .game-status {
-  font-size: clamp(14px, 3vw, 18px);
+  font-size: 16px;
   font-weight: bold;
   color: #000;
   text-align: center;
-  flex: 1;
-  min-width: 100%;
 }
 
 .tic-tac-toe-board {
   display: grid;
-  grid-template-columns: repeat(3, min(25vw, 100px));
-  grid-template-rows: repeat(3, min(25vw, 100px));
-  gap: 5px;
-  background-color: #000;
-  padding: 5px;
-  border: 4px solid #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  max-width: min(90vw, 310px);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 300px;
+  height: 300px;
+  gap: 4px;
+  background-color: #ecf0f1;
+  padding: 4px;
+  border: 3px solid #bdc3c7;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   margin: 0 auto;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
-.cell {
-  background-color: #fff;
-  border: 3px solid #000;
-  border-radius: 5px;
-  font-size: clamp(32px, 8vw, 48px);
+.tic-tac-toe-board .cell {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 48px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -76,29 +79,31 @@
   justify-content: center;
   color: #000;
   touch-action: manipulation;
-  min-height: 44px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.cell:hover:not(:disabled) {
+.tic-tac-toe-board .cell:hover:not(:disabled) {
   background-color: #f0f0f0;
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
-.cell:disabled {
+.tic-tac-toe-board .cell:disabled {
   cursor: not-allowed;
+  opacity: 0.8;
 }
 
-.cell-x {
+.tic-tac-toe-board .cell.cell-x {
   color: #3498db;
 }
 
-.cell-o {
+.tic-tac-toe-board .cell.cell-o {
   color: #e74c3c;
 }
 
-.cell.winning {
+.tic-tac-toe-board .cell.winning {
   background-color: #f1c40f;
   animation: pulse 0.5s infinite alternate;
+  box-shadow: 0 2px 8px rgba(241, 196, 15, 0.5);
 }
 
 @keyframes pulse {
@@ -106,19 +111,25 @@
     transform: scale(1);
   }
   to {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 }
 
 .tic-tac-toe-controls {
-  margin-top: 20px;
+  width: 100%;
+  max-width: 350px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .reset-button,
 .reset-scores-button {
-  padding: clamp(12px, 2.5vw, 14px) clamp(20px, 4vw, 24px);
-  font-size: clamp(16px, 3.5vw, 18px);
+  padding: 10px 20px;
+  font-size: 16px;
   font-weight: bold;
   background-color: #3498db;
   color: #fff;
@@ -126,9 +137,9 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin: 5px;
-  touch-action: manipulation;
-  min-height: 44px;
+  min-height: 40px;
+  width: 100%;
+  max-width: 200px;
 }
 
 .reset-scores-button {
@@ -154,20 +165,14 @@
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
-  padding: clamp(12px, 2vw, 15px);
-  max-width: min(90vw, 400px);
-  margin-top: 15px;
+  padding: 10px;
+  max-width: 350px;
+  width: 100%;
 }
 
 .instructions p {
   margin: 5px 0;
-  font-size: clamp(12px, 2.5vw, 14px);
+  font-size: 12px;
   color: #000;
   font-weight: 500;
 }
-
-.tic-tac-toe-controls {
-  width: 100%;
-  max-width: min(90vw, 400px);
-}
-
