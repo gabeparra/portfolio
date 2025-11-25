@@ -263,6 +263,14 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
 
       <footer className="footer">
         <p>&copy; 2024 Gabriel Parra. All rights reserved.</p>
+        <a 
+          href="#games" 
+          className="mobile-games-link"
+          onClick={handleCClick}
+          onTouchStart={handleCClick}
+        >
+          🎮
+        </a>
       </footer>
     </div>
   )
