@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import './RetroPage.css'
-import SnakeGame from './SnakeGame'
-import PongGame from './PongGame'
-import TicTacToe from './TicTacToe'
-import Tetris from './Tetris'
-import Game2048 from './Game2048'
-import MemoryGame from './MemoryGame'
-import Breakout from './Breakout'
+import SnakeGame from './SnakeGame.jsx'
+import PongGame from './PongGame.jsx'
+import TicTacToe from './TicTacToe.jsx'
+import Tetris from './Tetris.jsx'
+import Game2048 from './Game2048.jsx'
+import MemoryGame from './MemoryGame.jsx'
+import Breakout from './Breakout.jsx'
 
 function RetroPage() {
   const [activeTab, setActiveTab] = useState('retro')

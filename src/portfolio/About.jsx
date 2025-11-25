@@ -1,6 +1,19 @@
 import './About.css'
 
-function About({ onBack }) {
+function About({ onBack, onNavigateToPets, onNavigateToContact }) {
+  const handlePetsClick = (e) => {
+    e.preventDefault()
+    if (onNavigateToPets) {
+      onNavigateToPets()
+    }
+  }
+
+  const handleContactClick = (e) => {
+    e.preventDefault()
+    if (onNavigateToContact) {
+      onNavigateToContact()
+    }
+  }
   return (
     <div className="about-page">
       <header className="header">
@@ -13,7 +26,8 @@ function About({ onBack }) {
             <li><a href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>Home</a></li>
             <li><a href="#skills" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Skills</a></li>
             <li><a href="#projects" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Projects</a></li>
-            <li><a href="#contact" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Contact</a></li>
+            <li><a href="#pets" onClick={handlePetsClick}>Pets</a></li>
+            <li><a href="#contact" onClick={handleContactClick}>Contact</a></li>
           </ul>
         </nav>
       </header>

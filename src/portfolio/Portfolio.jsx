@@ -1,17 +1,20 @@
 import './Portfolio.css'
 import { useState, useEffect } from 'react'
 
-function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
+function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, onNavigateToPets }) {
   const [repos, setRepos] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showAll, setShowAll] = useState(false)
+  const [openDemo, setOpenDemo] = useState(null)
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
         setLoading(true)
-        const response = await fetch('https://api.github.com/users/gabeparra/repos?sort=updated&per_page=12')
+        
+        // Call the serverless function - token stays hidden on the server
+        const response = await fetch('/api/github-repos')
         
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({ message: response.statusText }))
@@ -64,6 +67,20 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
     }
   }
 
+  const handleContactClick = (e) => {
+    e.preventDefault()
+    if (onNavigateToContact) {
+      onNavigateToContact()
+    }
+  }
+
+  const handlePetsClick = (e) => {
+    e.preventDefault()
+    if (onNavigateToPets) {
+      onNavigateToPets()
+    }
+  }
+
   const getLanguageColor = (language) => {
     const colors = {
       'JavaScript': '#f7df1e',
@@ -96,7 +113,8 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
             <li><a href="#about" onClick={handleAboutClick}>About</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#pets" onClick={handlePetsClick}>Pets</a></li>
+            <li><a href="#contact" onClick={handleContactClick}>Contact</a></li>
           </ul>
         </nav>
       </header>
@@ -119,7 +137,7 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
             </p>
             <div className="hero-buttons">
               <a href="#projects" className="btn btn-primary">View Projects</a>
-              <a href="#contact" className="btn btn-secondary">Get in Touch</a>
+              <a href="#contact" className="btn btn-secondary" onClick={handleContactClick}>Get in Touch</a>
             </div>
           </div>
           <div className="hero-accent"></div>
@@ -135,7 +153,7 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
                   <li>JavaScript</li>
                   <li>Python</li>
                   <li>Java</li>
-                  <li>C++</li>
+                  <li>C#</li>
                   <li>PHP</li>
                 </ul>
               </div>
@@ -153,8 +171,8 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
                 <h3>Areas of Expertise</h3>
                 <ul>
                   <li>Web Development</li>
-                  <li>Algorithms</li>
-                  <li>System Design</li>
+                  <li>IT Support</li>
+                  <li>Mobile Development</li>
                   <li>Software Architecture</li>
                   <li>Problem Solving</li>
                 </ul>
@@ -205,6 +223,27 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
                             )}
                           </div>
                         </div>
+                        {repo.homepage && (
+                          <div className="project-demo">
+                            <button 
+                              className="demo-toggle-btn"
+                              onClick={() => setOpenDemo(openDemo === repo.id ? null : repo.id)}
+                            >
+                              {openDemo === repo.id ? '▼ Hide Demo' : '▶ View Demo'}
+                            </button>
+                            {openDemo === repo.id && (
+                              <div className="demo-container">
+                                <iframe
+                                  src={repo.homepage}
+                                  title={`${repo.name} Demo`}
+                                  className="demo-iframe"
+                                  loading="lazy"
+                                  allow="fullscreen"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
                         <p className="project-description">
                           {repo.description || 'No description available.'}
                         </p>
@@ -253,6 +292,16 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
                 I'm always interested in new opportunities and collaborations. 
                 Feel free to reach out!
               </p>
+              
+              <div style={{ marginBottom: '2rem' }}>
+                <button 
+                  onClick={handleContactClick}
+                  className="btn btn-primary"
+                >
+                  Send a Message
+                </button>
+              </div>
+              
               <div className="contact-links">
                 <a href="mailto:gabpar49@gmail.com" className="contact-link">
                   Email
@@ -282,7 +331,7 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
         >
           🎮
         </button>
-      </footer>
+        </footer>
     </div>
   )
 }

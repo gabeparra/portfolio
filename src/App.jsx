@@ -1,12 +1,16 @@
 import { useState } from 'react'
-import Portfolio from './Portfolio'
-import RetroPage from './RetroPage'
-import About from './About'
+import Portfolio from './portfolio/Portfolio'
+import RetroPage from './minigames/RetroPage'
+import About from './portfolio/About'
+import Contact from './portfolio/Contact'
+import Pets from './portfolio/Pets'
 import './App.css'
 
 function App() {
   const [showRetro, setShowRetro] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [showContact, setShowContact] = useState(false)
+  const [showPets, setShowPets] = useState(false)
   const [easterEggState, setEasterEggState] = useState({ clickedG: false, clickedC: false })
 
   const toggleRetro = () => {
@@ -15,6 +19,14 @@ function App() {
 
   const toggleAbout = () => {
     setShowAbout(!showAbout)
+  }
+
+  const toggleContact = () => {
+    setShowContact(!showContact)
+  }
+
+  const togglePets = () => {
+    setShowPets(!showPets)
   }
 
   const handleEasterEggProgress = (step) => {
@@ -51,7 +63,15 @@ function App() {
   }
 
   if (showAbout) {
-    return <About onBack={toggleAbout} />
+    return <About onBack={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
+  }
+
+  if (showContact) {
+    return <Contact onBack={toggleContact} onNavigateToPets={togglePets} onNavigateToAbout={toggleAbout} />
+  }
+
+  if (showPets) {
+    return <Pets onBack={togglePets} onNavigateToAbout={toggleAbout} onNavigateToContact={toggleContact} />
   }
 
   const showSecretButton = easterEggState.clickedG && easterEggState.clickedC
@@ -63,7 +83,7 @@ function App() {
           🎈
         </button>
       )}
-      <Portfolio onEasterEggClick={handleEasterEggProgress} onNavigateToAbout={toggleAbout} />
+      <Portfolio onEasterEggClick={handleEasterEggProgress} onNavigateToAbout={toggleAbout} onNavigateToContact={toggleContact} onNavigateToPets={togglePets} />
     </>
   )
 }
