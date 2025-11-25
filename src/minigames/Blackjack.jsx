@@ -101,16 +101,19 @@ function Blackjack() {
   }
 
   const handleBlackjack = () => {
-    const dealerValue = getHandValue(dealerHand)
-    if (dealerValue === 21) {
-      setMessage('Push! Both have Blackjack')
-      setBalance(prev => prev + bet)
-    } else {
-      setMessage('Blackjack! You win!')
-      setBalance(prev => prev + Math.floor(bet * 2.5))
-    }
-    setGameState('finished')
-    setDealerHidden(false)
+    // Use setTimeout to ensure dealerHand state is updated
+    setTimeout(() => {
+      const dealerValue = getHandValue(dealerHand)
+      if (dealerValue === 21) {
+        setMessage('Push! Both have Blackjack')
+        setBalance(prev => prev + bet)
+      } else {
+        setMessage('Blackjack! You win!')
+        setBalance(prev => prev + Math.floor(bet * 2.5))
+      }
+      setGameState('finished')
+      setDealerHidden(false)
+    }, 100)
   }
 
   const handleHit = () => {
@@ -143,47 +146,84 @@ function Blackjack() {
   }
 
   const dealerPlay = () => {
-    let newDeck = [...deck]
-    let newDealerHand = [...dealerHand]
-    
     const playDealer = () => {
-      const dealerValue = getHandValue(newDealerHand)
-      
-      if (dealerValue < 17) {
-        const newCard = newDeck.pop()
-        newDealerHand.push(newCard)
-        setDeck(newDeck)
-        setDealerHand(newDealerHand)
+      setDealerHand(currentHand => {
+        const dealerValue = getHandValue(currentHand)
         
-        setTimeout(() => {
-          playDealer()
-        }, 500)
-      } else {
-        checkWinner()
-      }
+        if (dealerValue < 17) {
+          setDeck(currentDeck => {
+            const newDeck = [...currentDeck]
+            const newCard = newDeck.pop()
+            if (newCard) {
+              setTimeout(() => {
+                setDealerHand(prevHand => {
+                  const updatedHand = [...prevHand, newCard]
+                  setTimeout(() => playDealer(), 500)
+                  return updatedHand
+                })
+              }, 100)
+            }
+            return newDeck
+          })
+          return currentHand
+        } else {
+          setTimeout(() => {
+            setPlayerHand(playerHand => {
+              setDealerHand(dealerHand => {
+                const playerValue = getHandValue(playerHand)
+                const dealerValue = getHandValue(dealerHand)
+                
+                if (dealerValue > 21) {
+                  setMessage('Dealer busts! You win!')
+                  setBalance(prev => prev + bet * 2)
+                } else if (playerValue > dealerValue) {
+                  setMessage('You win!')
+                  setBalance(prev => prev + bet * 2)
+                } else if (playerValue < dealerValue) {
+                  setMessage('Dealer wins!')
+                } else {
+                  setMessage('Push!')
+                  setBalance(prev => prev + bet)
+                }
+                
+                setGameState('finished')
+                return dealerHand
+              })
+              return playerHand
+            })
+          }, 500)
+          return currentHand
+        }
+      })
     }
     
-    playDealer()
+    setTimeout(() => playDealer(), 500)
   }
 
   const checkWinner = () => {
-    const playerValue = getHandValue(playerHand)
-    const dealerValue = getHandValue(dealerHand)
-    
-    if (dealerValue > 21) {
-      setMessage('Dealer busts! You win!')
-      setBalance(prev => prev + bet * 2)
-    } else if (playerValue > dealerValue) {
-      setMessage('You win!')
-      setBalance(prev => prev + bet * 2)
-    } else if (playerValue < dealerValue) {
-      setMessage('Dealer wins!')
-    } else {
-      setMessage('Push!')
-      setBalance(prev => prev + bet)
-    }
-    
-    setGameState('finished')
+    setPlayerHand(currentPlayerHand => {
+      setDealerHand(currentDealerHand => {
+        const playerValue = getHandValue(currentPlayerHand)
+        const dealerValue = getHandValue(currentDealerHand)
+        
+        if (dealerValue > 21) {
+          setMessage('Dealer busts! You win!')
+          setBalance(prev => prev + bet * 2)
+        } else if (playerValue > dealerValue) {
+          setMessage('You win!')
+          setBalance(prev => prev + bet * 2)
+        } else if (playerValue < dealerValue) {
+          setMessage('Dealer wins!')
+        } else {
+          setMessage('Push!')
+          setBalance(prev => prev + bet)
+        }
+        
+        setGameState('finished')
+        return currentDealerHand
+      })
+      return currentPlayerHand
+    })
   }
 
   const handleBetChange = (amount) => {

@@ -46,8 +46,8 @@ function GamesList({ onBack, onGameSelect }) {
   if (selectedGame) {
     return (
       <div className="games-list-container game-fullscreen">
-        <button onClick={handleBack} className="back-button">
-          ← Back to Games
+        <button onClick={handleBack} className="back-button" aria-label="Back to Games">
+          ←
         </button>
         {selectedGame === 'snake' && <SnakeGame />}
         {selectedGame === 'pong' && <PongGame />}

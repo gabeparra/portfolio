@@ -88,20 +88,28 @@
 
 .back-button {
   position: fixed;
-  top: clamp(10px, 2vh, 20px);
-  left: clamp(10px, 2vw, 20px);
+  top: clamp(10px, 2vh, 15px);
+  left: clamp(10px, 2vw, 15px);
   z-index: 1001;
-  padding: clamp(10px, 2vw, 15px) clamp(15px, 3vw, 25px);
-  font-size: clamp(14px, 3vw, 18px);
+  width: clamp(40px, 8vw, 50px);
+  height: clamp(40px, 8vw, 50px);
+  padding: 0;
+  font-size: clamp(24px, 5vw, 32px);
   font-weight: bold;
   background-color: rgba(255, 255, 255, 0.95);
   color: #000;
   border: 3px solid #000;
-  border-radius: 10px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  min-width: clamp(40px, 8vw, 50px);
+  min-height: clamp(40px, 8vw, 50px);
 }
 
 .back-button:hover {
