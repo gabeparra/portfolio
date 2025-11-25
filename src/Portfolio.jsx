@@ -33,13 +33,17 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
     fetchRepos()
   }, [])
 
-  const handleGClick = () => {
+  const handleGClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     if (onEasterEggClick) {
       onEasterEggClick('G')
     }
   }
 
-  const handleCClick = () => {
+  const handleCClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     if (onEasterEggClick) {
       onEasterEggClick('C')
     }
@@ -73,7 +77,11 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
       <header className="header">
         <nav className="nav">
           <div className="nav-brand">
-            <span className="easter-egg-letter" onClick={handleGClick}>G</span>
+            <span 
+              className="easter-egg-letter" 
+              onClick={handleGClick}
+              onTouchStart={handleGClick}
+            >G</span>
             abriel Parra
           </div>
           <ul className="nav-links">
@@ -92,7 +100,11 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
               Computer Scientist &<br />
               Software Developer<br />
               <span style={{ fontSize: '0.7em', fontWeight: '600' }}>Bachelor's Degree in IT</span>
-              <span className="easter-egg-overlay-c" onClick={handleCClick}></span>
+              <span 
+                className="easter-egg-overlay-c" 
+                onClick={handleCClick}
+                onTouchStart={handleCClick}
+              ></span>
             </h1>
             <p className="hero-subtitle">
               Crafting elegant solutions through code and innovation

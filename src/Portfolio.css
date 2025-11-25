@@ -379,6 +379,8 @@
   position: relative;
   display: inline;
   text-decoration: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .hero-title-with-easter-egg {
@@ -395,6 +397,24 @@
   z-index: 10;
   background: transparent;
   pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .hero-title .easter-egg-overlay-c {
+    width: 1em;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .easter-egg-letter {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-block;
+    padding: 8px;
+    margin: -8px;
+  }
 }
 
 .nav-brand .easter-egg-letter {
