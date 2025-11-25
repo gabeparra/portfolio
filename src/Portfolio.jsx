@@ -14,7 +14,8 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
         const response = await fetch('https://api.github.com/users/gabeparra/repos?sort=updated&per_page=12')
         
         if (!response.ok) {
-          throw new Error('Failed to fetch repositories')
+          const errorData = await response.json().catch(() => ({ message: response.statusText }))
+          throw new Error(errorData.message || `GitHub API error: ${response.status} ${response.statusText}`)
         }
         
         const data = await response.json()
@@ -238,7 +239,7 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
                 <a href="https://github.com/gabeparra" target="_blank" rel="noopener noreferrer" className="contact-link">
                   GitHub
                 </a>
-                <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="contact-link">
+                <a href="https://linkedin.com/in/gabeparra" target="_blank" rel="noopener noreferrer" className="contact-link">
                   LinkedIn
                 </a>
               </div>
