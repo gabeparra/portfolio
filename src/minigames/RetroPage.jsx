@@ -4,6 +4,7 @@ import GamesList from './GamesList.jsx'
 
 function RetroPage() {
   const [activeTab, setActiveTab] = useState('retro') // 'retro' or 'games'
+  const [gameSelected, setGameSelected] = useState(false)
   const [gif1Position, setGif1Position] = useState({ x: 50, y: 50 })
   const [gif2Position, setGif2Position] = useState({ x: 150, y: 150 })
   const [gif3Position, setGif3Position] = useState({ x: 250, y: 250 })
@@ -226,23 +227,25 @@ function RetroPage() {
 
   return (
     <div className="retro-page">
-      <div className="header-with-tabs">
-        <h1>Gabriel's Web Page</h1>
-        <div className="tabs">
-          <button 
-            className={`tab-button ${activeTab === 'retro' ? 'active' : ''}`}
-            onClick={() => setActiveTab('retro')}
-          >
-            Retro
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'games' ? 'active' : ''}`}
-            onClick={() => setActiveTab('games')}
-          >
-            Games
-          </button>
+      {!gameSelected && (
+        <div className="header-with-tabs">
+          <h1>Gabriel's Web Page</h1>
+          <div className="tabs">
+            <button 
+              className={`tab-button ${activeTab === 'retro' ? 'active' : ''}`}
+              onClick={() => setActiveTab('retro')}
+            >
+              Retro
+            </button>
+            <button 
+              className={`tab-button ${activeTab === 'games' ? 'active' : ''}`}
+              onClick={() => setActiveTab('games')}
+            >
+              Games
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {activeTab === 'retro' && (
         <>
@@ -309,7 +312,7 @@ function RetroPage() {
       )}
 
       {activeTab === 'games' && (
-        <GamesList />
+        <GamesList onGameSelect={setGameSelected} />
       )}
     </div>
   )

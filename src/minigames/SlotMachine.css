@@ -52,6 +52,10 @@
   transition: all 0.3s ease;
 }
 
+.reels-container.five-reels {
+  gap: clamp(8px, 1.5vw, 12px);
+}
+
 .reels-container.winning {
   animation: winPulse 0.5s ease-in-out 3;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
@@ -232,6 +236,20 @@
   padding: 5px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
+}
+
+.winning-lines {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+}
+
+.win-line-info {
+  font-size: clamp(12px, 2.5vw, 14px);
+  margin: 5px 0;
+  color: #ffd700;
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {

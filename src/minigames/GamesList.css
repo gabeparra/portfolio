@@ -6,6 +6,19 @@
   overflow-y: auto;
 }
 
+.games-list-container.game-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
 .games-list-header {
   text-align: center;
   margin-bottom: clamp(20px, 4vh, 30px);
@@ -77,17 +90,18 @@
   position: fixed;
   top: clamp(10px, 2vh, 20px);
   left: clamp(10px, 2vw, 20px);
-  z-index: 1000;
+  z-index: 1001;
   padding: clamp(10px, 2vw, 15px) clamp(15px, 3vw, 25px);
   font-size: clamp(14px, 3vw, 18px);
   font-weight: bold;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.95);
   color: #000;
   border: 3px solid #000;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .back-button:hover {

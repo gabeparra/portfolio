@@ -8,7 +8,9 @@ import Game2048 from './Game2048.jsx'
 import MemoryGame from './MemoryGame.jsx'
 import Breakout from './Breakout.jsx'
 import SlotMachine from './SlotMachine.jsx'
+import FiveReelSlots from './FiveReelSlots.jsx'
 import Blackjack from './Blackjack.jsx'
+import Roulette from './Roulette.jsx'
 
 const GAMES = [
   { id: 'snake', name: 'Snake', icon: '🐍' },
@@ -18,24 +20,32 @@ const GAMES = [
   { id: '2048', name: '2048', icon: '🔢' },
   { id: 'memory', name: 'Memory', icon: '🧠' },
   { id: 'breakout', name: 'Breakout', icon: '🎾' },
-  { id: 'slots', name: 'Slots', icon: '🎰' },
-  { id: 'blackjack', name: 'Blackjack', icon: '🃏' }
+  { id: 'slots', name: '3-Reel Slots', icon: '🎰' },
+  { id: 'fivereelslots', name: '5-Reel Slots', icon: '🎲' },
+  { id: 'blackjack', name: 'Blackjack', icon: '🃏' },
+  { id: 'roulette', name: 'Roulette', icon: '🎡' }
 ]
 
-function GamesList({ onBack }) {
+function GamesList({ onBack, onGameSelect }) {
   const [selectedGame, setSelectedGame] = useState(null)
 
   const handleGameSelect = (gameId) => {
     setSelectedGame(gameId)
+    if (onGameSelect) {
+      onGameSelect(true)
+    }
   }
 
   const handleBack = () => {
     setSelectedGame(null)
+    if (onGameSelect) {
+      onGameSelect(false)
+    }
   }
 
   if (selectedGame) {
     return (
-      <div className="games-list-container">
+      <div className="games-list-container game-fullscreen">
         <button onClick={handleBack} className="back-button">
           ← Back to Games
         </button>
@@ -47,7 +57,9 @@ function GamesList({ onBack }) {
         {selectedGame === 'memory' && <MemoryGame />}
         {selectedGame === 'breakout' && <Breakout />}
         {selectedGame === 'slots' && <SlotMachine />}
+        {selectedGame === 'fivereelslots' && <FiveReelSlots />}
         {selectedGame === 'blackjack' && <Blackjack />}
+        {selectedGame === 'roulette' && <Roulette />}
       </div>
     )
   }
