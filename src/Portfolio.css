@@ -423,6 +423,10 @@
     min-height: 44px;
     line-height: 44px;
     text-align: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
   }
   
   .mobile-games-link:active {

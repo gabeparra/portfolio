@@ -49,6 +49,17 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
     }
   }
 
+  const handleMobileGamesClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (onEasterEggClick) {
+      onEasterEggClick('G')
+      setTimeout(() => {
+        onEasterEggClick('C')
+      }, 50)
+    }
+  }
+
   const handleAboutClick = (e) => {
     e.preventDefault()
     if (onNavigateToAbout) {
@@ -263,14 +274,17 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
 
       <footer className="footer">
         <p>&copy; 2024 Gabriel Parra. All rights reserved.</p>
-        <a 
-          href="#games" 
+        <button 
+          type="button"
           className="mobile-games-link"
-          onClick={handleCClick}
-          onTouchStart={handleCClick}
+          onClick={handleMobileGamesClick}
+          onTouchEnd={(e) => {
+            e.preventDefault()
+            handleMobileGamesClick(e)
+          }}
         >
           🎮
-        </a>
+        </button>
       </footer>
     </div>
   )
