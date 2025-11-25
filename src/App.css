@@ -2,13 +2,13 @@
   position: fixed;
   top: clamp(10px, 2vh, 20px);
   right: clamp(10px, 2vw, 20px);
-  width: clamp(36px, 8vw, 40px);
-  height: clamp(36px, 8vw, 40px);
+  width: 44px;
+  height: 44px;
   background: rgba(59, 130, 246, 0.2);
   border: 1px solid rgba(59, 130, 246, 0.4);
   border-radius: 50%;
   color: #60a5fa;
-  font-size: clamp(18px, 4vw, 20px);
+  font-size: 20px;
   cursor: pointer;
   z-index: 10000;
   display: flex;
@@ -18,8 +18,15 @@
   backdrop-filter: blur(10px);
   opacity: 0.6;
   touch-action: manipulation;
-  min-width: 44px;
-  min-height: 44px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .secret-button {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
 }
 
 .secret-button:hover {

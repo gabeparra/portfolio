@@ -19,17 +19,23 @@ function App() {
 
   const handleEasterEggProgress = (step) => {
     if (step === 'G') {
-      if (!easterEggState.clickedG) {
-        setEasterEggState({ clickedG: true, clickedC: false })
-      } else {
-        setEasterEggState({ clickedG: false, clickedC: false })
-      }
+      setEasterEggState(prev => {
+        if (!prev.clickedG) {
+          return { clickedG: true, clickedC: false }
+        } else {
+          return { clickedG: false, clickedC: false }
+        }
+      })
     } else if (step === 'C') {
-      if (easterEggState.clickedG && !easterEggState.clickedC) {
-        setEasterEggState({ ...easterEggState, clickedC: true })
-      } else {
-        setEasterEggState({ clickedG: false, clickedC: false })
-      }
+      setEasterEggState(prev => {
+        if (prev.clickedG && !prev.clickedC) {
+          return { ...prev, clickedC: true }
+        } else {
+          return { clickedG: false, clickedC: false }
+        }
+      })
+    } else if (step === 'MOBILE') {
+      setEasterEggState({ clickedG: true, clickedC: true })
     }
   }
 

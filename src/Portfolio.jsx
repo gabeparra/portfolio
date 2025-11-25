@@ -53,10 +53,7 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
     e.preventDefault()
     e.stopPropagation()
     if (onEasterEggClick) {
-      onEasterEggClick('G')
-      setTimeout(() => {
-        onEasterEggClick('C')
-      }, 50)
+      onEasterEggClick('MOBILE')
     }
   }
 
