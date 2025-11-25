@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import './SnakeGame.css'
 
 const GRID_SIZE = 20
-const CELL_SIZE = 20
 const INITIAL_SNAKE = [{ x: 10, y: 10 }]
 const INITIAL_DIRECTION = { x: 1, y: 0 }
 const GAME_SPEED = 150
@@ -10,7 +9,6 @@ const GAME_SPEED = 150
 function SnakeGame() {
   const [snake, setSnake] = useState(INITIAL_SNAKE)
   const [food, setFood] = useState({ x: 15, y: 15 })
-  const [direction, setDirection] = useState(INITIAL_DIRECTION)
   const [gameOver, setGameOver] = useState(false)
   const [score, setScore] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
@@ -18,32 +16,31 @@ function SnakeGame() {
   const gameLoopRef = useRef(null)
 
   const generateFood = useCallback(() => {
-    const newFood = {
-      x: Math.floor(Math.random() * GRID_SIZE),
-      y: Math.floor(Math.random() * GRID_SIZE)
-    }
+    let newFood
+    do {
+      newFood = {
+        x: Math.floor(Math.random() * GRID_SIZE),
+        y: Math.floor(Math.random() * GRID_SIZE)
+      }
+    } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y))
     return newFood
-  }, [])
+  }, [snake])
 
   const checkCollision = useCallback((head, snakeBody) => {
     if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
       return true
     }
-    for (let segment of snakeBody) {
-      if (head.x === segment.x && head.y === segment.y) {
-        return true
-      }
-    }
-    return false
+    return snakeBody.some(segment => segment.x === head.x && segment.y === head.y)
   }, [])
 
   const gameLoop = useCallback(() => {
     if (isPaused || gameOver) return
 
     setSnake(prevSnake => {
-      const head = { ...prevSnake[0] }
-      head.x += directionRef.current.x
-      head.y += directionRef.current.y
+      const head = {
+        x: prevSnake[0].x + directionRef.current.x,
+        y: prevSnake[0].y + directionRef.current.y
+      }
 
       if (checkCollision(head, prevSnake)) {
         setGameOver(true)
@@ -53,16 +50,12 @@ function SnakeGame() {
       const newSnake = [head, ...prevSnake]
 
       if (head.x === food.x && head.y === food.y) {
-        let newFood = generateFood()
-        while (newSnake.some(segment => segment.x === newFood.x && segment.y === newFood.y)) {
-          newFood = generateFood()
-        }
-        setFood(newFood)
+        setFood(generateFood())
+        setScore(newSnake.length - 1)
       } else {
         newSnake.pop()
+        setScore(newSnake.length - 1)
       }
-
-      setScore(newSnake.length - 1)
 
       return newSnake
     })
@@ -96,29 +89,22 @@ function SnakeGame() {
       return
     }
 
-    if (key === 'arrowup' || key === 'w') {
+    const directionMap = {
+      'arrowup': { x: 0, y: -1, opposite: { y: 0 } },
+      'w': { x: 0, y: -1, opposite: { y: 0 } },
+      'arrowdown': { x: 0, y: 1, opposite: { y: 0 } },
+      's': { x: 0, y: 1, opposite: { y: 0 } },
+      'arrowleft': { x: -1, y: 0, opposite: { x: 0 } },
+      'a': { x: -1, y: 0, opposite: { x: 0 } },
+      'arrowright': { x: 1, y: 0, opposite: { x: 0 } },
+      'd': { x: 1, y: 0, opposite: { x: 0 } }
+    }
+
+    if (directionMap[key]) {
       e.preventDefault()
-      if (currentDir.y === 0) {
-        directionRef.current = { x: 0, y: -1 }
-        setDirection({ x: 0, y: -1 })
-      }
-    } else if (key === 'arrowdown' || key === 's') {
-      e.preventDefault()
-      if (currentDir.y === 0) {
-        directionRef.current = { x: 0, y: 1 }
-        setDirection({ x: 0, y: 1 })
-      }
-    } else if (key === 'arrowleft' || key === 'a') {
-      e.preventDefault()
-      if (currentDir.x === 0) {
-        directionRef.current = { x: -1, y: 0 }
-        setDirection({ x: -1, y: 0 })
-      }
-    } else if (key === 'arrowright' || key === 'd') {
-      e.preventDefault()
-      if (currentDir.x === 0) {
-        directionRef.current = { x: 1, y: 0 }
-        setDirection({ x: 1, y: 0 })
+      const newDir = directionMap[key]
+      if (currentDir[Object.keys(newDir.opposite)[0]] === 0) {
+        directionRef.current = { x: newDir.x, y: newDir.y }
       }
     }
   }, [gameOver])
@@ -133,7 +119,6 @@ function SnakeGame() {
   const resetGame = () => {
     setSnake(INITIAL_SNAKE)
     setFood({ x: 15, y: 15 })
-    setDirection(INITIAL_DIRECTION)
     directionRef.current = INITIAL_DIRECTION
     setGameOver(false)
     setScore(0)
@@ -144,24 +129,39 @@ function SnakeGame() {
     if (gameOver) return
     const currentDir = directionRef.current
     
-    if (newDirection === 'up' && currentDir.y === 0) {
-      directionRef.current = { x: 0, y: -1 }
-      setDirection({ x: 0, y: -1 })
-    } else if (newDirection === 'down' && currentDir.y === 0) {
-      directionRef.current = { x: 0, y: 1 }
-      setDirection({ x: 0, y: 1 })
-    } else if (newDirection === 'left' && currentDir.x === 0) {
-      directionRef.current = { x: -1, y: 0 }
-      setDirection({ x: -1, y: 0 })
-    } else if (newDirection === 'right' && currentDir.x === 0) {
-      directionRef.current = { x: 1, y: 0 }
-      setDirection({ x: 1, y: 0 })
+    const directions = {
+      'up': { x: 0, y: -1, check: 'y' },
+      'down': { x: 0, y: 1, check: 'y' },
+      'left': { x: -1, y: 0, check: 'x' },
+      'right': { x: 1, y: 0, check: 'x' }
+    }
+
+    const dir = directions[newDirection]
+    if (dir && currentDir[dir.check] === 0) {
+      directionRef.current = { x: dir.x, y: dir.y }
     }
   }
 
   const handlePause = () => {
     if (gameOver) return
     setIsPaused(prev => !prev)
+  }
+
+  const renderCell = (index) => {
+    const x = index % GRID_SIZE
+    const y = Math.floor(index / GRID_SIZE)
+    const isSnake = snake.some(segment => segment.x === x && segment.y === y)
+    const isHead = snake[0]?.x === x && snake[0]?.y === y
+    const isFood = food.x === x && food.y === y
+
+    let className = 'cell'
+    if (isHead) className += ' head'
+    else if (isSnake) className += ' snake'
+    if (isFood) className += ' food'
+
+    return (
+      <div key={index} className={className} />
+    )
   }
 
   return (
@@ -173,57 +173,24 @@ function SnakeGame() {
       </div>
       
       <div className="snake-game-board" tabIndex={0}>
-        {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, index) => {
-          const x = index % GRID_SIZE
-          const y = Math.floor(index / GRID_SIZE)
-          const isSnake = snake.some(segment => segment.x === x && segment.y === y)
-          const isHead = snake[0] && snake[0].x === x && snake[0].y === y
-          const isFood = food.x === x && food.y === y
-
-          return (
-            <div
-              key={index}
-              className={`cell ${isHead ? 'head' : ''} ${isSnake && !isHead ? 'snake' : ''} ${isFood ? 'food' : ''}`}
-            />
-          )
-        })}
+        {Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, index) => renderCell(index))}
       </div>
 
       <div className="snake-game-controls">
         <div className="mobile-controls">
-          <button 
-            className="control-button up" 
-            onClick={() => handleDirectionChange('up')}
-            aria-label="Move up"
-          >
+          <button className="control-button up" onClick={() => handleDirectionChange('up')} aria-label="Move up">
             ↑
           </button>
-          <button 
-            className="control-button left" 
-            onClick={() => handleDirectionChange('left')}
-            aria-label="Move left"
-          >
+          <button className="control-button left" onClick={() => handleDirectionChange('left')} aria-label="Move left">
             ←
           </button>
-          <button 
-            className="control-button pause" 
-            onClick={handlePause}
-            aria-label="Pause"
-          >
+          <button className="control-button pause" onClick={handlePause} aria-label="Pause">
             ⏸
           </button>
-          <button 
-            className="control-button right" 
-            onClick={() => handleDirectionChange('right')}
-            aria-label="Move right"
-          >
+          <button className="control-button right" onClick={() => handleDirectionChange('right')} aria-label="Move right">
             →
           </button>
-          <button 
-            className="control-button down" 
-            onClick={() => handleDirectionChange('down')}
-            aria-label="Move down"
-          >
+          <button className="control-button down" onClick={() => handleDirectionChange('down')} aria-label="Move down">
             ↓
           </button>
         </div>

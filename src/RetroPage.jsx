@@ -3,6 +3,10 @@ import './RetroPage.css'
 import SnakeGame from './SnakeGame'
 import PongGame from './PongGame'
 import TicTacToe from './TicTacToe'
+import Tetris from './Tetris'
+import Game2048 from './Game2048'
+import MemoryGame from './MemoryGame'
+import Breakout from './Breakout'
 
 function RetroPage() {
   const [activeTab, setActiveTab] = useState('retro')
@@ -255,6 +259,30 @@ function RetroPage() {
           >
             Tic Tac Toe
           </button>
+          <button 
+            className={`tab-button ${activeTab === 'tetris' ? 'active' : ''}`}
+            onClick={() => setActiveTab('tetris')}
+          >
+            Tetris
+          </button>
+          <button 
+            className={`tab-button ${activeTab === '2048' ? 'active' : ''}`}
+            onClick={() => setActiveTab('2048')}
+          >
+            2048
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'memory' ? 'active' : ''}`}
+            onClick={() => setActiveTab('memory')}
+          >
+            Memory
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'breakout' ? 'active' : ''}`}
+            onClick={() => setActiveTab('breakout')}
+          >
+            Breakout
+          </button>
         </div>
       </div>
 
@@ -332,6 +360,22 @@ function RetroPage() {
 
       {activeTab === 'tictactoe' && (
         <TicTacToe />
+      )}
+
+      {activeTab === 'tetris' && (
+        <Tetris />
+      )}
+
+      {activeTab === '2048' && (
+        <Game2048 />
+      )}
+
+      {activeTab === 'memory' && (
+        <MemoryGame />
+      )}
+
+      {activeTab === 'breakout' && (
+        <Breakout />
       )}
     </div>
   )

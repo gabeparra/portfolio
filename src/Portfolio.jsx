@@ -90,7 +90,8 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout }) {
           <div className="hero-content">
             <h1 className="hero-title hero-title-with-easter-egg">
               Computer Scientist &<br />
-              Software Developer
+              Software Developer<br />
+              <span style={{ fontSize: '0.7em', fontWeight: '600' }}>Bachelor's Degree in IT</span>
               <span className="easter-egg-overlay-c" onClick={handleCClick}></span>
             </h1>
             <p className="hero-subtitle">
