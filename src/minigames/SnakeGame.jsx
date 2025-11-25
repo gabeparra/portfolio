@@ -14,6 +14,8 @@ function SnakeGame() {
   const [isPaused, setIsPaused] = useState(false)
   const directionRef = useRef(INITIAL_DIRECTION)
   const gameLoopRef = useRef(null)
+  const touchStartRef = useRef(null)
+  const containerRef = useRef(null)
 
   const generateFood = useCallback(() => {
     let newFood
@@ -147,6 +149,92 @@ function SnakeGame() {
     setIsPaused(prev => !prev)
   }
 
+  const handleTouchStart = useCallback((e) => {
+    if (gameOver || isPaused) return
+    const touch = e.touches[0]
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now()
+    }
+  }, [gameOver, isPaused])
+
+  const handleTouchMove = useCallback((e) => {
+    e.preventDefault() // Prevent scrolling while playing
+  }, [])
+
+  const handleTouchEnd = useCallback((e) => {
+    if (!touchStartRef.current || gameOver || isPaused) return
+    
+    const touch = e.changedTouches[0]
+    const touchEnd = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now()
+    }
+
+    const deltaX = touchEnd.x - touchStartRef.current.x
+    const deltaY = touchEnd.y - touchStartRef.current.y
+    const deltaTime = touchEnd.time - touchStartRef.current.time
+
+    // Only register swipe if movement is significant and quick enough
+    const minSwipeDistance = 30
+    const maxSwipeTime = 300
+
+    if (deltaTime > maxSwipeTime) {
+      touchStartRef.current = null
+      return
+    }
+
+    const absX = Math.abs(deltaX)
+    const absY = Math.abs(deltaY)
+
+    if (absX < minSwipeDistance && absY < minSwipeDistance) {
+      touchStartRef.current = null
+      return
+    }
+
+    const currentDir = directionRef.current
+
+    // Determine swipe direction
+    if (absX > absY) {
+      // Horizontal swipe
+      if (deltaX > 0 && currentDir.x === 0) {
+        // Swipe right
+        directionRef.current = { x: 1, y: 0 }
+      } else if (deltaX < 0 && currentDir.x === 0) {
+        // Swipe left
+        directionRef.current = { x: -1, y: 0 }
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY > 0 && currentDir.y === 0) {
+        // Swipe down
+        directionRef.current = { x: 0, y: 1 }
+      } else if (deltaY < 0 && currentDir.y === 0) {
+        // Swipe up
+        directionRef.current = { x: 0, y: -1 }
+      }
+    }
+
+    touchStartRef.current = null
+  }, [gameOver, isPaused])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: false })
+    container.addEventListener('touchmove', handleTouchMove, { passive: false })
+    container.addEventListener('touchend', handleTouchEnd, { passive: false })
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart)
+      container.removeEventListener('touchmove', handleTouchMove)
+      container.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [handleTouchStart, handleTouchMove, handleTouchEnd])
+
   const renderCell = (index) => {
     const x = index % GRID_SIZE
     const y = Math.floor(index / GRID_SIZE)
@@ -165,7 +253,10 @@ function SnakeGame() {
   }
 
   return (
-    <div className="snake-game-container">
+    <div 
+      ref={containerRef}
+      className="snake-game-container"
+    >
       <div className="snake-game-header">
         <div className="score">Score: {score}</div>
         {isPaused && <div className="paused">PAUSED</div>}
@@ -198,9 +289,9 @@ function SnakeGame() {
           {gameOver ? 'Play Again' : 'Reset'}
         </button>
         <div className="instructions">
-          <p>Use Arrow Keys or WASD to move</p>
-          <p>Press Space to pause</p>
-          <p className="mobile-instruction">Or use the on-screen controls</p>
+          <p>Desktop: Use Arrow Keys or WASD to move</p>
+          <p>Mobile: Swipe anywhere on screen to change direction</p>
+          <p>Press Space or Pause button to pause</p>
         </div>
       </div>
     </div>

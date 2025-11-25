@@ -10,6 +10,11 @@
   overflow-x: hidden;
   overflow-y: auto;
   gap: 15px;
+  touch-action: none;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .snake-game-header {
@@ -58,6 +63,7 @@
   overflow: hidden;
   padding: 2px;
   gap: 2px;
+  touch-action: none;
 }
 
 .snake-game-board .cell {

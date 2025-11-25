@@ -1,15 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import './RetroPage.css'
-import SnakeGame from './SnakeGame.jsx'
-import PongGame from './PongGame.jsx'
-import TicTacToe from './TicTacToe.jsx'
-import Tetris from './Tetris.jsx'
-import Game2048 from './Game2048.jsx'
-import MemoryGame from './MemoryGame.jsx'
-import Breakout from './Breakout.jsx'
+import GamesList from './GamesList.jsx'
 
 function RetroPage() {
-  const [activeTab, setActiveTab] = useState('retro')
+  const [activeTab, setActiveTab] = useState('retro') // 'retro' or 'games'
   const [gif1Position, setGif1Position] = useState({ x: 50, y: 50 })
   const [gif2Position, setGif2Position] = useState({ x: 150, y: 150 })
   const [gif3Position, setGif3Position] = useState({ x: 250, y: 250 })
@@ -242,46 +236,10 @@ function RetroPage() {
             Retro
           </button>
           <button 
-            className={`tab-button ${activeTab === 'snake' ? 'active' : ''}`}
-            onClick={() => setActiveTab('snake')}
+            className={`tab-button ${activeTab === 'games' ? 'active' : ''}`}
+            onClick={() => setActiveTab('games')}
           >
-            Snake
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'pong' ? 'active' : ''}`}
-            onClick={() => setActiveTab('pong')}
-          >
-            Pong
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'tictactoe' ? 'active' : ''}`}
-            onClick={() => setActiveTab('tictactoe')}
-          >
-            Tic Tac Toe
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'tetris' ? 'active' : ''}`}
-            onClick={() => setActiveTab('tetris')}
-          >
-            Tetris
-          </button>
-          <button 
-            className={`tab-button ${activeTab === '2048' ? 'active' : ''}`}
-            onClick={() => setActiveTab('2048')}
-          >
-            2048
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'memory' ? 'active' : ''}`}
-            onClick={() => setActiveTab('memory')}
-          >
-            Memory
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'breakout' ? 'active' : ''}`}
-            onClick={() => setActiveTab('breakout')}
-          >
-            Breakout
+            Games
           </button>
         </div>
       </div>
@@ -350,32 +308,8 @@ function RetroPage() {
         </>
       )}
 
-      {activeTab === 'snake' && (
-        <SnakeGame />
-      )}
-
-      {activeTab === 'pong' && (
-        <PongGame />
-      )}
-
-      {activeTab === 'tictactoe' && (
-        <TicTacToe />
-      )}
-
-      {activeTab === 'tetris' && (
-        <Tetris />
-      )}
-
-      {activeTab === '2048' && (
-        <Game2048 />
-      )}
-
-      {activeTab === 'memory' && (
-        <MemoryGame />
-      )}
-
-      {activeTab === 'breakout' && (
-        <Breakout />
+      {activeTab === 'games' && (
+        <GamesList />
       )}
     </div>
   )
