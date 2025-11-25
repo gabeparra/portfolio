@@ -7,9 +7,12 @@ const BALL_SIZE = 10
 const GAME_HEIGHT = 400
 const GAME_WIDTH = 600
 const PADDLE_SPEED = 5
+const AI_PADDLE_SPEED = 20
 const INITIAL_BALL_SPEED = 4
-const MAX_BALL_SPEED = 12
+const MAX_BALL_SPEED = 60
 const MIN_BALL_SPEED = 2
+const BALL_SPEED_INCREASE_INTERVAL = 2000
+const BALL_SPEED_INCREASE_AMOUNT = 1
 
 const getGameDimensions = () => {
   const board = document.querySelector('.pong-game-board')
@@ -60,6 +63,8 @@ function PongGame() {
   const aiPaddleRef = useRef(GAME_HEIGHT / 2 - PADDLE_HEIGHT / 2)
   const boardRef = useRef(null)
   const isTouchingRef = useRef(false)
+  const gameStartTimeRef = useRef(0)
+  const lastSpeedIncreaseRef = useRef(0)
 
   const handleKeyDown = useCallback((e) => {
     const key = e.key.toLowerCase()
@@ -123,10 +128,111 @@ function PongGame() {
     ballVelRef.current = newVel
     setBall(newBall)
     setBallVelocity(newVel)
+    lastSpeedIncreaseRef.current = Date.now()
+  }, [])
+
+  const checkSweptCollision = useCallback((ballX, ballY, velX, velY, paddleX, paddleY, paddleWidth, paddleHeight, ballSize) => {
+    const oldBallX = ballX - velX
+    const oldBallY = ballY - velY
+    
+    const ballMinX = Math.min(oldBallX, ballX)
+    const ballMaxX = Math.max(oldBallX + ballSize, ballX + ballSize)
+    const ballMinY = Math.min(oldBallY, ballY)
+    const ballMaxY = Math.max(oldBallY + ballSize, ballY + ballSize)
+    
+    const paddleMinX = paddleX
+    const paddleMaxX = paddleX + paddleWidth
+    const paddleMinY = paddleY
+    const paddleMaxY = paddleY + paddleHeight
+    
+    if (ballMaxX < paddleMinX || ballMinX > paddleMaxX ||
+        ballMaxY < paddleMinY || ballMinY > paddleMaxY) {
+      return null
+    }
+    
+    if (Math.abs(velX) < 0.001) {
+      return null
+    }
+    
+    const tEnterX = (paddleMinX - (oldBallX + ballSize)) / velX
+    const tExitX = (paddleMaxX - oldBallX) / velX
+    const tMinX = Math.min(tEnterX, tExitX)
+    const tMaxX = Math.max(tEnterX, tExitX)
+    
+    const tEnterY = velY === 0 ? -Infinity : (paddleMinY - (oldBallY + ballSize)) / velY
+    const tExitY = velY === 0 ? Infinity : (paddleMaxY - oldBallY) / velY
+    const tMinY = Math.min(tEnterY, tExitY)
+    const tMaxY = Math.max(tEnterY, tExitY)
+    
+    const tEnter = Math.max(tMinX, tMinY)
+    const tExit = Math.min(tMaxX, tMaxY)
+    
+    if (tEnter <= tExit && tEnter >= 0 && tEnter <= 1) {
+      const collisionX = oldBallX + velX * tEnter
+      const collisionY = oldBallY + velY * tEnter
+      return { t: tEnter, x: collisionX, y: collisionY }
+    }
+    
+    return null
+  }, [])
+
+  const predictBallY = useCallback((ballX, ballY, velX, velY, targetX, actualHeight) => {
+    if (velX === 0 || Math.abs(velX) < 0.1) return ballY
+    
+    const isMovingTowardTarget = (velX > 0 && targetX > ballX) || (velX < 0 && targetX < ballX)
+    if (!isMovingTowardTarget) {
+      return ballY
+    }
+    
+    let currentY = ballY
+    let currentVelY = velY
+    const stepSize = Math.abs(velX)
+    const totalDistance = Math.abs(targetX - ballX)
+    let distanceTraveled = 0
+    
+    while (distanceTraveled < totalDistance) {
+      const remainingDistance = totalDistance - distanceTraveled
+      const stepDistance = Math.min(stepSize, remainingDistance)
+      
+      currentY += currentVelY
+      distanceTraveled += stepDistance
+      
+      if (currentY < 0) {
+        currentY = -currentY
+        currentVelY = -currentVelY
+      } else if (currentY + BALL_SIZE > actualHeight) {
+        currentY = 2 * actualHeight - currentY - 2 * BALL_SIZE
+        currentVelY = -currentVelY
+      }
+      
+      if (distanceTraveled >= totalDistance) break
+    }
+    
+    return currentY
   }, [])
 
   const gameLoop = useCallback(() => {
     if (isPaused || gameOver) return
+
+    // Gradually increase ball speed over time
+    const now = Date.now()
+    if (now - lastSpeedIncreaseRef.current >= BALL_SPEED_INCREASE_INTERVAL) {
+      const currentSpeedX = Math.abs(ballVelRef.current.x)
+      const currentSpeedY = Math.abs(ballVelRef.current.y)
+      
+      if (currentSpeedX < MAX_BALL_SPEED) {
+        const newSpeedX = Math.min(MAX_BALL_SPEED, currentSpeedX + BALL_SPEED_INCREASE_AMOUNT)
+        ballVelRef.current.x = ballVelRef.current.x > 0 ? newSpeedX : -newSpeedX
+      }
+      
+      if (currentSpeedY < MAX_BALL_SPEED) {
+        const newSpeedY = Math.min(MAX_BALL_SPEED, currentSpeedY + BALL_SPEED_INCREASE_AMOUNT)
+        ballVelRef.current.y = ballVelRef.current.y > 0 ? newSpeedY : -newSpeedY
+      }
+      
+      setBallVelocity({ x: ballVelRef.current.x, y: ballVelRef.current.y })
+      lastSpeedIncreaseRef.current = now
+    }
 
     // Use actual visible game dimensions (may be less than GAME_HEIGHT due to CSS constraints)
     const actualHeight = gameDimensions.actualGameHeight || GAME_HEIGHT
@@ -134,12 +240,20 @@ function PongGame() {
 
     let newPlayerY = playerPaddleRef.current
     if (aiVsAi) {
-      const playerCenter = playerPaddleRef.current + PADDLE_HEIGHT / 2
-      if (ballRef.current.y < playerCenter - 10) {
-        newPlayerY = playerPaddleRef.current - PADDLE_SPEED * 0.8
-      } else if (ballRef.current.y > playerCenter + 10) {
-        newPlayerY = playerPaddleRef.current + PADDLE_SPEED * 0.8
-      }
+      const targetX = PADDLE_WIDTH
+      const predictedY = predictBallY(
+        ballRef.current.x,
+        ballRef.current.y,
+        ballVelRef.current.x,
+        ballVelRef.current.y,
+        targetX,
+        actualHeight
+      )
+      const targetPaddleY = predictedY - PADDLE_HEIGHT / 2
+      const currentPaddleY = playerPaddleRef.current
+      const diff = targetPaddleY - currentPaddleY
+      const moveDistance = Math.min(Math.abs(diff), AI_PADDLE_SPEED)
+      newPlayerY = currentPaddleY + (diff > 0 ? moveDistance : -moveDistance)
     } else {
       if (keysRef.current.w) {
         newPlayerY = newPlayerY - PADDLE_SPEED
@@ -156,20 +270,26 @@ function PongGame() {
     playerPaddleRef.current = newPlayerY
     setPlayerPaddle(newPlayerY)
 
-    const aiCenter = aiPaddleRef.current + PADDLE_HEIGHT / 2
-    let newAiY = aiPaddleRef.current
-    if (ballRef.current.y < aiCenter - 10) {
-      newAiY = aiPaddleRef.current - PADDLE_SPEED * 0.8
-    } else if (ballRef.current.y > aiCenter + 10) {
-      newAiY = aiPaddleRef.current + PADDLE_SPEED * 0.8
-    }
-    const maxAiPaddleY = actualHeight - PADDLE_HEIGHT
-    newAiY = Math.max(0, Math.min(maxAiPaddleY, Math.round(newAiY)))
+    const aiTargetX = actualWidth - PADDLE_WIDTH
+    const aiPredictedY = predictBallY(
+      ballRef.current.x,
+      ballRef.current.y,
+      ballVelRef.current.x,
+      ballVelRef.current.y,
+      aiTargetX,
+      actualHeight
+    )
+    const aiTargetPaddleY = aiPredictedY - PADDLE_HEIGHT / 2
+    const currentAiPaddleY = aiPaddleRef.current
+    const aiDiff = aiTargetPaddleY - currentAiPaddleY
+    const aiMoveDistance = Math.min(Math.abs(aiDiff), AI_PADDLE_SPEED)
+    const newAiY = Math.max(0, Math.min(actualHeight - PADDLE_HEIGHT, Math.round(currentAiPaddleY + (aiDiff > 0 ? aiMoveDistance : -aiMoveDistance))))
     if (newAiY + PADDLE_HEIGHT > actualHeight) {
-      newAiY = Math.max(0, actualHeight - PADDLE_HEIGHT)
+      aiPaddleRef.current = Math.max(0, actualHeight - PADDLE_HEIGHT)
+    } else {
+      aiPaddleRef.current = newAiY
     }
-    aiPaddleRef.current = newAiY
-    setAiPaddle(newAiY)
+    setAiPaddle(aiPaddleRef.current)
 
     let newX = ballRef.current.x + ballVelRef.current.x
     let newY = ballRef.current.y + ballVelRef.current.y
@@ -178,9 +298,6 @@ function PongGame() {
 
     const ballTop = newY
     const ballBottom = newY + BALL_SIZE
-    const ballLeft = newX
-    const ballRight = newX + BALL_SIZE
-    const ballCenterY = newY + BALL_SIZE / 2
 
     if (ballTop < 0) {
       newVelY = Math.abs(newVelY) * 1.05
@@ -202,17 +319,20 @@ function PongGame() {
       }
     }
 
-    if (newVelX < 0 && ballLeft <= PADDLE_WIDTH) {
+    if (newVelX < 0 && newX <= PADDLE_WIDTH + BALL_SIZE) {
       const paddleTop = playerPaddleRef.current
-      const paddleBottom = playerPaddleRef.current + PADDLE_HEIGHT
       const paddleLeft = 0
-      const paddleRight = PADDLE_WIDTH
       
-      if (ballRight >= paddleLeft && ballLeft <= paddleRight && 
-          ballBottom >= paddleTop && ballTop <= paddleBottom) {
-        const hitPos = (ballCenterY - paddleTop) / PADDLE_HEIGHT
+      const collision = checkSweptCollision(
+        newX, newY, ballVelRef.current.x, ballVelRef.current.y,
+        paddleLeft, paddleTop, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE
+      )
+      
+      if (collision) {
+        const hitY = collision.y + BALL_SIZE / 2
+        const hitPos = Math.max(0, Math.min(1, (hitY - paddleTop) / PADDLE_HEIGHT))
         const speedMultiplier = 1.15
-        const currentSpeed = Math.abs(newVelX)
+        const currentSpeed = Math.abs(ballVelRef.current.x)
         newVelX = currentSpeed * speedMultiplier
         const baseSpeed = Math.max(currentSpeed, INITIAL_BALL_SPEED)
         newVelY = (hitPos - 0.5) * baseSpeed * 2
@@ -227,7 +347,8 @@ function PongGame() {
           newVelY = newVelY > 0 ? MIN_BALL_SPEED : -MIN_BALL_SPEED
         }
         newX = PADDLE_WIDTH
-      } else if (ballLeft < 0) {
+        newY = collision.y
+      } else if (newX + BALL_SIZE < 0) {
         setAiScore(prev => {
           const newScore = prev + 1
           if (newScore >= 10) {
@@ -240,17 +361,20 @@ function PongGame() {
       }
     }
 
-    if (newVelX > 0 && ballRight >= actualWidth - PADDLE_WIDTH) {
+    if (newVelX > 0 && newX + BALL_SIZE >= actualWidth - PADDLE_WIDTH) {
       const paddleTop = aiPaddleRef.current
-      const paddleBottom = aiPaddleRef.current + PADDLE_HEIGHT
       const paddleLeft = actualWidth - PADDLE_WIDTH
-      const paddleRight = actualWidth
       
-      if (ballRight >= paddleLeft && ballLeft <= paddleRight && 
-          ballBottom >= paddleTop && ballTop <= paddleBottom) {
-        const hitPos = (ballCenterY - paddleTop) / PADDLE_HEIGHT
+      const collision = checkSweptCollision(
+        newX, newY, ballVelRef.current.x, ballVelRef.current.y,
+        paddleLeft, paddleTop, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_SIZE
+      )
+      
+      if (collision) {
+        const hitY = collision.y + BALL_SIZE / 2
+        const hitPos = Math.max(0, Math.min(1, (hitY - paddleTop) / PADDLE_HEIGHT))
         const speedMultiplier = 1.15
-        const currentSpeed = Math.abs(newVelX)
+        const currentSpeed = Math.abs(ballVelRef.current.x)
         newVelX = -currentSpeed * speedMultiplier
         const baseSpeed = Math.max(currentSpeed, INITIAL_BALL_SPEED)
         newVelY = (hitPos - 0.5) * baseSpeed * 2
@@ -265,7 +389,8 @@ function PongGame() {
           newVelY = newVelY > 0 ? MIN_BALL_SPEED : -MIN_BALL_SPEED
         }
         newX = actualWidth - PADDLE_WIDTH - BALL_SIZE
-      } else if (ballRight > actualWidth) {
+        newY = collision.y
+      } else if (newX > actualWidth) {
         setPlayerScore(prev => {
           const newScore = prev + 1
           if (newScore >= 10) {
@@ -289,7 +414,7 @@ function PongGame() {
     ballVelRef.current = { x: newVelX, y: newVelY }
     setBall({ x: newX, y: newY })
     setBallVelocity({ x: newVelX, y: newVelY })
-  }, [isPaused, gameOver, resetBall, aiVsAi])
+  }, [isPaused, gameOver, resetBall, aiVsAi, gameDimensions, predictBallY, checkSweptCollision])
 
   useEffect(() => {
     if (!gameOver && !isPaused) {
@@ -319,6 +444,11 @@ function PongGame() {
     setAiScore(0)
     setGameOver(false)
     setIsPaused(false)
+    const now = Date.now()
+    gameStartTimeRef.current = now
+    lastSpeedIncreaseRef.current = now
+    ballVelRef.current = { x: INITIAL_BALL_SPEED, y: INITIAL_BALL_SPEED }
+    setBallVelocity({ x: INITIAL_BALL_SPEED, y: INITIAL_BALL_SPEED })
   }
 
   const toggleAiVsAi = () => {
@@ -329,13 +459,6 @@ function PongGame() {
     }
   }
 
-  const handlePaddleMove = (direction) => {
-    if (gameOver || isPaused || aiVsAi) return
-    keysRef.current[direction] = true
-    setTimeout(() => {
-      keysRef.current[direction] = false
-    }, 50)
-  }
 
   const handleTouchStart = useCallback((e) => {
     if (gameOver || isPaused || aiVsAi || !boardRef.current) return

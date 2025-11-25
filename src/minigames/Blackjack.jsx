@@ -24,16 +24,19 @@ const shuffleDeck = (deck) => {
 }
 
 const getCardValue = (card) => {
+  if (!card || !card.value) return 0
   if (card.value === 'A') return 11
   if (['J', 'Q', 'K'].includes(card.value)) return 10
-  return parseInt(card.value)
+  return parseInt(card.value) || 0
 }
 
 const getHandValue = (hand) => {
+  if (!hand || hand.length === 0) return 0
   let value = 0
   let aces = 0
   
   for (let card of hand) {
+    if (!card) continue
     if (card.value === 'A') {
       aces++
       value += 11
@@ -61,7 +64,13 @@ function Blackjack() {
   const [dealerHidden, setDealerHidden] = useState(true)
 
   useEffect(() => {
-    startNewGame()
+    const newDeck = createDeck()
+    setDeck(newDeck)
+    setPlayerHand([])
+    setDealerHand([])
+    setGameState('betting')
+    setMessage('Place your bet!')
+    setDealerHidden(true)
   }, [])
 
   const startNewGame = () => {
@@ -252,7 +261,7 @@ function Blackjack() {
   }
 
   const playerValue = getHandValue(playerHand)
-  const dealerValue = dealerHidden ? getCardValue(dealerHand[0]) : getHandValue(dealerHand)
+  const dealerValue = dealerHidden && dealerHand.length > 0 ? getCardValue(dealerHand[0]) : getHandValue(dealerHand)
 
   return (
     <div className="blackjack-container">
@@ -295,7 +304,21 @@ function Blackjack() {
                 <button onClick={() => handleBetChange(5)} disabled={bet >= balance}>+5</button>
               </div>
             </div>
-            <button onClick={dealCards} disabled={balance < bet} className="deal-button">
+            <button 
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                dealCards()
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault()
+                if (balance >= bet) {
+                  dealCards()
+                }
+              }}
+              disabled={balance < bet} 
+              className="deal-button"
+            >
               Deal Cards
             </button>
           </>
@@ -303,13 +326,50 @@ function Blackjack() {
 
         {gameState === 'playing' && (
           <div className="game-buttons">
-            <button onClick={handleHit} className="hit-button">Hit</button>
-            <button onClick={handleStand} className="stand-button">Stand</button>
+            <button 
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                handleHit()
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault()
+                handleHit()
+              }}
+              className="hit-button"
+            >
+              Hit
+            </button>
+            <button 
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                handleStand()
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault()
+                handleStand()
+              }}
+              className="stand-button"
+            >
+              Stand
+            </button>
           </div>
         )}
 
         {gameState === 'finished' && (
-          <button onClick={startNewGame} className="new-game-button">
+          <button 
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              startNewGame()
+            }}
+            onTouchStart={(e) => {
+              e.preventDefault()
+              startNewGame()
+            }}
+            className="new-game-button"
+          >
             New Game
           </button>
         )}

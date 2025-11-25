@@ -1,0 +1,302 @@
+.foxy-hallway-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: calc(100vh - 100px);
+  width: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.foxy-game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 3px solid #8b0000;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.foxy-stats {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff6b6b;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.pause-button {
+  padding: 8px 15px;
+  font-size: 20px;
+  background-color: #8b0000;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pause-button:hover {
+  background-color: #a00000;
+  transform: scale(1.05);
+}
+
+.hallway-view {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, #2a2a3e 0%, #0a0a0a 100%);
+  border: 4px solid #8b0000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(139, 0, 0, 0.5), inset 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+.hallway {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(139, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(139, 0, 0, 0.1) 100%
+  );
+  transition: opacity 0.3s ease;
+}
+
+.hallway-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.hallway-line {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(139, 0, 0, 0.3) 20%,
+    rgba(139, 0, 0, 0.5) 50%,
+    rgba(139, 0, 0, 0.3) 80%,
+    transparent 100%
+  );
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.foxy-character {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 100px;
+  transform-origin: center;
+  transition: transform 0.1s linear, opacity 0.2s ease, filter 0.2s ease;
+  z-index: 10;
+  filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.5));
+  animation: foxyGlow 1.5s infinite ease-in-out;
+}
+
+@keyframes foxyGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.5)) brightness(0.8);
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.8)) brightness(1.2);
+  }
+}
+
+.flashlight-flash {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 200, 0.6) 0%,
+    rgba(255, 255, 150, 0.3) 30%,
+    transparent 70%
+  );
+  z-index: 5;
+  pointer-events: none;
+  animation: flashFade 0.2s ease-out;
+}
+
+@keyframes flashFade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.game-over-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.game-over-content {
+  text-align: center;
+  color: #ff6b6b;
+  padding: 30px;
+  background: rgba(139, 0, 0, 0.3);
+  border: 3px solid #ff6b6b;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+}
+
+.game-over-content h2 {
+  font-size: 48px;
+  margin: 0 0 20px 0;
+  text-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.game-over-content p {
+  font-size: 20px;
+  margin: 10px 0;
+  color: #fff;
+}
+
+.restart-button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #8b0000;
+  color: #fff;
+  border: 3px solid #ff6b6b;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.restart-button:hover {
+  background-color: #ff6b6b;
+  color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
+}
+
+.flashlight-controls {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.flashlight-button {
+  padding: 20px 50px;
+  font-size: 24px;
+  font-weight: bold;
+  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+  color: #fff;
+  border: 4px solid #8b0000;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.flashlight-button:active,
+.flashlight-button.active {
+  background: linear-gradient(180deg, #ffffaa 0%, #ffff88 100%);
+  color: #000;
+  box-shadow: 0 0 30px rgba(255, 255, 200, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.5);
+  transform: scale(0.95);
+}
+
+.flashlight-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.flashlight-hint {
+  color: #ccc;
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .hallway-view {
+    height: 400px;
+  }
+
+  .foxy-character {
+    font-size: 80px;
+  }
+
+  .flashlight-button {
+    padding: 15px 40px;
+    font-size: 20px;
+  }
+
+  .game-over-content h2 {
+    font-size: 36px;
+  }
+}
+

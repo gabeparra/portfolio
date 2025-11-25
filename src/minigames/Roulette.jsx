@@ -37,6 +37,7 @@ function Roulette() {
   const [message, setMessage] = useState('Place your bets!')
   const [spinAngle, setSpinAngle] = useState(0)
   const spinIntervalRef = useRef(null)
+  const currentAngleRef = useRef(0)
 
   const handleBet = (betType) => {
     if (isSpinning || balance < betAmount) return
@@ -51,6 +52,12 @@ function Roulette() {
     }))
     
     setBalance(prev => prev - betAmount)
+  }
+
+  const handleBetClick = (e, betType) => {
+    e.preventDefault()
+    e.stopPropagation()
+    handleBet(betType)
   }
 
   const handleBetAmountChange = (amount) => {
@@ -75,10 +82,24 @@ function Roulette() {
     setLastWin(0)
     setWinningNumber(null)
 
-    let currentAngle = spinAngle
-    const spins = 5 + Math.random() * 3 // 5-8 full rotations
-    const finalAngle = spins * 360 + Math.random() * 360
-    const targetNumber = NUMBERS[Math.floor(Math.random() * NUMBERS.length)]
+    // Each number occupies (360 / NUMBERS.length) degrees
+    const anglePerNumber = 360 / NUMBERS.length
+    
+    // Add multiple full rotations for visual effect (5-8 rotations)
+    const spins = 5 + Math.random() * 3
+    const fullRotations = spins * 360
+    
+    // Add a random final angle (0-360) for unpredictability
+    const randomFinalAngle = Math.random() * 360
+    
+    // Get current angle and normalize to 0-360 range
+    let currentAngle = currentAngleRef.current
+    while (currentAngle < 0) currentAngle += 360
+    while (currentAngle >= 360) currentAngle -= 360
+    
+    // Calculate final angle: start from normalized current + full rotations + random angle
+    const startAngle = currentAngle
+    const finalAngle = startAngle + fullRotations + randomFinalAngle
     
     let frame = 0
     const totalFrames = 120
@@ -87,13 +108,28 @@ function Roulette() {
       frame++
       const progress = frame / totalFrames
       const easeOut = 1 - Math.pow(1 - progress, 3) // Easing function
-      currentAngle = spinAngle + finalAngle * easeOut
-      setSpinAngle(currentAngle % 360)
+      const currentAngle = startAngle + (finalAngle - startAngle) * easeOut
+      currentAngleRef.current = currentAngle
+      setSpinAngle(currentAngle)
 
       if (frame >= totalFrames) {
         clearInterval(spinIntervalRef.current)
+        currentAngleRef.current = finalAngle
+        setSpinAngle(finalAngle)
+        
+        // Calculate which number is under the pointer based on final angle
+        // The pointer is at the top (0 degrees)
+        // When wheel rotates clockwise by finalAngle, numbers rotate with it
+        // To find which number is at top: solve (anglePerNumber * index + finalAngle) % 360 = 0
+        // Which simplifies to: index = (-finalAngle / anglePerNumber) % NUMBERS.length
+        const normalizedFinalAngle = finalAngle % 360
+        // Calculate the raw index offset
+        const rawIndex = -normalizedFinalAngle / anglePerNumber
+        // Round to nearest integer and handle negative values
+        const winningIndex = Math.round((rawIndex % NUMBERS.length + NUMBERS.length) % NUMBERS.length)
+        const targetNumber = NUMBERS[winningIndex]
+        
         setWinningNumber(targetNumber)
-        setSpinAngle((spinAngle + finalAngle) % 360)
         
         // Calculate wins
         let totalWin = 0
@@ -132,9 +168,9 @@ function Roulette() {
   }
 
   const getWheelRotation = () => {
-    const numberIndex = NUMBERS.findIndex(n => n.num === winningNumber?.num)
-    const baseRotation = (360 / NUMBERS.length) * numberIndex
-    return spinAngle - baseRotation
+    // CSS can handle angles > 360, but we normalize to prevent very large values
+    // while maintaining smooth rotation
+    return spinAngle
   }
 
   return (
@@ -154,12 +190,16 @@ function Roulette() {
           >
             {NUMBERS.map((number, index) => {
               const angle = (360 / NUMBERS.length) * index
+              // Radius closer to edge but with spacing to prevent overlap
+              const radius = -160
+              // Counter-rotate by the wheel's rotation to keep numbers upright
+              const wheelRotation = getWheelRotation()
               return (
                 <div
                   key={number.num}
                   className={`wheel-number ${number.color} ${winningNumber?.num === number.num ? 'winning' : ''}`}
                   style={{
-                    transform: `rotate(${angle}deg) translateY(-150px) rotate(${-angle}deg)`
+                    transform: `rotate(${angle}deg) translateY(${radius}px) rotate(${-angle - wheelRotation}deg)`
                   }}
                 >
                   {number.num}
@@ -202,7 +242,13 @@ function Roulette() {
               return (
                 <button
                   key={key}
-                  onClick={() => handleBet(key)}
+                  onClick={(e) => handleBetClick(e, key)}
+                  onTouchStart={(e) => {
+                    e.preventDefault()
+                    if (!isSpinning && balance >= betAmount) {
+                      handleBet(key)
+                    }
+                  }}
                   disabled={isSpinning || balance < betAmount}
                   className={`bet-type-btn ${bet > 0 ? 'active' : ''}`}
                 >
@@ -218,10 +264,38 @@ function Roulette() {
         </div>
 
         <div className="action-buttons">
-          <button onClick={clearBets} disabled={isSpinning || getTotalBets() === 0} className="clear-bets-btn">
+          <button 
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              clearBets()
+            }}
+            onTouchStart={(e) => {
+              e.preventDefault()
+              if (!isSpinning && getTotalBets() > 0) {
+                clearBets()
+              }
+            }}
+            disabled={isSpinning || getTotalBets() === 0} 
+            className="clear-bets-btn"
+          >
             Clear Bets ({getTotalBets()})
           </button>
-          <button onClick={spin} disabled={isSpinning || getTotalBets() === 0} className="spin-btn">
+          <button 
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              spin()
+            }}
+            onTouchStart={(e) => {
+              e.preventDefault()
+              if (!isSpinning && getTotalBets() > 0) {
+                spin()
+              }
+            }}
+            disabled={isSpinning || getTotalBets() === 0} 
+            className="spin-btn"
+          >
             {isSpinning ? 'SPINNING...' : 'SPIN'}
           </button>
         </div>

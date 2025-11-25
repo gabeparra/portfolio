@@ -96,20 +96,19 @@ function RetroPage() {
       let newX = currentPos.x + vx
       let newY = currentPos.y + vy
 
-      const padding = Math.max(10, window.innerWidth * 0.02)
-      const maxX = window.innerWidth - gifWidth - padding
-      const maxY = window.innerHeight - gifHeight - padding
+      const maxX = window.innerWidth - gifWidth
+      const maxY = window.innerHeight - gifHeight
 
-      if (newX <= padding) {
-        newX = padding
+      if (newX <= 0) {
+        newX = 0
         vx = -vx
       } else if (newX >= maxX) {
         newX = maxX
         vx = -vx
       }
 
-      if (newY <= padding) {
-        newY = padding
+      if (newY <= 0) {
+        newY = 0
         vy = -vy
       } else if (newY >= maxY) {
         newY = maxY
@@ -148,16 +147,16 @@ function RetroPage() {
           newX = currentPos.x + vx
           newY = currentPos.y + vy
           
-          if (newX < padding) {
-            newX = padding
+          if (newX < 0) {
+            newX = 0
             vx = -vx
           } else if (newX > maxX) {
             newX = maxX
             vx = -vx
           }
 
-          if (newY < padding) {
-            newY = padding
+          if (newY < 0) {
+            newY = 0
             vy = -vy
           } else if (newY > maxY) {
             newY = maxY
@@ -303,10 +302,6 @@ function RetroPage() {
             <div className="bell bell-2">🔔</div>
             
             <div className="character">👤</div>
-          </div>
-          
-          <div className="content">
-            <p>Welcome to my portfolio!</p>
           </div>
         </>
       )}

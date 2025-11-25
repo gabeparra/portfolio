@@ -11,6 +11,7 @@ import SlotMachine from './SlotMachine.jsx'
 import FiveReelSlots from './FiveReelSlots.jsx'
 import Blackjack from './Blackjack.jsx'
 import Roulette from './Roulette.jsx'
+import FoxyHallway from './FoxyHallway.jsx'
 
 const GAMES = [
   { id: 'snake', name: 'Snake', icon: '🐍' },
@@ -23,7 +24,8 @@ const GAMES = [
   { id: 'slots', name: '3-Reel Slots', icon: '🎰' },
   { id: 'fivereelslots', name: '5-Reel Slots', icon: '🎲' },
   { id: 'blackjack', name: 'Blackjack', icon: '🃏' },
-  { id: 'roulette', name: 'Roulette', icon: '🎡' }
+  { id: 'roulette', name: 'Roulette', icon: '🎡' },
+  { id: 'foxyhallway', name: 'Foxy Hallway', icon: '🦊' }
 ]
 
 function GamesList({ onBack, onGameSelect }) {
@@ -60,6 +62,7 @@ function GamesList({ onBack, onGameSelect }) {
         {selectedGame === 'fivereelslots' && <FiveReelSlots />}
         {selectedGame === 'blackjack' && <Blackjack />}
         {selectedGame === 'roulette' && <Roulette />}
+        {selectedGame === 'foxyhallway' && <FoxyHallway />}
       </div>
     )
   }
