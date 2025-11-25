@@ -1,36 +1,16 @@
 import './About.css'
+import Navbar from '../components/Navbar'
 
-function About({ onBack, onNavigateToPets, onNavigateToContact }) {
-  const handlePetsClick = (e) => {
-    e.preventDefault()
-    if (onNavigateToPets) {
-      onNavigateToPets()
-    }
-  }
-
-  const handleContactClick = (e) => {
-    e.preventDefault()
-    if (onNavigateToContact) {
-      onNavigateToContact()
-    }
-  }
+function About({ onBack, onNavigateToPets, onNavigateToContact, onNavigateToAbout }) {
   return (
     <div className="about-page">
-      <header className="header">
-        <nav className="nav">
-          <div className="nav-brand">
-            <span onClick={onBack} style={{ cursor: 'pointer' }}>G</span>
-            abriel Parra
-          </div>
-          <ul className="nav-links">
-            <li><a href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>Home</a></li>
-            <li><a href="#skills" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Skills</a></li>
-            <li><a href="#projects" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Projects</a></li>
-            <li><a href="#pets" onClick={handlePetsClick}>Pets</a></li>
-            <li><a href="#contact" onClick={handleContactClick}>Contact</a></li>
-          </ul>
-        </nav>
-      </header>
+      <Navbar 
+        onBack={onBack}
+        onNavigateToAbout={onNavigateToAbout}
+        onNavigateToPets={onNavigateToPets}
+        onNavigateToContact={onNavigateToContact}
+        currentPage="about"
+      />
 
       <main>
         <section className="section">

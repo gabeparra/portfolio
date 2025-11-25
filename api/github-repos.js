@@ -1,3 +1,4 @@
+/* global process */
 export default async function handler(req, res) {
   // This runs on Vercel's server - GITHUB_TOKEN is never exposed to the browser
   const token = process.env.GITHUB_TOKEN || ''

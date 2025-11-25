@@ -1,21 +1,9 @@
 import './Contact.css'
 import { useState } from 'react'
 import emailjs from '@emailjs/browser'
+import Navbar from '../components/Navbar'
 
-function Contact({ onBack, onNavigateToPets, onNavigateToAbout }) {
-  const handlePetsClick = (e) => {
-    e.preventDefault()
-    if (onNavigateToPets) {
-      onNavigateToPets()
-    }
-  }
-
-  const handleAboutClick = (e) => {
-    e.preventDefault()
-    if (onNavigateToAbout) {
-      onNavigateToAbout()
-    }
-  }
+function Contact({ onBack, onNavigateToPets, onNavigateToAbout, onNavigateToContact }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -70,21 +58,13 @@ function Contact({ onBack, onNavigateToPets, onNavigateToAbout }) {
 
   return (
     <div className="contact-page">
-      <header className="header">
-        <nav className="nav">
-          <div className="nav-brand">
-            <span onClick={onBack} style={{ cursor: 'pointer' }}>G</span>
-            abriel Parra
-          </div>
-          <ul className="nav-links">
-            <li><a href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>Home</a></li>
-            <li><a href="#skills" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Skills</a></li>
-            <li><a href="#projects" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Projects</a></li>
-            <li><a href="#pets" onClick={handlePetsClick}>Pets</a></li>
-            <li><a href="#contact" onClick={(e) => { e.preventDefault(); }}>Contact</a></li>
-          </ul>
-        </nav>
-      </header>
+      <Navbar 
+        onBack={onBack}
+        onNavigateToAbout={onNavigateToAbout}
+        onNavigateToPets={onNavigateToPets}
+        onNavigateToContact={onNavigateToContact}
+        currentPage="contact"
+      />
 
       <main>
         <section className="section section-dark">

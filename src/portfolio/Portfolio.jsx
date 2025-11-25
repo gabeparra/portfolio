@@ -13,8 +13,11 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, o
       try {
         setLoading(true)
         
-        // Call the serverless function - token stays hidden on the server
-        const response = await fetch('/api/github-repos')
+        // Use serverless API in production, public API in development
+        const isProduction = import.meta.env.PROD
+        const endpoint = isProduction ? '/api/github-repos' : 'https://api.github.com/users/gabeparra/repos?sort=updated&per_page=12'
+        
+        const response = await fetch(endpoint)
         
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({ message: response.statusText }))

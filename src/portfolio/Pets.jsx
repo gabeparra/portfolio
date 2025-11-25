@@ -1,19 +1,7 @@
 import './Pets.css'
+import Navbar from '../components/Navbar'
 
-function Pets({ onBack, onNavigateToAbout, onNavigateToContact }) {
-  const handleAboutClick = (e) => {
-    e.preventDefault()
-    if (onNavigateToAbout) {
-      onNavigateToAbout()
-    }
-  }
-
-  const handleContactClick = (e) => {
-    e.preventDefault()
-    if (onNavigateToContact) {
-      onNavigateToContact()
-    }
-  }
+function Pets({ onBack, onNavigateToAbout, onNavigateToContact, onNavigateToPets }) {
   const pets = [
     {
       name: 'Blanco',
@@ -43,21 +31,13 @@ function Pets({ onBack, onNavigateToAbout, onNavigateToContact }) {
 
   return (
     <div className="pets-page">
-      <header className="header">
-        <nav className="nav">
-          <div className="nav-brand">
-            <span onClick={onBack} style={{ cursor: 'pointer' }}>G</span>
-            abriel Parra
-          </div>
-          <ul className="nav-links">
-            <li><a href="#" onClick={(e) => { e.preventDefault(); onBack(); }}>Home</a></li>
-            <li><a href="#skills" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Skills</a></li>
-            <li><a href="#projects" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Projects</a></li>
-            <li><a href="#pets" onClick={(e) => { e.preventDefault(); }}>Pets</a></li>
-            <li><a href="#contact" onClick={handleContactClick}>Contact</a></li>
-          </ul>
-        </nav>
-      </header>
+      <Navbar 
+        onBack={onBack}
+        onNavigateToAbout={onNavigateToAbout}
+        onNavigateToPets={onNavigateToPets}
+        onNavigateToContact={onNavigateToContact}
+        currentPage="pets"
+      />
 
       <main>
         <section className="section">

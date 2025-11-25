@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Portfolio from './portfolio/Portfolio'
 import RetroPage from './minigames/RetroPage'
 import About from './portfolio/About'
 import Contact from './portfolio/Contact'
 import Pets from './portfolio/Pets'
+import { useKonamiCode } from './hooks/useKonamiCode'
 import './App.css'
 
 function App() {
@@ -13,9 +14,12 @@ function App() {
   const [showPets, setShowPets] = useState(false)
   const [easterEggState, setEasterEggState] = useState({ clickedG: false, clickedC: false })
 
-  const toggleRetro = () => {
-    setShowRetro(!showRetro)
-  }
+  const toggleRetro = useCallback(() => {
+    setShowRetro(prev => !prev)
+  }, [])
+
+  // Activate RetroPage on Konami code
+  useKonamiCode(toggleRetro)
 
   const toggleAbout = () => {
     setShowAbout(!showAbout)
@@ -63,15 +67,15 @@ function App() {
   }
 
   if (showAbout) {
-    return <About onBack={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
+    return <About onBack={toggleAbout} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
   }
 
   if (showContact) {
-    return <Contact onBack={toggleContact} onNavigateToPets={togglePets} onNavigateToAbout={toggleAbout} />
+    return <Contact onBack={toggleContact} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
   }
 
   if (showPets) {
-    return <Pets onBack={togglePets} onNavigateToAbout={toggleAbout} onNavigateToContact={toggleContact} />
+    return <Pets onBack={togglePets} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
   }
 
   const showSecretButton = easterEggState.clickedG && easterEggState.clickedC
