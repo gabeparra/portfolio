@@ -16,13 +16,20 @@
 
 .header-with-tabs {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: clamp(10px, 2vh, 20px) 0;
+  gap: 15px;
+  margin: clamp(10px, 2vh, 20px) clamp(10px, 2vw, 20px);
   z-index: 1000;
   position: relative;
+}
+
+@media (min-width: 768px) {
+  .header-with-tabs {
+    flex-direction: row;
+    gap: 20px;
+  }
 }
 
 .retro-page h1 {
@@ -37,14 +44,20 @@
 
 .tabs {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   z-index: 1000;
   position: relative;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 5px;
 }
 
 .tab-button {
-  padding: 12px 24px;
-  font-size: 18px;
+  padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 24px);
+  font-size: clamp(14px, 3vw, 18px);
   font-weight: bold;
   background-color: rgba(255, 255, 255, 0.9);
   color: #000;
@@ -53,6 +66,9 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
+  min-width: fit-content;
+  white-space: nowrap;
+  touch-action: manipulation;
 }
 
 .tab-button:hover {

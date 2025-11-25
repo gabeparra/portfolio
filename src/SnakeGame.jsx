@@ -140,6 +140,30 @@ function SnakeGame() {
     setIsPaused(false)
   }
 
+  const handleDirectionChange = (newDirection) => {
+    if (gameOver) return
+    const currentDir = directionRef.current
+    
+    if (newDirection === 'up' && currentDir.y === 0) {
+      directionRef.current = { x: 0, y: -1 }
+      setDirection({ x: 0, y: -1 })
+    } else if (newDirection === 'down' && currentDir.y === 0) {
+      directionRef.current = { x: 0, y: 1 }
+      setDirection({ x: 0, y: 1 })
+    } else if (newDirection === 'left' && currentDir.x === 0) {
+      directionRef.current = { x: -1, y: 0 }
+      setDirection({ x: -1, y: 0 })
+    } else if (newDirection === 'right' && currentDir.x === 0) {
+      directionRef.current = { x: 1, y: 0 }
+      setDirection({ x: 1, y: 0 })
+    }
+  }
+
+  const handlePause = () => {
+    if (gameOver) return
+    setIsPaused(prev => !prev)
+  }
+
   return (
     <div className="snake-game-container">
       <div className="snake-game-header">
@@ -160,22 +184,56 @@ function SnakeGame() {
             <div
               key={index}
               className={`cell ${isHead ? 'head' : ''} ${isSnake && !isHead ? 'snake' : ''} ${isFood ? 'food' : ''}`}
-              style={{
-                width: `${CELL_SIZE}px`,
-                height: `${CELL_SIZE}px`
-              }}
             />
           )
         })}
       </div>
 
       <div className="snake-game-controls">
+        <div className="mobile-controls">
+          <button 
+            className="control-button up" 
+            onClick={() => handleDirectionChange('up')}
+            aria-label="Move up"
+          >
+            ↑
+          </button>
+          <button 
+            className="control-button left" 
+            onClick={() => handleDirectionChange('left')}
+            aria-label="Move left"
+          >
+            ←
+          </button>
+          <button 
+            className="control-button pause" 
+            onClick={handlePause}
+            aria-label="Pause"
+          >
+            ⏸
+          </button>
+          <button 
+            className="control-button right" 
+            onClick={() => handleDirectionChange('right')}
+            aria-label="Move right"
+          >
+            →
+          </button>
+          <button 
+            className="control-button down" 
+            onClick={() => handleDirectionChange('down')}
+            aria-label="Move down"
+          >
+            ↓
+          </button>
+        </div>
         <button onClick={resetGame} className="reset-button">
           {gameOver ? 'Play Again' : 'Reset'}
         </button>
         <div className="instructions">
           <p>Use Arrow Keys or WASD to move</p>
           <p>Press Space to pause</p>
+          <p className="mobile-instruction">Or use the on-screen controls</p>
         </div>
       </div>
     </div>

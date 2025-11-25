@@ -3,9 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: clamp(10px, 2vw, 20px);
   min-height: calc(100vh - 100px);
   background-color: #87CEEB;
+  overflow-x: hidden;
 }
 
 .pong-header {
@@ -13,30 +14,32 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 600px;
-  margin-bottom: 20px;
-  padding: 10px;
+  max-width: min(90vw, 600px);
+  margin-bottom: clamp(10px, 2vh, 20px);
+  padding: clamp(8px, 1.5vw, 10px);
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .score-display {
   display: flex;
-  gap: 30px;
-  font-size: 20px;
+  gap: clamp(15px, 4vw, 30px);
+  font-size: clamp(16px, 3.5vw, 20px);
   font-weight: bold;
   color: #000;
 }
 
 .player-score,
 .ai-score {
-  font-size: 18px;
+  font-size: clamp(14px, 3vw, 18px);
 }
 
 .paused,
 .game-over {
-  font-size: 18px;
+  font-size: clamp(14px, 3vw, 18px);
   font-weight: bold;
   color: #ff0000;
   text-transform: uppercase;
@@ -50,6 +53,7 @@
   border: 4px solid #fff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   outline: none;
+  margin: 0 auto;
 }
 
 .paddle {
@@ -95,8 +99,8 @@
 }
 
 .reset-button {
-  padding: 12px 24px;
-  font-size: 18px;
+  padding: clamp(12px, 2.5vw, 14px) clamp(20px, 4vw, 24px);
+  font-size: clamp(16px, 3.5vw, 18px);
   font-weight: bold;
   background-color: #3498db;
   color: #fff;
@@ -105,6 +109,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 15px;
+  touch-action: manipulation;
+  min-height: 44px;
 }
 
 .reset-button:hover {
@@ -120,14 +126,67 @@
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
-  padding: 15px;
-  max-width: 600px;
+  padding: clamp(12px, 2vw, 15px);
+  max-width: min(90vw, 600px);
 }
 
 .instructions p {
   margin: 5px 0;
-  font-size: 14px;
+  font-size: clamp(12px, 2.5vw, 14px);
   color: #000;
   font-weight: 500;
+}
+
+.pong-controls {
+  width: 100%;
+  max-width: min(90vw, 600px);
+}
+
+.mobile-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px auto;
+  touch-action: manipulation;
+}
+
+@media (min-width: 768px) {
+  .mobile-controls {
+    display: none;
+  }
+}
+
+.control-button {
+  padding: 20px 30px;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  min-height: 60px;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button:active {
+  background-color: #3498db;
+  color: #fff;
+  transform: scale(0.95);
+}
+
+.mobile-instruction {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobile-instruction {
+    display: none;
+  }
 }
 

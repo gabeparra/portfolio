@@ -1,14 +1,14 @@
 .secret-button {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
+  top: clamp(10px, 2vh, 20px);
+  right: clamp(10px, 2vw, 20px);
+  width: clamp(36px, 8vw, 40px);
+  height: clamp(36px, 8vw, 40px);
   background: rgba(59, 130, 246, 0.2);
   border: 1px solid rgba(59, 130, 246, 0.4);
   border-radius: 50%;
   color: #60a5fa;
-  font-size: 20px;
+  font-size: clamp(18px, 4vw, 20px);
   cursor: pointer;
   z-index: 10000;
   display: flex;
@@ -17,6 +17,9 @@
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   opacity: 0.6;
+  touch-action: manipulation;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .secret-button:hover {

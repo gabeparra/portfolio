@@ -3,9 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: clamp(10px, 2vw, 20px);
   min-height: calc(100vh - 100px);
   background-color: #87CEEB;
+  overflow-x: hidden;
 }
 
 .tic-tac-toe-header {
@@ -13,9 +14,9 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 400px;
-  margin-bottom: 20px;
-  padding: 10px;
+  max-width: min(90vw, 400px);
+  margin-bottom: clamp(10px, 2vh, 20px);
+  padding: clamp(8px, 1.5vw, 10px);
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
@@ -25,8 +26,8 @@
 
 .score-display {
   display: flex;
-  gap: 30px;
-  font-size: 20px;
+  gap: clamp(15px, 4vw, 30px);
+  font-size: clamp(16px, 3.5vw, 20px);
   font-weight: bold;
   color: #000;
 }
@@ -40,7 +41,7 @@
 }
 
 .game-status {
-  font-size: 18px;
+  font-size: clamp(14px, 3vw, 18px);
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -50,21 +51,23 @@
 
 .tic-tac-toe-board {
   display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
+  grid-template-columns: repeat(3, min(25vw, 100px));
+  grid-template-rows: repeat(3, min(25vw, 100px));
   gap: 5px;
   background-color: #000;
   padding: 5px;
   border: 4px solid #fff;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  max-width: min(90vw, 310px);
+  margin: 0 auto;
 }
 
 .cell {
   background-color: #fff;
   border: 3px solid #000;
   border-radius: 5px;
-  font-size: 48px;
+  font-size: clamp(32px, 8vw, 48px);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -72,6 +75,8 @@
   align-items: center;
   justify-content: center;
   color: #000;
+  touch-action: manipulation;
+  min-height: 44px;
 }
 
 .cell:hover:not(:disabled) {
@@ -112,8 +117,8 @@
 
 .reset-button,
 .reset-scores-button {
-  padding: 12px 24px;
-  font-size: 18px;
+  padding: clamp(12px, 2.5vw, 14px) clamp(20px, 4vw, 24px);
+  font-size: clamp(16px, 3.5vw, 18px);
   font-weight: bold;
   background-color: #3498db;
   color: #fff;
@@ -122,6 +127,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 5px;
+  touch-action: manipulation;
+  min-height: 44px;
 }
 
 .reset-scores-button {
@@ -147,15 +154,20 @@
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
-  padding: 15px;
-  max-width: 400px;
+  padding: clamp(12px, 2vw, 15px);
+  max-width: min(90vw, 400px);
   margin-top: 15px;
 }
 
 .instructions p {
   margin: 5px 0;
-  font-size: 14px;
+  font-size: clamp(12px, 2.5vw, 14px);
   color: #000;
   font-weight: 500;
+}
+
+.tic-tac-toe-controls {
+  width: 100%;
+  max-width: min(90vw, 400px);
 }
 

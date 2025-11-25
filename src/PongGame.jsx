@@ -9,7 +9,19 @@ const GAME_WIDTH = 600
 const PADDLE_SPEED = 5
 const INITIAL_BALL_SPEED = 4
 
+const getGameDimensions = () => {
+  const maxWidth = Math.min(window.innerWidth * 0.9, 600)
+  const maxHeight = Math.min(maxWidth * (400 / 600), 400)
+  const scale = Math.min(maxWidth / GAME_WIDTH, maxHeight / GAME_HEIGHT)
+  return {
+    width: GAME_WIDTH * scale,
+    height: GAME_HEIGHT * scale,
+    scale: scale
+  }
+}
+
 function PongGame() {
+  const [gameDimensions, setGameDimensions] = useState(getGameDimensions())
   const [playerPaddle, setPlayerPaddle] = useState(GAME_HEIGHT / 2 - PADDLE_HEIGHT / 2)
   const [aiPaddle, setAiPaddle] = useState(GAME_HEIGHT / 2 - PADDLE_HEIGHT / 2)
   const [ball, setBall] = useState({ x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2 })
@@ -58,6 +70,14 @@ function PongGame() {
     }
   }, [handleKeyDown, handleKeyUp])
 
+  useEffect(() => {
+    const handleResize = () => {
+      setGameDimensions(getGameDimensions())
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const resetBall = useCallback((servingToPlayer = false) => {
     const newBall = { x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2 }
     const newVel = {
@@ -79,6 +99,10 @@ function PongGame() {
     }
     if (keysRef.current.s && newPlayerY < GAME_HEIGHT - PADDLE_HEIGHT) {
       newPlayerY = Math.min(GAME_HEIGHT - PADDLE_HEIGHT, newPlayerY + PADDLE_SPEED)
+    }
+    if (!keysRef.current.w && !keysRef.current.s) {
+      keysRef.current.w = false
+      keysRef.current.s = false
     }
     playerPaddleRef.current = newPlayerY
     setPlayerPaddle(newPlayerY)
@@ -185,6 +209,19 @@ function PongGame() {
     setIsPaused(false)
   }
 
+  const handlePaddleMove = (direction) => {
+    if (gameOver || isPaused) return
+    keysRef.current[direction] = true
+    setTimeout(() => {
+      keysRef.current[direction] = false
+    }, 50)
+  }
+
+  const handlePause = () => {
+    if (gameOver) return
+    setIsPaused(prev => !prev)
+  }
+
   return (
     <div className="pong-game-container">
       <div className="pong-header">
@@ -200,7 +237,16 @@ function PongGame() {
         )}
       </div>
 
-      <div className="pong-game-board" tabIndex={0}>
+      <div 
+        className="pong-game-board" 
+        tabIndex={0}
+        style={{
+          width: `${gameDimensions.width}px`,
+          height: `${gameDimensions.height}px`,
+          transform: `scale(${gameDimensions.scale})`,
+          transformOrigin: 'top center'
+        }}
+      >
         <div
           className="paddle player-paddle"
           style={{
@@ -232,12 +278,38 @@ function PongGame() {
       </div>
 
       <div className="pong-controls">
+        <div className="mobile-controls">
+          <button 
+            className="control-button" 
+            onTouchStart={() => handlePaddleMove('w')}
+            onMouseDown={() => handlePaddleMove('w')}
+            aria-label="Move paddle up"
+          >
+            ↑ Up
+          </button>
+          <button 
+            className="control-button" 
+            onTouchStart={() => handlePaddleMove('s')}
+            onMouseDown={() => handlePaddleMove('s')}
+            aria-label="Move paddle down"
+          >
+            ↓ Down
+          </button>
+          <button 
+            className="control-button" 
+            onClick={handlePause}
+            aria-label="Pause"
+          >
+            ⏸ Pause
+          </button>
+        </div>
         <button onClick={resetGame} className="reset-button">
           {gameOver ? 'Play Again' : 'Reset'}
         </button>
         <div className="instructions">
           <p>Use W/S or Arrow Keys to move paddle</p>
           <p>Press Space to pause</p>
+          <p className="mobile-instruction">Or use the on-screen controls</p>
           <p>First to 10 points wins!</p>
         </div>
       </div>

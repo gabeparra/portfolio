@@ -3,9 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: clamp(10px, 2vw, 20px);
   min-height: calc(100vh - 100px);
   background-color: #87CEEB;
+  overflow-x: hidden;
 }
 
 .snake-game-header {
@@ -13,23 +14,25 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 400px;
-  margin-bottom: 20px;
-  padding: 10px;
+  max-width: min(90vw, 400px);
+  margin-bottom: clamp(10px, 2vh, 20px);
+  padding: clamp(8px, 1.5vw, 10px);
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .score {
-  font-size: 24px;
+  font-size: clamp(18px, 4vw, 24px);
   font-weight: bold;
   color: #000;
 }
 
 .paused,
 .game-over {
-  font-size: 20px;
+  font-size: clamp(16px, 3.5vw, 20px);
   font-weight: bold;
   color: #ff0000;
   text-transform: uppercase;
@@ -37,18 +40,23 @@
 
 .snake-game-board {
   display: grid;
-  grid-template-columns: repeat(20, 20px);
+  grid-template-columns: repeat(20, min(4vw, 20px));
   gap: 1px;
   background-color: #2c3e50;
   border: 4px solid #000;
   padding: 2px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   outline: none;
+  max-width: min(90vw, 400px);
+  margin: 0 auto;
 }
 
 .cell {
   background-color: #34495e;
   border: 1px solid #2c3e50;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
 }
 
 .cell.head {
@@ -82,8 +90,8 @@
 }
 
 .reset-button {
-  padding: 12px 24px;
-  font-size: 18px;
+  padding: clamp(12px, 2.5vw, 14px) clamp(20px, 4vw, 24px);
+  font-size: clamp(16px, 3.5vw, 18px);
   font-weight: bold;
   background-color: #3498db;
   color: #fff;
@@ -92,6 +100,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 15px;
+  touch-action: manipulation;
+  min-height: 44px;
 }
 
 .reset-button:hover {
@@ -107,14 +117,94 @@
   background-color: rgba(255, 255, 255, 0.9);
   border: 3px solid #000;
   border-radius: 10px;
-  padding: 15px;
-  max-width: 400px;
+  padding: clamp(12px, 2vw, 15px);
+  max-width: min(90vw, 400px);
 }
 
 .instructions p {
   margin: 5px 0;
-  font-size: 14px;
+  font-size: clamp(12px, 2.5vw, 14px);
   color: #000;
   font-weight: 500;
+}
+
+.mobile-instruction {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobile-instruction {
+    display: none;
+  }
+}
+
+.snake-game-controls {
+  width: 100%;
+  max-width: min(90vw, 400px);
+}
+
+.mobile-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  max-width: min(90vw, 200px);
+  margin: 20px auto;
+  touch-action: manipulation;
+}
+
+@media (min-width: 768px) {
+  .mobile-controls {
+    display: none;
+  }
+}
+
+.control-button {
+  padding: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button:active {
+  background-color: #3498db;
+  color: #fff;
+  transform: scale(0.95);
+}
+
+.control-button.up {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.control-button.down {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.control-button.left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.control-button.right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.control-button.pause {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 18px;
 }
 
