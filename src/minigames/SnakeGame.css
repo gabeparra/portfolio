@@ -1,3 +1,26 @@
+/* Prevent overlay from blocking clicks on controls/buttons */
+.snake-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* keep overlay under controls */
+}
+
+.snake-overlay .overlay-content {
+  pointer-events: none;
+}
+
+/* Ensure controls are above overlay so clicks hit buttons */
+.snake-game-controls {
+  position: relative;
+  z-index: 2;
+}
+
+/* Container should be positioning context for overlay */
+.snake-game-container {
+  position: relative;
+}
+
 .snake-game-container {
   display: flex;
   flex-direction: column;
@@ -15,6 +38,60 @@
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* Dim the entire game when paused or finished */
+.snake-game-container.dimmed {
+  filter: grayscale(0.6) brightness(0.8);
+}
+
+.snake-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* allow clicks to pass unless we want to block */
+}
+
+.snake-overlay .overlay-content {
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(16px, 2.6vmin, 28px);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.25);
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* When not started, allow clicking overlay to start */
+.snake-overlay.clickable {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.overlay-start-button {
+  margin-top: 10px;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: 800;
+  background-color: #3498db;
+  color: #fff;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.overlay-start-button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.overlay-start-button:active {
+  transform: scale(0.95);
 }
 
 .snake-game-header {
@@ -48,10 +125,10 @@
 
 .snake-game-board {
   display: grid;
-  grid-template-columns: repeat(20, 1fr);
-  grid-template-rows: repeat(20, 1fr);
-  width: 350px;
-  height: 350px;
+  /* grid-template set inline from component so it matches dynamic gridSize */
+  width: auto;
+  aspect-ratio: 1 / 1;
+  max-width: 1400px;
   background-color: #ecf0f1;
   border: 3px solid #bdc3c7;
   border-radius: 8px;
