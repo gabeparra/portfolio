@@ -114,12 +114,9 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, o
 
   useEffect(() => { launched.current = true }, [])
 
-  const handleGClick = (e) => { e.preventDefault(); e.stopPropagation(); onEasterEggClick && onEasterEggClick('G') }
   const handleCClick = (e) => { e.preventDefault(); e.stopPropagation(); onEasterEggClick && onEasterEggClick('C') }
-  const handleMobileGamesClick = (e) => { e.preventDefault(); e.stopPropagation(); onEasterEggClick && onEasterEggClick('MOBILE') }
   const handleAboutClick = (e) => { e.preventDefault(); onNavigateToAbout && onNavigateToAbout() }
   const handleContactClick = (e) => { e.preventDefault(); onNavigateToContact && onNavigateToContact() }
-  const handlePetsClick = (e) => { e.preventDefault(); onNavigateToPets && onNavigateToPets() }
 
   const getLanguageColor = (language) => {
     const colors = {
@@ -134,22 +131,6 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, o
 
   return (
     <div className="portfolio mc">
-      <header className="mc-header">
-        <nav className="mc-nav">
-          <div className="mc-brand">
-            <span className="mc-brand-sigil" onClick={handleGClick} onTouchStart={handleGClick}>G</span>
-            <span className="mc-brand-name">PARRA</span>
-            <span className="mc-brand-tag">// MISSION CONTROL</span>
-          </div>
-          <ul className="mc-links">
-            <li><a href="#about" onClick={handleAboutClick}>Crew File</a></li>
-            <li><a href="#systems">Systems</a></li>
-            <li><a href="#missions">Missions</a></li>
-            <li><a href="#pets" onClick={handlePetsClick}>Companions</a></li>
-            <li><a href="#contact" onClick={handleContactClick} className="mc-link-cta">Open a Channel</a></li>
-          </ul>
-        </nav>
-      </header>
 
       <main className="mc-main">
         <section className="mc-hero">
@@ -279,18 +260,6 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, o
         </section>
       </main>
 
-      <footer className="mc-footer">
-        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
-        <p className="mc-footer-alien" title="they are out there">👽</p>
-        <button
-          type="button"
-          className="mobile-games-link"
-          onClick={handleMobileGamesClick}
-          onTouchEnd={(e) => { e.preventDefault(); handleMobileGamesClick(e) }}
-        >
-          🎮
-        </button>
-      </footer>
     </div>
   )
 }

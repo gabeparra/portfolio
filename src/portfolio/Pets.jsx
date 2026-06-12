@@ -1,7 +1,6 @@
 import './Pets.css'
-import Navbar from '../components/Navbar'
 
-function Pets({ onBack, onNavigateToAbout, onNavigateToContact, onNavigateToPets }) {
+function Pets() {
   const pets = [
     {
       name: 'Blanco',
@@ -31,13 +30,6 @@ function Pets({ onBack, onNavigateToAbout, onNavigateToContact, onNavigateToPets
 
   return (
     <div className="pets-page mc">
-      <Navbar 
-        onBack={onBack}
-        onNavigateToAbout={onNavigateToAbout}
-        onNavigateToPets={onNavigateToPets}
-        onNavigateToContact={onNavigateToContact}
-        currentPage="pets"
-      />
 
       <main>
         <section className="section">
@@ -83,10 +75,6 @@ function Pets({ onBack, onNavigateToAbout, onNavigateToContact, onNavigateToPets
           </div>
         </section>
       </main>
-
-      <footer className="mc-footer">
-        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
-      </footer>
     </div>
   )
 }

@@ -1,9 +1,8 @@
 import './Contact.css'
 import { useState } from 'react'
 import emailjs from '@emailjs/browser'
-import Navbar from '../components/Navbar'
 
-function Contact({ onBack, onNavigateToPets, onNavigateToAbout, onNavigateToContact }) {
+function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -58,13 +57,6 @@ function Contact({ onBack, onNavigateToPets, onNavigateToAbout, onNavigateToCont
 
   return (
     <div className="contact-page mc">
-      <Navbar 
-        onBack={onBack}
-        onNavigateToAbout={onNavigateToAbout}
-        onNavigateToPets={onNavigateToPets}
-        onNavigateToContact={onNavigateToContact}
-        currentPage="contact"
-      />
 
       <main>
         <section className="section section-dark">
@@ -150,10 +142,6 @@ function Contact({ onBack, onNavigateToPets, onNavigateToAbout, onNavigateToCont
           </div>
         </section>
       </main>
-
-      <footer className="mc-footer">
-        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
-      </footer>
     </div>
   )
 }

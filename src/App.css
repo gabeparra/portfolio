@@ -39,3 +39,53 @@
 .secret-button:active {
   transform: scale(0.95);
 }
+
+/* ---------- view transitions (persistent shell) ---------- */
+.mc-view {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 120px);
+  animation: view-in 0.34s ease both;
+}
+.mc-view.leaving {
+  animation: view-out 0.26s ease both;
+}
+@keyframes view-in {
+  from { opacity: 0; transform: translateY(-16px) scale(0.997); filter: blur(3px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+@keyframes view-out {
+  from { opacity: 1; transform: none; filter: none; }
+  to   { opacity: 0; transform: translateY(16px) scale(0.997); filter: blur(3px); }
+}
+
+/* scan line sweep during transition */
+.warp-line {
+  position: fixed;
+  left: 0; right: 0; top: -4px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  box-shadow: 0 0 18px var(--cyan);
+  opacity: 0;
+  z-index: 2000;
+  pointer-events: none;
+}
+.warp-line.active {
+  animation: warp-sweep 0.5s ease-in-out;
+}
+@keyframes warp-sweep {
+  0% { top: -4px; opacity: 0; }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.9; }
+  100% { top: 100vh; opacity: 0; }
+}
+
+.mc-links .mc-link-active {
+  color: var(--cyan);
+  border-bottom-color: var(--cyan);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mc-view, .mc-view.leaving { animation: none !important; }
+  .warp-line { display: none; }
+}

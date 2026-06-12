@@ -1,5 +1,4 @@
 import './About.css'
-import Navbar from '../components/Navbar'
 
 const SERVICE_RECORD = [
   {
@@ -30,16 +29,9 @@ const SERVICE_RECORD = [
   },
 ]
 
-function About({ onBack, onNavigateToPets, onNavigateToContact, onNavigateToAbout }) {
+function About() {
   return (
     <div className="about-page mc">
-      <Navbar
-        onBack={onBack}
-        onNavigateToAbout={onNavigateToAbout}
-        onNavigateToPets={onNavigateToPets}
-        onNavigateToContact={onNavigateToContact}
-        currentPage="about"
-      />
 
       <main className="mc-main crew-main">
         <div className="mc-section-head">
@@ -92,10 +84,6 @@ function About({ onBack, onNavigateToPets, onNavigateToContact, onNavigateToAbou
           </div>
         </div>
       </main>
-
-      <footer className="mc-footer">
-        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
-      </footer>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import Portfolio from './portfolio/Portfolio'
 import RetroPage from './minigames/RetroPage'
 import About from './portfolio/About'
@@ -8,24 +8,45 @@ import Starfield from './components/Starfield'
 import { useKonamiCode } from './hooks/useKonamiCode'
 import './App.css'
 
+const TRANSITION_MS = 260
+
 function App() {
   const [showRetro, setShowRetro] = useState(false)
-  const [showAbout, setShowAbout] = useState(false)
-  const [showContact, setShowContact] = useState(false)
-  const [showPets, setShowPets] = useState(false)
+  const [shownView, setShownView] = useState('home')
+  const [leaving, setLeaving] = useState(false)
   const [easterEggState, setEasterEggState] = useState({ clickedG: false, clickedC: false })
+  const navLock = useRef(false)
 
-  const toggleRetro = useCallback(() => {
-    setShowRetro(prev => !prev)
-  }, [])
-
-  // Activate RetroPage on Konami code
+  const toggleRetro = useCallback(() => setShowRetro(prev => !prev), [])
   useKonamiCode(toggleRetro)
 
-  // Exclusive navigation: opening one page closes the others
-  const toggleAbout = () => { setShowContact(false); setShowPets(false); setShowAbout(v => !v) }
-  const toggleContact = () => { setShowAbout(false); setShowPets(false); setShowContact(v => !v) }
-  const togglePets = () => { setShowAbout(false); setShowContact(false); setShowPets(v => !v) }
+  const navigate = useCallback((next, anchor = null) => {
+    if (navLock.current) return
+    if (next === shownView) {
+      if (anchor) document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
+      else window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    navLock.current = true
+    setLeaving(true)
+    setTimeout(() => {
+      setShownView(next)
+      setLeaving(false)
+      window.scrollTo({ top: 0 })
+      navLock.current = false
+      if (anchor) {
+        requestAnimationFrame(() => {
+          setTimeout(() => document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' }), 60)
+        })
+      }
+    }, TRANSITION_MS)
+  }, [shownView])
+
+  const goHome = (e) => { e && e.preventDefault(); navigate('home') }
+  const goAbout = (e) => { e && e.preventDefault(); navigate('about') }
+  const goPets = (e) => { e && e.preventDefault(); navigate('pets') }
+  const goContact = (e) => { e && e.preventDefault(); navigate('contact') }
+  const goAnchor = (anchor) => (e) => { e && e.preventDefault(); navigate('home', anchor) }
 
   const handleEasterEggProgress = (step) => {
     if (step === 'G') {
@@ -37,6 +58,9 @@ function App() {
     }
   }
 
+  const handleGClick = (e) => { e.preventDefault(); e.stopPropagation(); handleEasterEggProgress('G') }
+  const handleMobileGamesClick = (e) => { e.preventDefault(); e.stopPropagation(); handleEasterEggProgress('MOBILE') }
+
   if (showRetro) {
     return (
       <>
@@ -44,18 +68,6 @@ function App() {
         <RetroPage />
       </>
     )
-  }
-
-  if (showAbout) {
-    return <><Starfield /><About onBack={toggleAbout} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} /></>
-  }
-
-  if (showContact) {
-    return <><Starfield /><Contact onBack={toggleContact} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} /></>
-  }
-
-  if (showPets) {
-    return <><Starfield /><Pets onBack={togglePets} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} /></>
   }
 
   const showSecretButton = easterEggState.clickedG && easterEggState.clickedC
@@ -66,7 +78,47 @@ function App() {
       {showSecretButton && (
         <button className="secret-button" onClick={toggleRetro} title="Easter Egg">🎈</button>
       )}
-      <Portfolio onEasterEggClick={handleEasterEggProgress} onNavigateToAbout={toggleAbout} onNavigateToContact={toggleContact} onNavigateToPets={togglePets} />
+
+      <header className="mc-header">
+        <nav className="mc-nav">
+          <div className="mc-brand">
+            <span className="mc-brand-sigil" onClick={handleGClick} onTouchStart={handleGClick}>G</span>
+            <span className="mc-brand-name" onClick={goHome} style={{ cursor: 'pointer' }}>PARRA</span>
+            <span className="mc-brand-tag">// MISSION CONTROL</span>
+          </div>
+          <ul className="mc-links">
+            <li><a href="#about" onClick={goAbout} className={shownView === 'about' ? 'mc-link-active' : ''}>Crew File</a></li>
+            <li><a href="#systems" onClick={goAnchor('systems')}>Systems</a></li>
+            <li><a href="#missions" onClick={goAnchor('missions')}>Missions</a></li>
+            <li><a href="#pets" onClick={goPets} className={shownView === 'pets' ? 'mc-link-active' : ''}>Companions</a></li>
+            <li><a href="#contact" onClick={goContact} className="mc-link-cta">Open a Channel</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <div className={`mc-view${leaving ? ' leaving' : ''}`} key={shownView}>
+        {shownView === 'home' && (
+          <Portfolio onEasterEggClick={handleEasterEggProgress} onNavigateToAbout={goAbout} onNavigateToContact={goContact} onNavigateToPets={goPets} />
+        )}
+        {shownView === 'about' && <About />}
+        {shownView === 'contact' && <Contact />}
+        {shownView === 'pets' && <Pets />}
+      </div>
+
+      <div className={`warp-line${leaving ? ' active' : ''}`} aria-hidden="true"></div>
+
+      <footer className="mc-footer">
+        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
+        <p className="mc-footer-alien" title="they are out there">👽</p>
+        <button
+          type="button"
+          className="mobile-games-link"
+          onClick={handleMobileGamesClick}
+          onTouchEnd={(e) => { e.preventDefault(); handleMobileGamesClick(e) }}
+        >
+          🎮
+        </button>
+      </footer>
     </>
   )
 }
