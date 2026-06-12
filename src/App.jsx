@@ -22,9 +22,10 @@ function App() {
   // Activate RetroPage on Konami code
   useKonamiCode(toggleRetro)
 
-  const toggleAbout = () => setShowAbout(!showAbout)
-  const toggleContact = () => setShowContact(!showContact)
-  const togglePets = () => setShowPets(!showPets)
+  // Exclusive navigation: opening one page closes the others
+  const toggleAbout = () => { setShowContact(false); setShowPets(false); setShowAbout(v => !v) }
+  const toggleContact = () => { setShowAbout(false); setShowPets(false); setShowContact(v => !v) }
+  const togglePets = () => { setShowAbout(false); setShowContact(false); setShowPets(v => !v) }
 
   const handleEasterEggProgress = (step) => {
     if (step === 'G') {

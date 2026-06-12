@@ -30,7 +30,7 @@ function Pets({ onBack, onNavigateToAbout, onNavigateToContact, onNavigateToPets
   ]
 
   return (
-    <div className="pets-page">
+    <div className="pets-page mc">
       <Navbar 
         onBack={onBack}
         onNavigateToAbout={onNavigateToAbout}
@@ -42,12 +42,15 @@ function Pets({ onBack, onNavigateToAbout, onNavigateToContact, onNavigateToPets
       <main>
         <section className="section">
           <div className="container">
-            <h2 className="section-title">My Pets</h2>
+            <div className="mc-section-head">
+              <span className="mc-section-no">XO</span>
+              <h2 className="mc-section-title">COMPANIONS</h2>
+              <span className="mc-section-line"></span>
+            </div>
             <div className="pets-intro">
               <p className="pets-intro-text">
                 My pets are an important part of my life and bring me so much joy. 
-                They're not just pets—they're family members who keep me company during 
-                long coding sessions and remind me to take breaks and enjoy the simple things in life.
+                They're not just pets, they're crew. They keep me company during long coding sessions and remind me to take breaks and enjoy the simple things in life.
               </p>
             </div>
             <div className="pets-grid">
@@ -81,8 +84,8 @@ function Pets({ onBack, onNavigateToAbout, onNavigateToContact, onNavigateToPets
         </section>
       </main>
 
-      <footer className="footer">
-        <p>&copy; 2024 Gabriel Parra. All rights reserved.</p>
+      <footer className="mc-footer">
+        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
       </footer>
     </div>
   )

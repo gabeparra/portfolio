@@ -1,10 +1,39 @@
 import './About.css'
 import Navbar from '../components/Navbar'
 
+const SERVICE_RECORD = [
+  {
+    period: 'OCT 2025 — PRESENT',
+    title: 'Business System Analyst II',
+    org: 'UCF Global · University of Central Florida',
+    notes: [
+      'Slate (Technolutions) development for international admissions: portals, forms, SQL queries, and integrations.',
+      'Built a React + TypeScript replacement for the legacy upload system and a Respond.io contact-manager integration with duplicate detection.',
+      'Java libphonenumber validator wired into the Slate intake via bpLogix Process Director; PHP modules powering the live help desk.',
+    ],
+  },
+  {
+    period: 'MAY 2026 — PRESENT',
+    title: 'Founder / Engineer',
+    org: 'BananaByte LLC',
+    notes: [
+      'Web & app development studio. Production sites on Astro, TypeScript, Tailwind, and Cloudflare, owned from brand to deploy.',
+    ],
+  },
+  {
+    period: '2014 — 2023',
+    title: 'IT Support & Operations',
+    org: 'Repuestos Rojas · Comercial PYM Ltda — Santiago, Chile',
+    notes: [
+      'Nine years across frontline IT support, SQL maintenance, POS and web systems, and retail operations management.',
+    ],
+  },
+]
+
 function About({ onBack, onNavigateToPets, onNavigateToContact, onNavigateToAbout }) {
   return (
-    <div className="about-page">
-      <Navbar 
+    <div className="about-page mc">
+      <Navbar
         onBack={onBack}
         onNavigateToAbout={onNavigateToAbout}
         onNavigateToPets={onNavigateToPets}
@@ -12,34 +41,63 @@ function About({ onBack, onNavigateToPets, onNavigateToContact, onNavigateToAbou
         currentPage="about"
       />
 
-      <main>
-        <section className="section">
-          <div className="container">
-            <h2 className="section-title">About Me</h2>
-            <div className="about-content">
-              <p className="about-text">
-                I'm Gabriel (Mariano) Parra, a computer science student and software developer with a strong focus on building practical, efficient, and well-designed solutions. I enjoy working across multiple areas of technology — from backend development and automation to application design and systems troubleshooting.
-              </p>
-              <p className="about-text">
-                My experience ranges from developing Python and Java applications to integrating services through APIs, webhooks, and automation tools like n8n. I've also worked on web development projects, internal tools, and IT support tasks such as system setup, diagnostics, and optimization. I approach every project with curiosity and a drive to understand how things work under the hood.
-              </p>
-              <p className="about-text">
-                What motivates me most is solving real problems: simplifying workflows, improving user experience, and creating tools that genuinely help people. I thrive in environments where I can learn continuously, refine systems, and contribute to building reliable, thoughtful software.
-              </p>
-              <p className="about-text">
-                Outside of coursework and development, I'm always exploring new technologies, improving processes, and finding opportunities to turn ideas into practical solutions.
-              </p>
+      <main className="mc-main crew-main">
+        <div className="mc-section-head">
+          <span className="mc-section-no">ID</span>
+          <h2 className="mc-section-title">CREW FILE</h2>
+          <span className="mc-section-line"></span>
+        </div>
+
+        <div className="crew-grid">
+          <div className="crew-bio">
+            <p className="crew-text">
+              I&apos;m Gabriel (Mariano) Parra — a full-stack engineer working in higher-ed
+              enrollment systems by day and shipping web, AI, and game projects the rest of the time.
+              Currently a Business System Analyst II at UCF Global, where I build and integrate the
+              Slate (Technolutions) systems that international students use to reach the university.
+            </p>
+            <p className="crew-text">
+              My range runs from React/TypeScript front-ends and Python/Java back-ends to enterprise
+              workflow engines, LLM agent tooling, and Unity. What motivates me most is solving real
+              problems: simplifying workflows, killing manual triage, and building tools that
+              genuinely help the people using them.
+            </p>
+            <p className="crew-text">
+              B.S. Computer Science at UCF (Aug 2026) on top of a B.S. in Information Technology from
+              Chile. Bilingual English/Spanish. Based in Orlando — close enough to the Cape to hear
+              the launches.
+            </p>
+
+            <div className="crew-cert">
+              <span className="crew-cert-badge">✦ CERTIFIED</span>
+              <div>
+                <p className="crew-cert-name">Fundamentals of Admissions &amp; Enrollment (2026)</p>
+                <p className="crew-cert-org">Technolutions Slate — the CRM behind admissions at 2,000+ institutions</p>
+              </div>
             </div>
           </div>
-        </section>
+
+          <div className="crew-record">
+            <h3 className="crew-record-title">// SERVICE RECORD</h3>
+            {SERVICE_RECORD.map((entry) => (
+              <div key={entry.title} className="crew-entry">
+                <p className="crew-entry-period">{entry.period}</p>
+                <h4 className="crew-entry-title">{entry.title}</h4>
+                <p className="crew-entry-org">{entry.org}</p>
+                <ul className="crew-entry-notes">
+                  {entry.notes.map((n, i) => <li key={i}>{n}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
 
-      <footer className="footer">
-        <p>&copy; 2024 Gabriel Parra. All rights reserved.</p>
+      <footer className="mc-footer">
+        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
       </footer>
     </div>
   )
 }
 
 export default About
-

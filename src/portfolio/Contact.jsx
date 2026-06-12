@@ -57,7 +57,7 @@ function Contact({ onBack, onNavigateToPets, onNavigateToAbout, onNavigateToCont
   }
 
   return (
-    <div className="contact-page">
+    <div className="contact-page mc">
       <Navbar 
         onBack={onBack}
         onNavigateToAbout={onNavigateToAbout}
@@ -69,7 +69,11 @@ function Contact({ onBack, onNavigateToPets, onNavigateToAbout, onNavigateToCont
       <main>
         <section className="section section-dark">
           <div className="container">
-            <h2 className="section-title">Get In Touch</h2>
+            <div className="mc-section-head">
+              <span className="mc-section-no">TX</span>
+              <h2 className="mc-section-title">OPEN A CHANNEL</h2>
+              <span className="mc-section-line"></span>
+            </div>
             <div className="contact-content">
               <p className="contact-text">
                 I'm always interested in new opportunities and collaborations. 
@@ -147,8 +151,8 @@ function Contact({ onBack, onNavigateToPets, onNavigateToAbout, onNavigateToCont
         </section>
       </main>
 
-      <footer className="footer">
-        <p>&copy; 2024 Gabriel Parra. All rights reserved.</p>
+      <footer className="mc-footer">
+        <p className="mc-footer-line">TRANSMISSION ENDS — © 2026 GABRIEL PARRA</p>
       </footer>
     </div>
   )

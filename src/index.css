@@ -71,26 +71,9 @@ code {
   pointer-events: none;
 }
 
-/* Sub-pages (About / Contact / Pets) inherit the void + starfield */
-.about-page,
-.contact-page,
-.pets-page {
-  background: transparent !important;
-  font-family: var(--font-body) !important;
+/* Sub-pages render over the starfield natively now */
+.about-page, .contact-page, .pets-page {
   position: relative;
   z-index: 1;
-}
-
-.about-page .header,
-.contact-page .header,
-.pets-page .header {
-  background: rgba(4, 7, 15, 0.82) !important;
-  border-bottom: 1px solid var(--line) !important;
-}
-
-.about-page .section-title,
-.contact-page .section-title,
-.pets-page .section-title {
-  font-family: var(--font-display) !important;
-  letter-spacing: 0.04em;
+  min-height: 100vh;
 }

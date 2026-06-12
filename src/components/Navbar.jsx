@@ -1,72 +1,24 @@
 import './Navbar.css'
 
 function Navbar({ onBack, onNavigateToAbout, onNavigateToPets, onNavigateToContact, currentPage }) {
-  const handleHomeClick = (e) => {
-    e.preventDefault()
-    if (onBack) {
-      onBack()
-    }
-  }
-
-  const handleAboutClick = (e) => {
-    e.preventDefault()
-    if (currentPage !== 'about' && onNavigateToAbout) {
-      onNavigateToAbout()
-    }
-  }
-
-  const handlePetsClick = (e) => {
-    e.preventDefault()
-    if (currentPage !== 'pets' && onNavigateToPets) {
-      onNavigateToPets()
-    }
-  }
-
-  const handleContactClick = (e) => {
-    e.preventDefault()
-    if (currentPage !== 'contact' && onNavigateToContact) {
-      onNavigateToContact()
-    }
-  }
+  const handleHomeClick = (e) => { e.preventDefault(); onBack && onBack() }
+  const handleAboutClick = (e) => { e.preventDefault(); if (currentPage !== 'about' && onNavigateToAbout) onNavigateToAbout() }
+  const handlePetsClick = (e) => { e.preventDefault(); if (currentPage !== 'pets' && onNavigateToPets) onNavigateToPets() }
+  const handleContactClick = (e) => { e.preventDefault(); if (currentPage !== 'contact' && onNavigateToContact) onNavigateToContact() }
 
   return (
-    <header className="header">
-      <nav className="nav">
-        <div className="nav-brand">
-          <span onClick={handleHomeClick} style={{ cursor: 'pointer' }}>G</span>
-          abriel Parra
+    <header className="mc-header">
+      <nav className="mc-nav">
+        <div className="mc-brand">
+          <span className="mc-brand-sigil" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>G</span>
+          <span className="mc-brand-name" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>PARRA</span>
+          <span className="mc-brand-tag">// MISSION CONTROL</span>
         </div>
-        <ul className="nav-links">
-          <li><a href="#" onClick={handleHomeClick}>Home</a></li>
-          <li>
-            <a 
-              href="#about" 
-              onClick={handleAboutClick}
-              className={currentPage === 'about' ? 'active' : ''}
-            >
-              About
-            </a>
-          </li>
-          <li><a href="#skills" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Skills</a></li>
-          <li><a href="#projects" onClick={(e) => { e.preventDefault(); onBack(); setTimeout(() => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Projects</a></li>
-          <li>
-            <a 
-              href="#pets" 
-              onClick={handlePetsClick}
-              className={currentPage === 'pets' ? 'active' : ''}
-            >
-              Pets
-            </a>
-          </li>
-          <li>
-            <a 
-              href="#contact" 
-              onClick={handleContactClick}
-              className={currentPage === 'contact' ? 'active' : ''}
-            >
-              Contact
-            </a>
-          </li>
+        <ul className="mc-links">
+          <li><a href="#" onClick={handleHomeClick}>Base</a></li>
+          <li><a href="#about" onClick={handleAboutClick} className={currentPage === 'about' ? 'mc-link-active' : ''}>Crew File</a></li>
+          <li><a href="#pets" onClick={handlePetsClick} className={currentPage === 'pets' ? 'mc-link-active' : ''}>Companions</a></li>
+          <li><a href="#contact" onClick={handleContactClick} className="mc-link-cta">Open a Channel</a></li>
         </ul>
       </nav>
     </header>
@@ -74,4 +26,3 @@ function Navbar({ onBack, onNavigateToAbout, onNavigateToPets, onNavigateToConta
 }
 
 export default Navbar
-
