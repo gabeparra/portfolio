@@ -4,6 +4,7 @@ import RetroPage from './minigames/RetroPage'
 import About from './portfolio/About'
 import Contact from './portfolio/Contact'
 import Pets from './portfolio/Pets'
+import Starfield from './components/Starfield'
 import { useKonamiCode } from './hooks/useKonamiCode'
 import './App.css'
 
@@ -21,35 +22,15 @@ function App() {
   // Activate RetroPage on Konami code
   useKonamiCode(toggleRetro)
 
-  const toggleAbout = () => {
-    setShowAbout(!showAbout)
-  }
-
-  const toggleContact = () => {
-    setShowContact(!showContact)
-  }
-
-  const togglePets = () => {
-    setShowPets(!showPets)
-  }
+  const toggleAbout = () => setShowAbout(!showAbout)
+  const toggleContact = () => setShowContact(!showContact)
+  const togglePets = () => setShowPets(!showPets)
 
   const handleEasterEggProgress = (step) => {
     if (step === 'G') {
-      setEasterEggState(prev => {
-        if (!prev.clickedG) {
-          return { clickedG: true, clickedC: false }
-        } else {
-          return { clickedG: false, clickedC: false }
-        }
-      })
+      setEasterEggState(prev => prev.clickedG ? { clickedG: false, clickedC: false } : { clickedG: true, clickedC: false })
     } else if (step === 'C') {
-      setEasterEggState(prev => {
-        if (prev.clickedG && !prev.clickedC) {
-          return { ...prev, clickedC: true }
-        } else {
-          return { clickedG: false, clickedC: false }
-        }
-      })
+      setEasterEggState(prev => (prev.clickedG && !prev.clickedC) ? { ...prev, clickedC: true } : { clickedG: false, clickedC: false })
     } else if (step === 'MOBILE') {
       setEasterEggState({ clickedG: true, clickedC: true })
     }
@@ -58,34 +39,31 @@ function App() {
   if (showRetro) {
     return (
       <>
-        <button className="secret-button" onClick={toggleRetro}>
-          ×
-        </button>
+        <button className="secret-button" onClick={toggleRetro}>×</button>
         <RetroPage />
       </>
     )
   }
 
   if (showAbout) {
-    return <About onBack={toggleAbout} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
+    return <><Starfield /><About onBack={toggleAbout} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} /></>
   }
 
   if (showContact) {
-    return <Contact onBack={toggleContact} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
+    return <><Starfield /><Contact onBack={toggleContact} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} /></>
   }
 
   if (showPets) {
-    return <Pets onBack={togglePets} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} />
+    return <><Starfield /><Pets onBack={togglePets} onNavigateToAbout={toggleAbout} onNavigateToPets={togglePets} onNavigateToContact={toggleContact} /></>
   }
 
   const showSecretButton = easterEggState.clickedG && easterEggState.clickedC
 
   return (
     <>
+      <Starfield />
       {showSecretButton && (
-        <button className="secret-button" onClick={toggleRetro} title="Easter Egg">
-          🎈
-        </button>
+        <button className="secret-button" onClick={toggleRetro} title="Easter Egg">🎈</button>
       )}
       <Portfolio onEasterEggClick={handleEasterEggProgress} onNavigateToAbout={toggleAbout} onNavigateToContact={toggleContact} onNavigateToPets={togglePets} />
     </>

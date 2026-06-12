@@ -1,3 +1,25 @@
+:root {
+  /* MISSION CONTROL design tokens */
+  --void: #04070f;
+  --void-2: #070c18;
+  --panel: rgba(13, 20, 38, 0.55);
+  --panel-solid: #0b1224;
+  --line: rgba(110, 243, 214, 0.14);
+  --line-strong: rgba(110, 243, 214, 0.35);
+  --ink: #d6e4ff;
+  --ink-dim: #8fa3c7;
+  --red: #fc3d21;        /* NASA worm red */
+  --red-soft: rgba(252, 61, 33, 0.16);
+  --cyan: #6ef3d6;       /* telemetry */
+  --cyan-soft: rgba(110, 243, 214, 0.12);
+  --alien: #8aff80;      /* reserved for visitors */
+  --amber: #ffb347;
+
+  --font-display: 'Michroma', 'Trebuchet MS', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-body: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,17 +32,65 @@ html {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0a0e27;
-  color: #e0e7ff;
+  color: var(--ink);
   overflow-x: hidden;
+  background:
+    radial-gradient(1100px 700px at 85% -10%, rgba(252, 61, 33, 0.07), transparent 60%),
+    radial-gradient(900px 600px at -10% 30%, rgba(64, 120, 255, 0.08), transparent 55%),
+    radial-gradient(700px 500px at 70% 90%, rgba(110, 243, 214, 0.05), transparent 60%),
+    linear-gradient(180deg, var(--void) 0%, var(--void-2) 55%, var(--void) 100%);
+  background-attachment: fixed;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--red);
+  color: #fff;
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb {
+  background: #1c2a4a;
+  border-radius: 5px;
+  border: 2px solid var(--void);
+}
+::-webkit-scrollbar-thumb:hover { background: #2a3c66; }
+
+/* Starfield canvas sits behind everything */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Sub-pages (About / Contact / Pets) inherit the void + starfield */
+.about-page,
+.contact-page,
+.pets-page {
+  background: transparent !important;
+  font-family: var(--font-body) !important;
+  position: relative;
+  z-index: 1;
+}
+
+.about-page .header,
+.contact-page .header,
+.pets-page .header {
+  background: rgba(4, 7, 15, 0.82) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.about-page .section-title,
+.contact-page .section-title,
+.pets-page .section-title {
+  font-family: var(--font-display) !important;
+  letter-spacing: 0.04em;
 }
