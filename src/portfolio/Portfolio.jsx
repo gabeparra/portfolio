@@ -28,10 +28,10 @@ const MISSIONS = [
   },
   {
     id: 'GP-04',
-    name: 'AiForGame',
-    desc: '3D game built in Unity 6 — C# gameplay and AI systems in a Western-themed environment with custom shader work.',
-    stack: ['Unity 6', 'C#', 'HLSL', 'URP'],
-    href: 'https://github.com/gabeparra/AiForGame',
+    name: 'Rolling with the Punches',
+    desc: 'Unity 6 Western-themed 3D game with a mobile port, built for an AI for Game Development course — C# gameplay/AI and custom URP shader work.',
+    stack: ['Unity 6', 'C#', 'Mobile', 'HLSL', 'URP'],
+    href: 'https://github.com/gabeparra/Rolling-with-the-punches-game',
     status: 'IN ORBIT',
   },
   {
@@ -48,6 +48,14 @@ const MISSIONS = [
     desc: 'Offline install bundle for Docker Engine on Ubuntu — fetch .deb packages online, install on air-gapped hosts.',
     stack: ['Bash', 'Debian packaging'],
     href: 'https://github.com/gabeparra/DockerOffline',
+    status: 'FIELD KIT',
+  },
+  {
+    id: 'GP-07',
+    name: 'Equipment Rental',
+    desc: 'Mobile-friendly web app for checking shared, access-controlled equipment in and out — session auth, server-side status, and CSV audit logging.',
+    stack: ['JavaScript', 'Python', 'HTML/CSS'],
+    href: 'https://github.com/gabeparra/equipment-rental',
     status: 'FIELD KIT',
   },
 ]
