@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import Portfolio from './portfolio/Portfolio'
 import RetroPage from './minigames/RetroPage'
 import About from './portfolio/About'
@@ -15,12 +15,21 @@ function App() {
   const [shownView, setShownView] = useState('home')
   const [leaving, setLeaving] = useState(false)
   const [easterEggState, setEasterEggState] = useState({ clickedG: false, clickedC: false })
+  const [menuOpen, setMenuOpen] = useState(false)
   const navLock = useRef(false)
 
   const toggleRetro = useCallback(() => setShowRetro(prev => !prev), [])
   useKonamiCode(toggleRetro)
 
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
+
   const navigate = useCallback((next, anchor = null) => {
+    setMenuOpen(false)
     if (navLock.current) return
     if (next === shownView) {
       if (anchor) document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
@@ -86,7 +95,17 @@ function App() {
             <span className="mc-brand-name" onClick={goHome} style={{ cursor: 'pointer' }}>PARRA</span>
             <span className="mc-brand-tag">// MISSION CONTROL</span>
           </div>
-          <ul className="mc-links">
+          <button
+            type="button"
+            className={`mc-menu-toggle${menuOpen ? ' open' : ''}`}
+            aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={menuOpen}
+            aria-controls="mc-primary-nav"
+            onClick={() => setMenuOpen(o => !o)}
+          >
+            <span></span><span></span><span></span>
+          </button>
+          <ul id="mc-primary-nav" className={`mc-links${menuOpen ? ' open' : ''}`}>
             <li><a href="#about" onClick={goAbout} className={shownView === 'about' ? 'mc-link-active' : ''}>Crew File</a></li>
             <li><a href="#systems" onClick={goAnchor('systems')}>Systems</a></li>
             <li><a href="#missions" onClick={goAnchor('missions')}>Missions</a></li>
