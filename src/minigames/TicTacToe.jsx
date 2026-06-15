@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './TicTacToe.css'
 
 const WINNING_COMBINATIONS = [

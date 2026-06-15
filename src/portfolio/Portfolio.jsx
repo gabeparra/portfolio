@@ -80,7 +80,7 @@ function Clock() {
   return <span>{now.toLocaleTimeString('en-US', { hour12: false })} EST</span>
 }
 
-function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, onNavigateToPets }) {
+function Portfolio({ onEasterEggClick, onNavigateToContact }) {
   const [repos, setRepos] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -115,7 +115,6 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, o
   useEffect(() => { launched.current = true }, [])
 
   const handleCClick = (e) => { e.preventDefault(); e.stopPropagation(); onEasterEggClick && onEasterEggClick('C') }
-  const handleAboutClick = (e) => { e.preventDefault(); onNavigateToAbout && onNavigateToAbout() }
   const handleContactClick = (e) => { e.preventDefault(); onNavigateToContact && onNavigateToContact() }
 
   const getLanguageColor = (language) => {

@@ -28,7 +28,7 @@ const GAMES = [
   { id: 'foxyhallway', name: 'Foxy Hallway', icon: '🦊' }
 ]
 
-function GamesList({ onBack, onGameSelect }) {
+function GamesList({ onGameSelect }) {
   const [selectedGame, setSelectedGame] = useState(null)
 
   const handleGameSelect = (gameId) => {

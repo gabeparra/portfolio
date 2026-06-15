@@ -209,32 +209,6 @@ function Blackjack() {
     setTimeout(() => playDealer(), 500)
   }
 
-  const checkWinner = () => {
-    setPlayerHand(currentPlayerHand => {
-      setDealerHand(currentDealerHand => {
-        const playerValue = getHandValue(currentPlayerHand)
-        const dealerValue = getHandValue(currentDealerHand)
-        
-        if (dealerValue > 21) {
-          setMessage('Dealer busts! You win!')
-          setBalance(prev => prev + bet * 2)
-        } else if (playerValue > dealerValue) {
-          setMessage('You win!')
-          setBalance(prev => prev + bet * 2)
-        } else if (playerValue < dealerValue) {
-          setMessage('Dealer wins!')
-        } else {
-          setMessage('Push!')
-          setBalance(prev => prev + bet)
-        }
-        
-        setGameState('finished')
-        return currentDealerHand
-      })
-      return currentPlayerHand
-    })
-  }
-
   const handleBetChange = (amount) => {
     if (gameState !== 'betting') return
     const newBet = Math.max(1, Math.min(balance, bet + amount))

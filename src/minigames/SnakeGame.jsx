@@ -24,7 +24,6 @@ function SnakeGame() {
   const lastFoodSetTickRef = useRef(-1)
   const touchStartRef = useRef(null)
   const containerRef = useRef(null)
-  const resizeTimeoutRef = useRef(null)
 
   // avoidPositions: array of positions to avoid (each {x,y}).
   // avoidanceDistance: Manhattan distance threshold to avoid.
@@ -317,7 +316,6 @@ function SnakeGame() {
 
   // compute grid size & interval from viewport/container size
   const computeParams = useCallback(() => {
-    const container = containerRef.current
     const vw = window.innerWidth
     const vh = window.innerHeight
     // Prefer using ~75% of the smaller viewport dimension to size the square
