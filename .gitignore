@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# OG image generation scratch (fonts + script); the output public/og.png is committed
+.ogfonts
