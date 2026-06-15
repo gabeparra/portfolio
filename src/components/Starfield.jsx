@@ -37,6 +37,8 @@ function Starfield() {
       canvas.style.height = height + 'px'
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       seedStars()
+      // in reduced-motion the loop never runs, so paint a static frame on every resize
+      if (reduceMotion) frame(performance.now())
     }
 
     function seedStars() {
@@ -173,18 +175,34 @@ function Starfield() {
         }
       }
 
-      rafId = requestAnimationFrame(frame)
+      // keep the loop alive only while animating and the tab is visible
+      if (!reduceMotion && !document.hidden) rafId = requestAnimationFrame(frame)
+    }
+
+    function onVisibility() {
+      if (reduceMotion) return
+      if (document.hidden) {
+        cancelAnimationFrame(rafId)
+      } else {
+        lastT = performance.now()
+        cancelAnimationFrame(rafId)
+        rafId = requestAnimationFrame(frame)
+      }
     }
 
     resize()
     nextShootAt = performance.now() + rand(2500, 7000)
     nextUfoAt = performance.now() + rand(20000, 45000)
     window.addEventListener('resize', resize)
-    rafId = requestAnimationFrame(frame)
+    document.addEventListener('visibilitychange', onVisibility)
+    // reduced motion: paint one static frame and skip the animation loop entirely
+    if (reduceMotion) frame(performance.now())
+    else rafId = requestAnimationFrame(frame)
 
     return () => {
       cancelAnimationFrame(rafId)
       window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [])
 

@@ -54,6 +54,13 @@ code {
   color: #fff;
 }
 
+/* visible focus ring for keyboard users (mouse clicks stay clean) */
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--void); }
 ::-webkit-scrollbar-thumb {
