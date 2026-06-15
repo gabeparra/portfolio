@@ -21,6 +21,10 @@ function RetroPage() {
   const initializedRef = useRef(false)
 
   useEffect(() => {
+    // only bounce the GIFs while the Retro tab is actually showing, and never under reduced motion
+    if (activeTab !== 'retro') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     if (!initializedRef.current) {
       const speed = 3
       velocitiesRef.current = {
@@ -222,7 +226,7 @@ function RetroPage() {
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
-  }, [])
+  }, [activeTab])
 
   return (
     <div className="retro-page">
