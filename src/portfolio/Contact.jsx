@@ -48,7 +48,7 @@ function Contact() {
       console.error('Error sending email:', error)
       setFormStatus({ 
         type: 'error', 
-        message: 'Failed to send message. Please try again or email me directly at gabpar49@gmail.com' 
+        message: 'Failed to send message. Please try again or email me directly at gabriel@gabrielparra.dev'
       })
     } finally {
       setIsSubmitting(false)
@@ -128,7 +128,7 @@ function Contact() {
               </form>
               
               <div className="contact-links">
-                <a href="mailto:gabpar49@gmail.com" className="contact-link">
+                <a href="mailto:gabriel@gabrielparra.dev" className="contact-link">
                   Email
                 </a>
                 <a href="https://github.com/gabeparra" target="_blank" rel="noopener noreferrer" className="contact-link">

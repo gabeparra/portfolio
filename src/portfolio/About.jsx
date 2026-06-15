@@ -3,7 +3,7 @@ import './About.css'
 const SERVICE_RECORD = [
   {
     period: 'OCT 2025 — PRESENT',
-    title: 'Business System Analyst II',
+    title: 'Business Analyst II',
     org: 'UCF Global · University of Central Florida',
     notes: [
       'Slate (Technolutions) development for international admissions: portals, forms, SQL queries, and integrations.',
@@ -45,7 +45,7 @@ function About() {
             <p className="crew-text">
               I&apos;m Gabriel (Mariano) Parra — a full-stack engineer working in higher-ed
               enrollment systems by day and shipping web, AI, and game projects the rest of the time.
-              Currently a Business System Analyst II at UCF Global, where I build and integrate the
+              Currently a Business Analyst II at UCF Global, where I build and integrate the
               Slate (Technolutions) systems that international students use to reach the university.
             </p>
             <p className="crew-text">

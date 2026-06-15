@@ -142,7 +142,7 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, o
               <span className="easter-egg-overlay-c" onClick={handleCClick} onTouchStart={handleCClick}></span>
             </h1>
             <p className="mc-sub launch launch-3">
-              Slate developer at <strong>UCF Global</strong> · Founder of <strong>BananaByte LLC</strong> ·
+              Business Analyst II at <strong>UCF Global</strong> · Founder of <strong>BananaByte LLC</strong> ·
               building web apps, enterprise integrations, and AI tooling from the Space Coast&apos;s backyard.
             </p>
             <div className="mc-cta-row launch launch-4">
@@ -252,7 +252,7 @@ function Portfolio({ onEasterEggClick, onNavigateToAbout, onNavigateToContact, o
           </p>
           <div className="mc-contact-row">
             <button onClick={handleContactClick} className="mc-btn mc-btn-primary">Send Transmission</button>
-            <a href="mailto:mariano@marianoparra.dev" className="mc-btn mc-btn-ghost">Email</a>
+            <a href="mailto:gabriel@gabrielparra.dev" className="mc-btn mc-btn-ghost">Email</a>
             <a href="https://github.com/gabeparra" target="_blank" rel="noopener noreferrer" className="mc-btn mc-btn-ghost">GitHub</a>
             <a href="https://linkedin.com/in/gabeparra" target="_blank" rel="noopener noreferrer" className="mc-btn mc-btn-ghost">LinkedIn</a>
             <a href="https://bananabyte.io" target="_blank" rel="noopener noreferrer" className="mc-btn mc-btn-ghost">BananaByte</a>
