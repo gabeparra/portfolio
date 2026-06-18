@@ -4,6 +4,14 @@ import { useState, useEffect, useRef } from 'react'
 const MISSIONS = [
   {
     id: 'GP-01',
+    name: 'ChessCadets',
+    desc: 'Kids’ chess game in Unreal Engine 5 — play White against a real embedded C++ chess engine (Pulse) on a holographic board set in neon, per-piece cyberpunk arenas. My senior design capstone.',
+    stack: ['Unreal Engine 5', 'C++', 'Pulse Chess AI', 'Lumen / Ray Tracing'],
+    href: 'https://github.com/LeineckerGames/ChessCadets',
+    status: 'LAUNCH PREP',
+  },
+  {
+    id: 'GP-02',
     name: 'UCF Global Administrative Portal',
     desc: 'Web application managing administrative forms and requests for international students. File uploads, role-based routing, REST backend.',
     stack: ['React', 'CoreUI', 'FastAPI', 'SQLite'],
@@ -11,7 +19,7 @@ const MISSIONS = [
     status: 'DEPLOYED',
   },
   {
-    id: 'GP-02',
+    id: 'GP-03',
     name: 'Margot AI — Pronunciation Trainer',
     desc: 'Full-stack pronunciation training app with real-time ES/EN feedback via ElevenLabs. Led a cross-functional team end to end.',
     stack: ['React', 'TypeScript', 'Flask', 'PostgreSQL', 'Docker'],
@@ -19,7 +27,7 @@ const MISSIONS = [
     status: 'MISSION COMPLETE',
   },
   {
-    id: 'GP-03',
+    id: 'GP-04',
     name: 'BananaByte LLC',
     desc: 'My web & app development studio. Production sites on an edge-deployed static stack, owned from brand to deploy.',
     stack: ['Astro 5', 'Tailwind 4', 'TypeScript', 'Cloudflare'],
@@ -27,7 +35,7 @@ const MISSIONS = [
     status: 'LIVE SIGNAL',
   },
   {
-    id: 'GP-04',
+    id: 'GP-05',
     name: 'Rolling with the Punches',
     desc: 'Unity 6 Western-themed 3D game with a mobile port, built for an AI for Game Development course — C# gameplay/AI and custom URP shader work.',
     stack: ['Unity 6', 'C#', 'Mobile', 'HLSL', 'URP'],
@@ -35,7 +43,7 @@ const MISSIONS = [
     status: 'IN ORBIT',
   },
   {
-    id: 'GP-05',
+    id: 'GP-06',
     name: 'UCF Global PhoneValidator',
     desc: 'Java libphonenumber validation wired into the Slate admissions intake, eliminating manual phone-format triage for staff.',
     stack: ['Java', 'libphonenumber', 'Slate', 'bpLogix'],
@@ -43,7 +51,7 @@ const MISSIONS = [
     status: 'DEPLOYED',
   },
   {
-    id: 'GP-06',
+    id: 'GP-07',
     name: 'DockerOffline',
     desc: 'Offline install bundle for Docker Engine on Ubuntu — fetch .deb packages online, install on air-gapped hosts.',
     stack: ['Bash', 'Debian packaging'],
@@ -51,7 +59,7 @@ const MISSIONS = [
     status: 'FIELD KIT',
   },
   {
-    id: 'GP-07',
+    id: 'GP-08',
     name: 'Equipment Rental',
     desc: 'Mobile-friendly web app for checking shared, access-controlled equipment in and out — session auth, server-side status, and CSV audit logging.',
     stack: ['JavaScript', 'Python', 'HTML/CSS'],
