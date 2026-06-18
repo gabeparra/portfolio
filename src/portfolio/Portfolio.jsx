@@ -69,10 +69,11 @@ const MISSIONS = [
 ]
 
 const SYSTEMS = [
-  { label: 'LANGUAGES', items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C#', 'SQL', 'PHP'] },
+  { label: 'LANGUAGES', items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C#', 'C++', 'SQL', 'PHP'] },
   { label: 'FRAMEWORKS', items: ['React', 'Next.js', 'React Native', 'Astro', 'FastAPI', 'Flask', 'Node.js'] },
   { label: 'PLATFORMS', items: ['PostgreSQL', 'MySQL', 'Docker', 'Cloudflare', 'Vercel', 'Linux', 'Git'] },
-  { label: 'SPECIAL OPS', items: ['Slate (Technolutions)', 'bpLogix', 'LLM agents', 'RAG pipelines', 'Unity'] },
+  { label: 'GAME DEV', items: ['Unreal Engine 5', 'Unity', 'C++ / C# gameplay', 'HLSL shaders'] },
+  { label: 'SPECIAL OPS', items: ['Slate (Technolutions)', 'bpLogix', 'LLM agents', 'RAG pipelines'] },
 ]
 
 function useReveal() {
