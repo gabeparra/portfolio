@@ -100,4 +100,5 @@
 @media (max-width: 880px) {
   .crew-grid { grid-template-columns: 1fr; }
   .crew-main { padding-top: 6.5rem; }
+  .crew-record { background: rgba(13, 20, 38, 0.92); }
 }
