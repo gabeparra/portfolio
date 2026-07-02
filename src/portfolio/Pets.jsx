@@ -6,6 +6,7 @@ function Pets() {
       name: 'Blanco',
       species: 'Dog',
       image: '/pets/blanco.jpg',
+      focus: '47% 42%',
       description: 'Blanco is a rescue dog from the streets of Chile. Despite his rough start, he\'s the most gentle and loving companion. He looks like a lab mix and has been my loyal friend for many years. His resilience and sweet nature remind me every day that every pet deserves a loving home.',
       age: '12 years old',
       personality: 'Gentle, loyal, and resilient'
@@ -14,17 +15,19 @@ function Pets() {
       name: 'Mango',
       species: 'Cat',
       image: '/pets/mango.jpg',
-      description: 'Mango is an orange cat and one of two brothers. He\'s full of energy and curiosity, always exploring and getting into playful mischief. Despite being young, he has a big personality and loves to be the center of attention.',
+      focus: '33% 37%',
+      description: 'Mango is an orange tabby we rescued here in Florida, and he is basically Garfield in the fur. Lasagna-level devotion to food, world-class at lounging, and a big personality he is never shy about. He and his brother Moyo came up together.',
       age: 'Just over 1 year old',
-      personality: 'Energetic, curious, and playful'
+      personality: 'Lazy, food-obsessed, pure Garfield'
     },
     {
       name: 'Moyo',
       species: 'Cat',
       image: '/pets/moyo.jpg',
-      description: 'Moyo is Mango\'s brother, a beautiful tabby cat. He\'s the perfect companion to his brother and together they keep the house lively. Moyo has a calm demeanor but can be just as playful when the mood strikes.',
+      focus: '50% 27%',
+      description: 'Moyo is Mango\'s brother, a grey tabby also rescued in Florida. He is deeply shy and thoroughly antisocial, and the short list of things he actually likes is Mango and eating. Catch him at the right moment though and he detonates into full-speed zoomies around the house.',
       age: 'Just over 1 year old',
-      personality: 'Calm, friendly, and playful'
+      personality: 'Shy, antisocial, chaotic zoomies'
     }
   ]
 
@@ -49,10 +52,11 @@ function Pets() {
               {pets.map((pet, index) => (
                 <div key={index} className="pet-card">
                   <div className="pet-image-container">
-                    <img 
-                      src={pet.image} 
+                    <img
+                      src={pet.image}
                       alt={pet.name}
                       className="pet-image"
+                      style={pet.focus ? { objectPosition: pet.focus } : undefined}
                       onError={(e) => {
                         e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%231e293b" width="400" height="300"/%3E%3Ctext fill="%2360a5fa" font-family="Arial" font-size="20" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3EPet Photo%3C/text%3E%3C/svg%3E'
                       }}
