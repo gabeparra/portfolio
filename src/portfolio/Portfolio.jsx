@@ -5,31 +5,39 @@ const MISSIONS = [
   {
     id: 'GP-01',
     name: 'Portbook',
-    desc: 'Local tracker for machines, the ports they serve, what connects to what, and the tickets against them — one self-contained offline Python file. No server to deploy, no Docker, no login; the data is a JSON file you can back up with cp.',
-    stack: ['Python', 'Tailwind', 'Zero dependencies'],
+    class: 'INFRA',
+    desc: 'Local tracker for machines, the ports they serve, what connects to what, and the tickets against them. The map view draws itself from the connections you enter, and any port serving on two machines gets flagged before you point a client at the wrong one.',
+    metrics: ['1 Python file', '0 dependencies', 'loopback only'],
+    stack: ['Python', 'Tailwind', 'stdlib http.server'],
+    image: '/shots/portbook.webp',
     href: 'https://github.com/gabeparra/portbook',
     status: 'LIVE',
   },
   {
     id: 'GP-02',
+    name: 'Strikedeck',
+    class: 'WEB',
+    desc: 'Options and prediction-market paper-trading terminal. Real market data in, positions and P&L tracked against it, and an Alpaca paper account you can opt into. Runs on the tailnet, never the open internet.',
+    metrics: ['real data', 'paper only', 'tailnet-served'],
+    stack: ['FastAPI', 'React', 'Vite', 'Alpaca', 'Polymarket'],
+    status: 'PRIVATE BUILD',
+  },
+  {
+    id: 'GP-03',
     name: 'ChessCadets',
-    desc: 'Kids’ chess game in Unreal Engine 5 — play White against a real embedded C++ chess engine (Pulse) on a holographic board set in neon, per-piece cyberpunk arenas. My senior design capstone.',
+    class: 'GAMES',
+    desc: 'Kids\u2019 chess game in Unreal Engine 5. Play White against a real embedded C++ chess engine (Pulse) on a holographic board set in neon, per-piece cyberpunk arenas. My senior design capstone.',
+    metrics: ['senior capstone', 'embedded C++ engine'],
     stack: ['Unreal Engine 5', 'C++', 'Pulse Chess AI', 'Lumen / Ray Tracing'],
     href: 'https://github.com/LeineckerGames/ChessCadets',
     status: 'LAUNCH PREP',
   },
   {
-    id: 'GP-03',
-    name: 'UCF Global Administrative Portal',
-    desc: 'Web application managing administrative forms and requests for international students. File uploads, role-based routing, REST backend.',
-    stack: ['React', 'CoreUI', 'FastAPI', 'SQLite'],
-    href: 'https://github.com/gabeparra/GlobalCoreUIDemo',
-    status: 'DEPLOYED',
-  },
-  {
     id: 'GP-04',
-    name: 'Margot AI — Pronunciation Trainer',
-    desc: 'Full-stack pronunciation training app with real-time ES/EN feedback via ElevenLabs. Led a cross-functional team end to end.',
+    name: 'Margot AI \u2014 Pronunciation Trainer',
+    class: 'AI',
+    desc: 'Full-stack pronunciation trainer that scores Spanish and English speech in real time through ElevenLabs, so a learner hears what is wrong while they are still saying it. I led the cross-functional team end to end.',
+    metrics: ['ES / EN', 'real-time feedback', 'team lead'],
     stack: ['React', 'TypeScript', 'Flask', 'PostgreSQL', 'Docker'],
     href: 'https://github.com/gabeparra/Margot.AI',
     status: 'MISSION COMPLETE',
@@ -37,41 +45,62 @@ const MISSIONS = [
   {
     id: 'GP-05',
     name: 'BananaByte LLC',
-    desc: 'My web & app development studio. Production sites on an edge-deployed static stack, owned from brand to deploy.',
+    class: 'WEB',
+    desc: 'My web and app studio. Production sites for Orlando shops, performers and small businesses on an edge-deployed static stack, owned from brand through deploy, at one flat price with no hourly meter.',
+    metrics: ['registered FL studio', 'bilingual', 'edge-deployed'],
     stack: ['Astro 5', 'Tailwind 4', 'TypeScript', 'Cloudflare'],
+    image: '/shots/bananabyte.webp',
     href: 'https://bananabyte.io',
     status: 'LIVE SIGNAL',
   },
   {
     id: 'GP-06',
+    name: 'UCF Global Administrative Portal',
+    class: 'WEB',
+    desc: 'Web application managing administrative forms and requests for international students: file uploads, role-based routing, and a REST backend replacing a legacy upload system.',
+    metrics: ['role-based routing', 'replaced legacy system'],
+    stack: ['React', 'CoreUI', 'FastAPI', 'SQLite'],
+    href: 'https://github.com/gabeparra/GlobalCoreUIDemo',
+    status: 'DEPLOYED',
+  },
+  {
+    id: 'GP-07',
     name: 'Rolling with the Punches',
-    desc: 'Unity 6 Western-themed 3D game with a mobile port, built for an AI for Game Development course — C# gameplay/AI and custom URP shader work.',
+    class: 'GAMES',
+    desc: 'Unity 6 Western-themed 3D game with a mobile port, built for an AI for Game Development course. C# gameplay and AI, plus custom URP shader work.',
+    metrics: ['desktop + mobile', 'custom URP shaders'],
     stack: ['Unity 6', 'C#', 'Mobile', 'HLSL', 'URP'],
     href: 'https://github.com/gabeparra/Rolling-with-the-punches-game',
     status: 'IN ORBIT',
   },
   {
-    id: 'GP-07',
+    id: 'GP-08',
     name: 'UCF Global PhoneValidator',
-    desc: 'Java libphonenumber validation wired into the Slate admissions intake, eliminating manual phone-format triage for staff.',
+    class: 'INFRA',
+    desc: 'Java libphonenumber validation wired into the Slate admissions intake through bpLogix Process Director, so bad phone formats are caught at entry instead of triaged by hand later.',
+    metrics: ['runs inside Slate', 'killed manual triage'],
     stack: ['Java', 'libphonenumber', 'Slate', 'bpLogix'],
     href: 'https://github.com/gabeparra/PhoneValidatorJavaApp',
     status: 'DEPLOYED',
   },
   {
-    id: 'GP-08',
-    name: 'DockerOffline',
-    desc: 'Offline install bundle for Docker Engine on Ubuntu — fetch .deb packages online, install on air-gapped hosts.',
-    stack: ['Bash', 'Debian packaging'],
-    href: 'https://github.com/gabeparra/DockerOffline',
+    id: 'GP-09',
+    name: 'Equipment Rental',
+    class: 'WEB',
+    desc: 'Mobile-friendly app for checking shared, access-controlled equipment in and out, with session auth, server-side status and CSV audit logging.',
+    metrics: ['session auth', 'CSV audit trail'],
+    stack: ['JavaScript', 'Python', 'HTML/CSS'],
+    href: 'https://github.com/gabeparra/equipment-rental',
     status: 'FIELD KIT',
   },
   {
-    id: 'GP-09',
-    name: 'Equipment Rental',
-    desc: 'Mobile-friendly web app for checking shared, access-controlled equipment in and out — session auth, server-side status, and CSV audit logging.',
-    stack: ['JavaScript', 'Python', 'HTML/CSS'],
-    href: 'https://github.com/gabeparra/equipment-rental',
+    id: 'GP-10',
+    name: 'DockerOffline',
+    class: 'INFRA',
+    desc: 'Offline install bundle for Docker Engine on Ubuntu: fetch the .deb packages while you have a network, install them on air-gapped hosts that never will.',
+    metrics: ['air-gapped install'],
+    stack: ['Bash', 'Debian packaging'],
+    href: 'https://github.com/gabeparra/DockerOffline',
     status: 'FIELD KIT',
   },
 ]
@@ -83,6 +112,43 @@ const SYSTEMS = [
   { label: 'GAME DEV', items: ['Unreal Engine 5', 'Unity', 'C++ / C# gameplay', 'HLSL shaders'] },
   { label: 'SPECIAL OPS', items: ['Slate (Technolutions)', 'bpLogix', 'LLM agents', 'RAG pipelines'] },
 ]
+
+// Derived from the data so a new mission class can never miss the filter row.
+const CLASSES = ['ALL', ...new Set(MISSIONS.map((m) => m.class))]
+
+function MissionCard({ mission: m }) {
+  const inner = (
+    <>
+      {/* No thumb at all where there is no capture — an empty 16:9 panel reads
+          as a broken image, and half these missions have no UI to shoot. */}
+      {m.image && (
+        <div className="mission-shot">
+          <img src={m.image} alt={`${m.name} screenshot`} loading="lazy" />
+        </div>
+      )}
+      <div className="mission-body">
+        <div className="mission-top">
+          <span className="mission-id">{m.id}</span>
+          <span className="mission-status">{m.status}</span>
+        </div>
+        <h3 className="mission-name">{m.name}</h3>
+        <p className="mission-desc">{m.desc}</p>
+        {m.metrics && (
+          <ul className="mission-metrics">
+            {m.metrics.map((x) => <li key={x}>{x}</li>)}
+          </ul>
+        )}
+        <div className="mission-stack">
+          {m.stack.map((s) => <span key={s} className="mission-chip">{s}</span>)}
+        </div>
+      </div>
+    </>
+  )
+  // Private builds have no repo to open, so they render as a plain card.
+  return m.href
+    ? <a className="mission-card" href={m.href} target="_blank" rel="noopener noreferrer">{inner}</a>
+    : <div className="mission-card mission-card-closed">{inner}</div>
+}
 
 function useReveal() {
   useEffect(() => {
@@ -110,7 +176,12 @@ function Portfolio({ onEasterEggClick, onNavigateToContact }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showAll, setShowAll] = useState(false)
+  const [missionClass, setMissionClass] = useState('ALL')
   const launched = useRef(false)
+
+  const visibleMissions = missionClass === 'ALL'
+    ? MISSIONS
+    : MISSIONS.filter((m) => m.class === missionClass)
 
   useReveal()
 
@@ -212,20 +283,22 @@ function Portfolio({ onEasterEggClick, onNavigateToContact }) {
             <h2 className="mc-section-title">ACTIVE MISSIONS</h2>
             <span className="mc-section-line"></span>
           </div>
-          <div className="missions-grid">
-            {MISSIONS.map((m) => (
-              <a key={m.id} className="mission-card" href={m.href} target="_blank" rel="noopener noreferrer">
-                <div className="mission-top">
-                  <span className="mission-id">{m.id}</span>
-                  <span className="mission-status">{m.status}</span>
-                </div>
-                <h3 className="mission-name">{m.name}</h3>
-                <p className="mission-desc">{m.desc}</p>
-                <div className="mission-stack">
-                  {m.stack.map((s) => <span key={s} className="mission-chip">{s}</span>)}
-                </div>
-              </a>
+          <div className="mission-filters">
+            {CLASSES.map((c) => (
+              <button
+                key={c}
+                className={`mission-filter${c === missionClass ? ' active' : ''}`}
+                onClick={() => setMissionClass(c)}
+              >
+                {c}
+                <span className="mission-filter-count">
+                  {c === 'ALL' ? MISSIONS.length : MISSIONS.filter((m) => m.class === c).length}
+                </span>
+              </button>
             ))}
+          </div>
+          <div className="missions-grid">
+            {visibleMissions.map((m) => <MissionCard key={m.id} mission={m} />)}
           </div>
         </section>
 

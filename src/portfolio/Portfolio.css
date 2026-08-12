@@ -348,17 +348,78 @@
 .system-list li:last-child { border-bottom: none; }
 
 /* ---------- missions ---------- */
+.mission-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+.mission-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.mission-filter:hover { color: var(--ink); border-color: rgba(252, 61, 33, 0.4); }
+.mission-filter.active { color: var(--red); border-color: rgba(252, 61, 33, 0.65); }
+.mission-filter-count { color: var(--ink-faint, #6b7a94); font-size: 0.62rem; }
+
 .missions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.2rem;
+  /* Cards keep their natural height; stretching them to the tallest in the row
+     leaves a hole under every short description. */
+  align-items: start;
 }
+.mission-shot {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: rgba(6, 10, 20, 0.75);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+.mission-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.mission-card:hover .mission-shot img { transform: scale(1.04); }
+.mission-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.3rem 1.4rem 1.5rem;
+  flex: 1;
+}
+.mission-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--alien);
+}
+.mission-metrics li::before { content: '/ '; color: rgba(143, 163, 199, 0.4); }
+.mission-card-closed { cursor: default; }
 .mission-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  padding: 1.5rem 1.4rem;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 4px;
