@@ -11,6 +11,13 @@ const PROJECTS = [
     status: 'Active',
   },
   {
+    name: 'Portbook',
+    desc: 'Local tracker for machines, the ports they serve, what connects to what, and the tickets against them. One self-contained offline Python file: no server to deploy, no Docker, no login, data in a JSON file you can back up with cp.',
+    stack: ['Python', 'Tailwind', 'Zero dependencies'],
+    href: 'https://github.com/gabeparra/portbook',
+    status: 'Live',
+  },
+  {
     name: 'ChessCadets',
     desc: "Kids' chess game in Unreal Engine 5. Play a real embedded C++ engine on a holographic board in neon, per-piece arenas. My senior design capstone.",
     stack: ['Unreal Engine 5', 'C++', 'Pulse AI', 'Lumen'],
