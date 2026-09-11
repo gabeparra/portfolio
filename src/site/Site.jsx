@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 import './site.css'
 
@@ -8,22 +8,18 @@ const FEATURED = [
     outcome:
       'Maps machines, ports, and tickets so you catch collisions before a client hits the wrong host.',
     stack: ['Python', 'Tailwind', 'stdlib http.server'],
-    metrics: ['1 file', '0 deps', 'Loopback'],
     image: '/shots/portbook.webp',
     href: 'https://github.com/gabeparra/portbook',
     status: 'Live',
-    tone: 'violet',
   },
   {
     name: 'BananaByte LLC',
     outcome:
-      'Web & app studio for Orlando shops and small businesses — brand through deploy on an edge-static stack, flat price.',
+      'My web and app studio for Orlando shops and small businesses — brand through deploy on an edge-static stack, flat price.',
     stack: ['Astro 5', 'Tailwind 4', 'TypeScript', 'Cloudflare'],
-    metrics: ['FL studio', 'Bilingual', 'Edge'],
     image: '/shots/bananabyte.webp',
     href: 'https://bananabyte.io',
     status: 'Live',
-    tone: 'amber',
   },
 ]
 
@@ -31,65 +27,47 @@ const PROJECTS = [
   {
     name: 'Strikedeck',
     outcome:
-      'Options and prediction-market paper terminal with live data, positions, and optional Alpaca paper trading — tailnet only.',
+      'Options and prediction-market paper terminal with live data, positions, and optional Alpaca paper trading. Runs on my tailnet only.',
     stack: ['FastAPI', 'React', 'Vite', 'Alpaca', 'Polymarket'],
-    metrics: ['Real data', 'Paper only', 'Tailnet'],
     status: 'Private',
-    tone: 'violet',
-    panel: 'terminal',
   },
   {
     name: 'ChessCadets',
     outcome:
       'Kids’ chess in Unreal Engine 5 — holographic board, neon arenas, embedded Pulse C++ engine, story and puzzle modes. Senior capstone; the full game lives in a private remake.',
     stack: ['Unreal Engine 5', 'C++', 'Pulse', 'Lumen'],
-    metrics: ['Capstone', 'Story + puzzles', 'Pulse AI'],
-    status: 'Capstone · Remake',
-    tone: 'cyan',
-    panel: 'board',
+    status: 'Capstone · remake',
   },
   {
     name: 'Margot AI',
     outcome:
-      'Pronunciation trainer that scores Spanish and English speech in real time via ElevenLabs. Led the team end to end.',
+      'Pronunciation trainer that scores Spanish and English speech in real time via ElevenLabs. I led the team end to end.',
     stack: ['React', 'TypeScript', 'Flask', 'PostgreSQL', 'Docker'],
-    metrics: ['ES / EN', 'Real-time', 'Team lead'],
     href: 'https://github.com/gabeparra/Margot.AI',
     status: 'Complete',
-    tone: 'amber',
-    panel: 'wave',
   },
   {
     name: 'Rolling with the Punches',
     outcome:
-      'Western twin-stick shooter for Android in Unity 6 — touch twin-stick, three view modes, headless IL2CPP pipeline. Public itch.io build targeted for end of October; repo stays private.',
+      'Western twin-stick shooter for Android in Unity 6. Public itch.io build targeted for end of October; repo stays private for licensed assets.',
     stack: ['Unity 6', 'C#', 'URP', 'Android'],
-    metrics: ['itch.io Oct', 'ARM64', '3 views'],
     status: 'Shipping Oct 2026',
-    tone: 'violet',
-    panel: 'gunslinger',
   },
   {
     name: 'UCF Global Portal',
     outcome:
       'Admin forms and requests for international students: uploads, role-based routing, REST backend replacing a legacy system.',
     stack: ['React', 'CoreUI', 'FastAPI', 'SQLite'],
-    metrics: ['Role routing', 'Legacy replace'],
     href: 'https://github.com/gabeparra/GlobalCoreUIDemo',
     status: 'Deployed',
-    tone: 'cyan',
-    panel: 'forms',
   },
   {
     name: 'PhoneValidator',
     outcome:
       'Java libphonenumber validation in the Slate admissions intake via bpLogix — bad formats caught at entry, not by hand later.',
     stack: ['Java', 'libphonenumber', 'Slate', 'bpLogix'],
-    metrics: ['Inside Slate', 'No manual triage'],
     href: 'https://github.com/gabeparra/PhoneValidatorJavaApp',
     status: 'Deployed',
-    tone: 'amber',
-    panel: 'signal',
   },
 ]
 
@@ -124,7 +102,7 @@ const EXPERIENCE = [
     title: 'Founder / Engineer',
     org: 'BananaByte LLC',
     notes: [
-      'Web & app studio. Production sites on Astro, TypeScript, Tailwind, and Cloudflare — brand to deploy.',
+      'Web and app studio. Production sites on Astro, TypeScript, Tailwind, and Cloudflare — brand to deploy.',
     ],
   },
   {
@@ -139,173 +117,48 @@ const EXPERIENCE = [
 
 const SKILLS = [
   {
-    n: '01',
     label: 'Languages',
     items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C#', 'C++', 'SQL', 'PHP'],
   },
   {
-    n: '02',
     label: 'Frameworks',
     items: ['React', 'Next.js', 'React Native', 'Astro', 'FastAPI', 'Flask', 'Node.js'],
   },
   {
-    n: '03',
     label: 'Platforms',
     items: ['PostgreSQL', 'MySQL', 'Docker', 'Cloudflare', 'Vercel', 'Linux', 'Git'],
   },
   {
-    n: '04',
-    label: 'Game development',
-    items: ['Unreal Engine 5', 'Unity', 'C++ / C# gameplay', 'HLSL shaders'],
+    label: 'Games',
+    items: ['Unreal Engine 5', 'Unity', 'C++ / C# gameplay', 'HLSL'],
   },
   {
-    n: '05',
     label: 'Enterprise & AI',
-    items: ['Slate (Technolutions)', 'bpLogix', 'LLM agents', 'RAG pipelines'],
+    items: ['Slate (Technolutions)', 'bpLogix', 'LLM agents', 'RAG'],
   },
 ]
 
-const PILLARS = [
-  {
-    title: 'Clear before clever',
-    text: 'I learn how the work actually runs — who touches it, where it breaks — then build the smallest thing that removes the friction.',
-  },
-  {
-    title: 'Ship the boring wins',
-    text: 'Validators, portals, offline installers, paper-trading sandboxes. The tools people stop noticing because they just work.',
-  },
-  {
-    title: 'Own the loop',
-    text: 'From brand and UX through API, deploy, and handoff. Bilingual EN/ES when the audience needs it.',
-  },
-]
-
-function useReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll('.reveal')
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add('is-visible')
-        })
-      },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
-}
-
-function useMagnetic(ref, strength = 0.28) {
-  useEffect(() => {
-    const el = ref.current
-    if (!el || window.matchMedia('(pointer: coarse)').matches) return undefined
-    const onMove = (e) => {
-      const r = el.getBoundingClientRect()
-      const x = e.clientX - r.left - r.width / 2
-      const y = e.clientY - r.top - r.height / 2
-      el.style.transform = `translate(${x * strength}px, ${y * strength}px)`
-    }
-    const onLeave = () => {
-      el.style.transform = 'translate(0, 0)'
-    }
-    el.addEventListener('mousemove', onMove)
-    el.addEventListener('mouseleave', onLeave)
-    return () => {
-      el.removeEventListener('mousemove', onMove)
-      el.removeEventListener('mouseleave', onLeave)
-    }
-  }, [ref, strength])
-}
-
-function AbstractPanel({ kind, name, metrics }) {
-  return (
-    <div className={`abs-panel abs-${kind}`} aria-hidden="true">
-      <div className="abs-noise" />
-      <div className="abs-core">
-        {kind === 'terminal' && (
-          <pre className="abs-code">{`> strikedeck --paper
-positions: synced
-tailnet:   private
-pnl:       tracking`}</pre>
-        )}
-        {kind === 'board' && (
-          <div className="abs-board">
-            {Array.from({ length: 64 }).map((_, i) => (
-              <span key={i} className={(Math.floor(i / 8) + i) % 2 ? 'd' : 'l'} />
-            ))}
-          </div>
-        )}
-        {kind === 'wave' && (
-          <svg className="abs-wave" viewBox="0 0 240 80" preserveAspectRatio="none">
-            <path d="M0 40 Q30 10 60 40 T120 40 T180 40 T240 40" fill="none" stroke="currentColor" strokeWidth="2" />
-            <path d="M0 48 Q30 70 60 48 T120 48 T180 48 T240 48" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
-          </svg>
-        )}
-        {kind === 'gunslinger' && <div className="abs-crosshair" />}
-        {kind === 'forms' && (
-          <div className="abs-forms">
-            <span /><span /><span />
-          </div>
-        )}
-        {kind === 'signal' && (
-          <div className="abs-signal">
-            <i /><i /><i /><i />
-          </div>
-        )}
-        <p className="abs-name">{name}</p>
-        {metrics && (
-          <ul className="abs-metrics">
-            {metrics.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function WorkCard({ project: p, featured = false }) {
-  const className = [
-    'work-card',
-    featured ? 'is-featured' : '',
-    p.image ? 'has-media' : 'no-media',
-    `tone-${p.tone || 'violet'}`,
-  ]
+function WorkItem({ project: p, large = false }) {
+  const className = ['work-item', large ? 'is-large' : '', p.image ? 'has-shot' : '']
     .filter(Boolean)
     .join(' ')
 
-  const media = p.image ? (
-    <img src={p.image} alt="" loading="lazy" />
-  ) : (
-    <AbstractPanel kind={p.panel || 'terminal'} name={p.name} metrics={p.metrics} />
-  )
-
-  const inner = (
+  const body = (
     <>
-      <div className="work-card-media">
-        {media}
-        <span className="work-badge">{p.status}</span>
-        <div className="work-card-glow" aria-hidden="true" />
-      </div>
-      <div className="work-card-body">
-        <h3 className="work-card-name">
-          {p.name}
-          {p.href && (
-            <span className="work-card-arrow" aria-hidden="true">
-              ↗
-            </span>
-          )}
-        </h3>
-        <p className="work-card-outcome">{p.outcome}</p>
-        {p.metrics && (
-          <ul className="work-metrics">
-            {p.metrics.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
-          </ul>
-        )}
+      {p.image ? (
+        <div className="work-shot">
+          <img src={p.image} alt={`${p.name} screenshot`} loading="lazy" />
+        </div>
+      ) : null}
+      <div className="work-body">
+        <div className="work-top">
+          <h3 className="work-name">
+            {p.name}
+            {p.href ? <span aria-hidden="true"> ↗</span> : null}
+          </h3>
+          <span className="work-status">{p.status}</span>
+        </div>
+        <p className="work-outcome">{p.outcome}</p>
         <ul className="work-stack">
           {p.stack.map((s) => (
             <li key={s}>{s}</li>
@@ -318,11 +171,11 @@ function WorkCard({ project: p, featured = false }) {
   if (p.href) {
     return (
       <a className={className} href={p.href} target="_blank" rel="noopener noreferrer">
-        {inner}
+        {body}
       </a>
     )
   }
-  return <div className={className}>{inner}</div>
+  return <article className={className}>{body}</article>
 }
 
 function ContactForm() {
@@ -356,12 +209,12 @@ function ContactForm() {
         },
         publicKey
       )
-      setStatus({ type: 'ok', message: "Sent. I'll get back to you soon." })
+      setStatus({ type: 'ok', message: "Sent — I'll reply soon." })
       setData({ name: '', email: '', message: '' })
     } catch {
       setStatus({
         type: 'err',
-        message: 'Couldn’t send. Email gabriel@gabrielparra.dev directly.',
+        message: 'Couldn’t send. Email gabriel@gabrielparra.dev instead.',
       })
     } finally {
       setSending(false)
@@ -370,7 +223,7 @@ function ContactForm() {
 
   return (
     <form className="contact-form" onSubmit={onSubmit} noValidate>
-      <div className="form-row">
+      <div className="field">
         <label htmlFor="name">Name</label>
         <input
           id="name"
@@ -380,10 +233,9 @@ function ContactForm() {
           onChange={onChange}
           required
           autoComplete="name"
-          placeholder="Your name"
         />
       </div>
-      <div className="form-row">
+      <div className="field">
         <label htmlFor="email">Email</label>
         <input
           id="email"
@@ -393,10 +245,9 @@ function ContactForm() {
           onChange={onChange}
           required
           autoComplete="email"
-          placeholder="you@company.com"
         />
       </div>
-      <div className="form-row">
+      <div className="field">
         <label htmlFor="message">Message</label>
         <textarea
           id="message"
@@ -405,15 +256,14 @@ function ContactForm() {
           value={data.message}
           onChange={onChange}
           required
-          placeholder="What are you hiring for?"
         />
       </div>
-      {status.message && (
-        <p className={`form-status ${status.type}`} role="status">
+      {status.message ? (
+        <p className={`form-note ${status.type}`} role="status">
           {status.message}
         </p>
-      )}
-      <button type="submit" className="btn btn-primary" disabled={sending}>
+      ) : null}
+      <button type="submit" className="btn" disabled={sending}>
         {sending ? 'Sending…' : 'Send message'}
       </button>
     </form>
@@ -422,9 +272,6 @@ function ContactForm() {
 
 export default function Site() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const ctaRef = useRef(null)
-  useReveal()
-  useMagnetic(ctaRef, 0.22)
 
   useEffect(() => {
     document.body.classList.add('site-body')
@@ -455,18 +302,9 @@ export default function Site() {
 
   return (
     <div className="site">
-      <div className="site-atmosphere" aria-hidden="true">
-        <div className="atm-grid" />
-        <div className="atm-glow atm-glow-a" />
-        <div className="atm-glow atm-glow-b" />
-        <div className="atm-glow atm-glow-c" />
-        <div className="atm-grain" />
-      </div>
-
       <header className="site-header">
-        <nav className="pill-nav" aria-label="Primary">
-          <a href="#top" className="pill-brand" onClick={goTo('top')}>
-            <span className="pill-mark" aria-hidden="true" />
+        <nav className="nav" aria-label="Primary">
+          <a href="#top" className="nav-name" onClick={goTo('top')}>
             Gabriel Parra
           </a>
 
@@ -475,14 +313,13 @@ export default function Site() {
             className={`nav-toggle${menuOpen ? ' is-open' : ''}`}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
-            aria-controls="pill-links"
+            aria-controls="nav-links"
             onClick={() => setMenuOpen((o) => !o)}
           >
-            <span />
-            <span />
+            Menu
           </button>
 
-          <ul id="pill-links" className={`pill-links${menuOpen ? ' is-open' : ''}`}>
+          <ul id="nav-links" className={`nav-links${menuOpen ? ' is-open' : ''}`}>
             <li>
               <a href="#work" onClick={goTo('work')}>
                 Work
@@ -498,100 +335,50 @@ export default function Site() {
                 Skills
               </a>
             </li>
+            <li>
+              <a href="#contact" className="nav-contact" onClick={goTo('contact')}>
+                Contact
+              </a>
+            </li>
           </ul>
-
-          <a href="#contact" className="pill-cta" onClick={goTo('contact')}>
-            Open to work
-          </a>
         </nav>
       </header>
 
       <main id="top">
         <section className="hero">
-          <div className="hero-copy">
-            <p className="hero-eyebrow fade-up">
-              <span className="pulse-dot" aria-hidden="true" />
-              Open to work · Orlando / Space Coast
-            </p>
-            <h1 className="hero-display fade-up delay-1">
-              <span className="hero-line-a">Build systems</span>
-              <span className="hero-line-b">
-                that <em>ship</em>
-              </span>
-              <span className="hero-line-c">and stick.</span>
-            </h1>
-            <p className="hero-sub fade-up delay-2">
-              I&apos;m <strong>Gabriel Parra</strong> — full-stack engineer crafting enrollment
-              platforms, web products, and games. Business Analyst II at UCF Global. Founder of
-              BananaByte LLC. Bilingual EN/ES.
-            </p>
-            <ul className="hero-chips fade-up delay-3">
-              <li>UCF Global</li>
-              <li>BananaByte</li>
-              <li>EN / ES</li>
-              <li>from UCF</li>
-            </ul>
-            <div className="hero-actions fade-up delay-4">
-              <a
-                ref={ctaRef}
-                href="#work"
-                className="btn btn-primary btn-magnetic"
-                onClick={goTo('work')}
-              >
-                See selected work
-              </a>
-              <a href="#contact" className="btn btn-ghost" onClick={goTo('contact')}>
-                Let&apos;s talk
-              </a>
-            </div>
-          </div>
-
-          <aside className="hero-aside fade-up delay-2" aria-label="Featured project">
-            <a
-              className="hero-feature"
-              href="https://github.com/gabeparra/portbook"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className="hero-feature-media">
-                <img src="/shots/portbook.webp" alt="Portbook screenshot" />
-                <div className="hero-feature-shine" aria-hidden="true" />
-              </div>
-              <div className="hero-feature-meta">
-                <div className="hero-feature-top">
-                  <span className="work-badge">Live</span>
-                  <span className="hero-feature-index">01 / featured</span>
-                </div>
-                <p className="hero-feature-name">Portbook</p>
-                <p className="hero-feature-desc">
-                  Machine · port · ticket map — catch collisions before clients do.
-                </p>
-              </div>
+          <p className="hero-status">Open to work · Orlando / Space Coast</p>
+          <h1 className="hero-name">Gabriel Parra</h1>
+          <p className="hero-line">
+            Full-stack engineer at UCF Global by day. I build enrollment systems, client sites through
+            BananaByte, and the occasional game — bilingual EN/ES, from UCF.
+          </p>
+          <div className="hero-actions">
+            <a href="#work" className="btn" onClick={goTo('work')}>
+              Selected work
             </a>
-          </aside>
+            <a href="#contact" className="btn btn-quiet" onClick={goTo('contact')}>
+              Get in touch
+            </a>
+          </div>
         </section>
 
-        <section id="work" className="section reveal">
+        <section id="work" className="section">
           <header className="section-head">
-            <p className="section-kicker">
-              <span className="sticky-label">01 — Work</span>
-            </p>
-            <h2 className="section-title is-spaced">Selected work</h2>
+            <h2 className="section-title">Selected work</h2>
             <p className="section-lede">
-              Screenshot-first where it helps. Private builds stay private — no fake links, no empty
-              black boxes.
+              Real screenshots when I have them. Private builds stay private — no filler panels.
             </p>
           </header>
 
           <div className="work-featured">
             {FEATURED.map((p) => (
-              <WorkCard key={p.name} project={p} featured />
+              <WorkItem key={p.name} project={p} large />
             ))}
           </div>
 
-          <div className="work-grid">
+          <div className="work-list">
             {PROJECTS.map((p) => (
-              <WorkCard key={p.name} project={p} />
+              <WorkItem key={p.name} project={p} />
             ))}
           </div>
 
@@ -607,49 +394,42 @@ export default function Site() {
                 <span className="work-more-status">{p.status}</span>
                 <span className="work-more-name">{p.name}</span>
                 <span className="work-more-desc">{p.outcome}</span>
-                <span className="work-card-arrow" aria-hidden="true">
-                  ↗
-                </span>
               </a>
             ))}
           </div>
         </section>
 
-        <section id="about" className="section reveal">
+        <section id="about" className="section">
           <header className="section-head">
-            <p className="section-kicker">
-              <span className="sticky-label">02 — About</span>
-            </p>
-            <h2 className="section-title is-spaced">Hi — I&apos;m Gabriel</h2>
+            <h2 className="section-title">About</h2>
           </header>
 
           <div className="about-grid">
-            <div className="about-bio">
+            <div className="about-copy">
               <p>
-                I work in higher-ed enrollment systems by day and ship web, AI, and game projects the
-                rest of the time. At UCF Global I build and integrate the Slate (Technolutions)
-                systems international students use to reach the university.
+                I&apos;m Gabriel — a full-stack engineer working in higher-ed enrollment systems and
+                shipping web, AI, and game projects on the side. At UCF Global I build and integrate
+                the Slate (Technolutions) tools international students use to reach the university.
               </p>
               <p>
-                My range runs from React/TypeScript front-ends and Python/Java back-ends to enterprise
-                workflow engines, LLM tooling, and Unity. I care about simplifying workflows, killing
-                manual triage, and building tools people actually use.
+                Day to day that means React and TypeScript on the front, Python and Java on the back,
+                plus enterprise workflow engines and the occasional Unity or Unreal build. I like
+                clearing friction: fewer manual triage steps, clearer tools, stuff people actually use.
               </p>
               <p>
-                B.S. Computer Science from UCF (Aug 2026), plus a B.S. in Information Technology from
-                Chile. Based in Orlando — close enough to the Cape to hear the launches.
+                B.S. Computer Science from UCF (Aug 2026), and a B.S. in Information Technology from
+                Chile. Based in Orlando. Close enough to the Cape to hear the launches.
               </p>
-              <div className="about-cert">
-                <span className="cert-label">Certified</span>
-                <p>Fundamentals of Admissions &amp; Enrollment (2026)</p>
-                <p className="cert-org">Technolutions Slate</p>
-              </div>
+              <p className="about-cert">
+                <span className="about-cert-label">Certified</span>
+                Fundamentals of Admissions &amp; Enrollment (2026) — Technolutions Slate
+              </p>
             </div>
 
             <div className="about-exp">
-              <h3 className="exp-heading">Experience</h3>
+              <h3 className="exp-label">Experience</h3>
               {EXPERIENCE.map((e) => (
-                <article key={e.title} className="exp-card">
+                <article key={e.title} className="exp-item">
                   <p className="exp-period">{e.period}</p>
                   <h4 className="exp-title">{e.title}</h4>
                   <p className="exp-org">{e.org}</p>
@@ -664,37 +444,15 @@ export default function Site() {
           </div>
         </section>
 
-        <section id="working" className="section reveal">
+        <section id="skills" className="section">
           <header className="section-head">
-            <p className="section-kicker">
-              <span className="sticky-label">03 — Working with me</span>
-            </p>
-            <h2 className="section-title is-spaced">What you can expect</h2>
+            <h2 className="section-title">Skills</h2>
           </header>
-          <div className="pillars">
-            {PILLARS.map((p, i) => (
-              <article key={p.title} className="pillar-card">
-                <span className="pillar-n">{String(i + 1).padStart(2, '0')}</span>
-                <h3>{p.title}</h3>
-                <p>{p.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="skills" className="section reveal">
-          <header className="section-head">
-            <p className="section-kicker">
-              <span className="sticky-label">04 — Capabilities</span>
-            </p>
-            <h2 className="section-title is-spaced">Stack I reach for</h2>
-          </header>
-          <div className="skill-rows">
+          <div className="skill-list">
             {SKILLS.map((s) => (
               <div key={s.label} className="skill-row">
-                <span className="skill-n">{s.n}</span>
                 <h3 className="skill-label">{s.label}</h3>
-                <ul className="skill-chips">
+                <ul className="skill-items">
                   {s.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
@@ -704,16 +462,9 @@ export default function Site() {
           </div>
         </section>
 
-        <section id="contact" className="section section-contact reveal">
-          <header className="section-head section-head-finale">
-            <p className="section-kicker">
-              <span className="sticky-label">05 — Contact</span>
-            </p>
-            <h2 className="finale-title">
-              Let&apos;s build
-              <br />
-              <em>something sharp.</em>
-            </h2>
+        <section id="contact" className="section section-contact">
+          <header className="section-head">
+            <h2 className="section-title">Contact</h2>
             <p className="section-lede">
               Open to full-time remote roles. I usually reply within a day.
             </p>
@@ -721,31 +472,14 @@ export default function Site() {
           <div className="contact-grid">
             <ContactForm />
             <aside className="contact-aside">
-              <a href="mailto:gabriel@gabrielparra.dev" className="contact-link">
-                gabriel@gabrielparra.dev
-              </a>
-              <a
-                href="https://github.com/gabeparra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-link"
-              >
+              <a href="mailto:gabriel@gabrielparra.dev">gabriel@gabrielparra.dev</a>
+              <a href="https://github.com/gabeparra" target="_blank" rel="noopener noreferrer">
                 GitHub · gabeparra
               </a>
-              <a
-                href="https://linkedin.com/in/gabeparra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-link"
-              >
+              <a href="https://linkedin.com/in/gabeparra" target="_blank" rel="noopener noreferrer">
                 LinkedIn · gabeparra
               </a>
-              <a
-                href="https://bananabyte.io"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-link"
-              >
+              <a href="https://bananabyte.io" target="_blank" rel="noopener noreferrer">
                 bananabyte.io
               </a>
             </aside>
@@ -754,9 +488,8 @@ export default function Site() {
       </main>
 
       <footer className="site-footer">
-        <p className="footer-mark">GP</p>
         <p>© {new Date().getFullYear()} Gabriel Parra</p>
-        <p className="footer-note">Orlando / Space Coast · EN / ES · Open to work</p>
+        <p>Orlando · EN / ES</p>
       </footer>
     </div>
   )
