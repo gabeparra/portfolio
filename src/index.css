@@ -1,11 +1,12 @@
 :root {
-  --bg: #0e100f;
+  --bg: #090b0a;
   --surface: #191917;
   --text: #ffffe3;
   --text-muted: rgba(255, 255, 227, 0.72);
   --text-dim: rgba(255, 255, 227, 0.45);
   --accent: #a374ff;
-  --max: 72rem;
+  --amber: #ffb85c;
+  --cyan: #5edcd2;
   --font: 'Hanken Grotesk', 'Segoe UI', sans-serif;
 }
 
@@ -31,7 +32,7 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: #0e100f;
+  color: #090b0a;
 }
 
 :focus-visible {

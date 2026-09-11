@@ -1,74 +1,108 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import emailjs from '@emailjs/browser'
 import './site.css'
 
-const PROJECTS = [
+const FEATURED = [
   {
     name: 'Portbook',
-    outcome: 'Maps machines, ports, and tickets so you catch collisions before a client hits the wrong host.',
+    outcome:
+      'Maps machines, ports, and tickets so you catch collisions before a client hits the wrong host.',
     stack: ['Python', 'Tailwind', 'stdlib http.server'],
+    metrics: ['1 file', '0 deps', 'Loopback'],
     image: '/shots/portbook.webp',
     href: 'https://github.com/gabeparra/portbook',
     status: 'Live',
-  },
-  {
-    name: 'Strikedeck',
-    outcome: 'Options and prediction-market paper terminal with live data, positions, and optional Alpaca paper trading — tailnet only.',
-    stack: ['FastAPI', 'React', 'Vite', 'Alpaca', 'Polymarket'],
-    status: 'Private',
-  },
-  {
-    name: 'ChessKids',
-    outcome: 'Kids’ chess in Unreal Engine 5 — holographic board, neon arenas, embedded Pulse C++ engine, story and puzzle modes. Senior capstone; the full game lives in a private remake.',
-    stack: ['Unreal Engine 5', 'C++', 'Pulse', 'Lumen'],
-    status: 'Capstone · Remake',
-  },
-  {
-    name: 'Margot AI',
-    outcome: 'Pronunciation trainer that scores Spanish and English speech in real time via ElevenLabs. Led the team end to end.',
-    stack: ['React', 'TypeScript', 'Flask', 'PostgreSQL', 'Docker'],
-    href: 'https://github.com/gabeparra/Margot.AI',
-    status: 'Complete',
+    tone: 'violet',
   },
   {
     name: 'BananaByte LLC',
-    outcome: 'Web and app studio for Orlando shops and small businesses — brand through deploy on an edge-static stack, flat price.',
+    outcome:
+      'Web & app studio for Orlando shops and small businesses — brand through deploy on an edge-static stack, flat price.',
     stack: ['Astro 5', 'Tailwind 4', 'TypeScript', 'Cloudflare'],
+    metrics: ['FL studio', 'Bilingual', 'Edge'],
     image: '/shots/bananabyte.webp',
     href: 'https://bananabyte.io',
     status: 'Live',
+    tone: 'amber',
+  },
+]
+
+const PROJECTS = [
+  {
+    name: 'Strikedeck',
+    outcome:
+      'Options and prediction-market paper terminal with live data, positions, and optional Alpaca paper trading — tailnet only.',
+    stack: ['FastAPI', 'React', 'Vite', 'Alpaca', 'Polymarket'],
+    metrics: ['Real data', 'Paper only', 'Tailnet'],
+    status: 'Private',
+    tone: 'violet',
+    panel: 'terminal',
   },
   {
-    name: 'UCF Global Portal',
-    outcome: 'Admin forms and requests for international students: uploads, role-based routing, REST backend replacing a legacy system.',
-    stack: ['React', 'CoreUI', 'FastAPI', 'SQLite'],
-    href: 'https://github.com/gabeparra/GlobalCoreUIDemo',
-    status: 'Deployed',
+    name: 'ChessCadets',
+    outcome:
+      'Kids’ chess in Unreal Engine 5 — holographic board, neon arenas, embedded Pulse C++ engine, story and puzzle modes. Senior capstone; the full game lives in a private remake.',
+    stack: ['Unreal Engine 5', 'C++', 'Pulse', 'Lumen'],
+    metrics: ['Capstone', 'Story + puzzles', 'Pulse AI'],
+    status: 'Capstone · Remake',
+    tone: 'cyan',
+    panel: 'board',
+  },
+  {
+    name: 'Margot AI',
+    outcome:
+      'Pronunciation trainer that scores Spanish and English speech in real time via ElevenLabs. Led the team end to end.',
+    stack: ['React', 'TypeScript', 'Flask', 'PostgreSQL', 'Docker'],
+    metrics: ['ES / EN', 'Real-time', 'Team lead'],
+    href: 'https://github.com/gabeparra/Margot.AI',
+    status: 'Complete',
+    tone: 'amber',
+    panel: 'wave',
   },
   {
     name: 'Rolling with the Punches',
-    outcome: 'Western twin-stick shooter for Android in Unity 6 — touch twin-stick, three view modes, headless IL2CPP pipeline. Public itch.io build targeted for end of October; repo stays private.',
+    outcome:
+      'Western twin-stick shooter for Android in Unity 6 — touch twin-stick, three view modes, headless IL2CPP pipeline. Public itch.io build targeted for end of October; repo stays private.',
     stack: ['Unity 6', 'C#', 'URP', 'Android'],
+    metrics: ['itch.io Oct', 'ARM64', '3 views'],
     status: 'Shipping Oct 2026',
+    tone: 'violet',
+    panel: 'gunslinger',
+  },
+  {
+    name: 'UCF Global Portal',
+    outcome:
+      'Admin forms and requests for international students: uploads, role-based routing, REST backend replacing a legacy system.',
+    stack: ['React', 'CoreUI', 'FastAPI', 'SQLite'],
+    metrics: ['Role routing', 'Legacy replace'],
+    href: 'https://github.com/gabeparra/GlobalCoreUIDemo',
+    status: 'Deployed',
+    tone: 'cyan',
+    panel: 'forms',
   },
   {
     name: 'PhoneValidator',
-    outcome: 'Java libphonenumber validation in the Slate admissions intake via bpLogix — bad formats caught at entry, not by hand later.',
+    outcome:
+      'Java libphonenumber validation in the Slate admissions intake via bpLogix — bad formats caught at entry, not by hand later.',
     stack: ['Java', 'libphonenumber', 'Slate', 'bpLogix'],
+    metrics: ['Inside Slate', 'No manual triage'],
     href: 'https://github.com/gabeparra/PhoneValidatorJavaApp',
     status: 'Deployed',
+    tone: 'amber',
+    panel: 'signal',
   },
+]
+
+const MORE = [
   {
     name: 'Equipment Rental',
-    outcome: 'Mobile-friendly check-in/out for shared equipment with session auth, server-side status, and CSV audit logging.',
-    stack: ['JavaScript', 'Python', 'HTML/CSS'],
+    outcome: 'Check-in/out for shared equipment with session auth and CSV audit logging.',
     href: 'https://github.com/gabeparra/equipment-rental',
     status: 'Tool',
   },
   {
     name: 'DockerOffline',
-    outcome: 'Offline Docker Engine install bundle for Ubuntu — fetch packages online, install on air-gapped hosts.',
-    stack: ['Bash', 'Debian packaging'],
+    outcome: 'Offline Docker Engine install bundle for air-gapped Ubuntu hosts.',
     href: 'https://github.com/gabeparra/DockerOffline',
     status: 'Tool',
   },
@@ -80,9 +114,9 @@ const EXPERIENCE = [
     title: 'Business Analyst II',
     org: 'UCF Global · University of Central Florida',
     notes: [
-      'Slate (Technolutions) development for international admissions: portals, forms, SQL queries, and integrations.',
+      'Slate (Technolutions) development for international admissions: portals, forms, SQL, and integrations.',
       'Built a React + TypeScript replacement for the legacy upload system and a Respond.io contact-manager integration with duplicate detection.',
-      'Java libphonenumber validator wired into the Slate intake via bpLogix Process Director; PHP modules powering the live help desk.',
+      'Java libphonenumber validator wired into Slate via bpLogix; PHP modules powering the live help desk.',
     ],
   },
   {
@@ -90,7 +124,7 @@ const EXPERIENCE = [
     title: 'Founder / Engineer',
     org: 'BananaByte LLC',
     notes: [
-      'Web & app development studio. Production sites on Astro, TypeScript, Tailwind, and Cloudflare, owned from brand to deploy.',
+      'Web & app studio. Production sites on Astro, TypeScript, Tailwind, and Cloudflare — brand to deploy.',
     ],
   },
   {
@@ -98,7 +132,7 @@ const EXPERIENCE = [
     title: 'IT Support & Operations',
     org: 'Repuestos Rojas · Comercial PYM Ltda — Santiago, Chile',
     notes: [
-      'Nine years across frontline IT support, SQL maintenance, POS and web systems, and retail operations management.',
+      'Nine years across frontline IT support, SQL maintenance, POS and web systems, and retail operations.',
     ],
   },
 ]
@@ -155,54 +189,140 @@ function useReveal() {
           if (e.isIntersecting) e.target.classList.add('is-visible')
         })
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
     )
     els.forEach((el) => io.observe(el))
     return () => io.disconnect()
   }, [])
 }
 
-function ProjectRow({ project: p, index }) {
-  const body = (
-    <>
-      <div className="work-meta">
-        <span className="work-index">{String(index + 1).padStart(2, '0')}</span>
-        <span className="work-status">{p.status}</span>
+function useMagnetic(ref, strength = 0.28) {
+  useEffect(() => {
+    const el = ref.current
+    if (!el || window.matchMedia('(pointer: coarse)').matches) return undefined
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect()
+      const x = e.clientX - r.left - r.width / 2
+      const y = e.clientY - r.top - r.height / 2
+      el.style.transform = `translate(${x * strength}px, ${y * strength}px)`
+    }
+    const onLeave = () => {
+      el.style.transform = 'translate(0, 0)'
+    }
+    el.addEventListener('mousemove', onMove)
+    el.addEventListener('mouseleave', onLeave)
+    return () => {
+      el.removeEventListener('mousemove', onMove)
+      el.removeEventListener('mouseleave', onLeave)
+    }
+  }, [ref, strength])
+}
+
+function AbstractPanel({ kind, name, metrics }) {
+  return (
+    <div className={`abs-panel abs-${kind}`} aria-hidden="true">
+      <div className="abs-noise" />
+      <div className="abs-core">
+        {kind === 'terminal' && (
+          <pre className="abs-code">{`> strikedeck --paper
+positions: synced
+tailnet:   private
+pnl:       tracking`}</pre>
+        )}
+        {kind === 'board' && (
+          <div className="abs-board">
+            {Array.from({ length: 64 }).map((_, i) => (
+              <span key={i} className={(Math.floor(i / 8) + i) % 2 ? 'd' : 'l'} />
+            ))}
+          </div>
+        )}
+        {kind === 'wave' && (
+          <svg className="abs-wave" viewBox="0 0 240 80" preserveAspectRatio="none">
+            <path d="M0 40 Q30 10 60 40 T120 40 T180 40 T240 40" fill="none" stroke="currentColor" strokeWidth="2" />
+            <path d="M0 48 Q30 70 60 48 T120 48 T180 48 T240 48" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
+          </svg>
+        )}
+        {kind === 'gunslinger' && <div className="abs-crosshair" />}
+        {kind === 'forms' && (
+          <div className="abs-forms">
+            <span /><span /><span />
+          </div>
+        )}
+        {kind === 'signal' && (
+          <div className="abs-signal">
+            <i /><i /><i /><i />
+          </div>
+        )}
+        <p className="abs-name">{name}</p>
+        {metrics && (
+          <ul className="abs-metrics">
+            {metrics.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        )}
       </div>
-      <div className="work-copy">
-        <h3 className="work-name">
+    </div>
+  )
+}
+
+function WorkCard({ project: p, featured = false }) {
+  const className = [
+    'work-card',
+    featured ? 'is-featured' : '',
+    p.image ? 'has-media' : 'no-media',
+    `tone-${p.tone || 'violet'}`,
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const media = p.image ? (
+    <img src={p.image} alt="" loading="lazy" />
+  ) : (
+    <AbstractPanel kind={p.panel || 'terminal'} name={p.name} metrics={p.metrics} />
+  )
+
+  const inner = (
+    <>
+      <div className="work-card-media">
+        {media}
+        <span className="work-badge">{p.status}</span>
+        <div className="work-card-glow" aria-hidden="true" />
+      </div>
+      <div className="work-card-body">
+        <h3 className="work-card-name">
           {p.name}
-          {p.href && <span className="work-arrow" aria-hidden="true">↗</span>}
+          {p.href && (
+            <span className="work-card-arrow" aria-hidden="true">
+              ↗
+            </span>
+          )}
         </h3>
-        <p className="work-outcome">{p.outcome}</p>
+        <p className="work-card-outcome">{p.outcome}</p>
+        {p.metrics && (
+          <ul className="work-metrics">
+            {p.metrics.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        )}
         <ul className="work-stack">
           {p.stack.map((s) => (
             <li key={s}>{s}</li>
           ))}
         </ul>
       </div>
-      {p.image && (
-        <div className="work-shot">
-          <img src={p.image} alt={`${p.name} screenshot`} loading="lazy" />
-        </div>
-      )}
     </>
   )
 
   if (p.href) {
     return (
-      <a
-        className={`work-row${p.image ? ' has-shot' : ''}`}
-        href={p.href}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {body}
+      <a className={className} href={p.href} target="_blank" rel="noopener noreferrer">
+        {inner}
       </a>
     )
   }
-
-  return <div className={`work-row${p.image ? ' has-shot' : ''}`}>{body}</div>
+  return <div className={className}>{inner}</div>
 }
 
 function ContactForm() {
@@ -223,9 +343,7 @@ function ContactForm() {
       const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
       const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error('unconfigured')
-      }
+      if (!serviceId || !templateId || !publicKey) throw new Error('unconfigured')
       await emailjs.send(
         serviceId,
         templateId,
@@ -304,7 +422,9 @@ function ContactForm() {
 
 export default function Site() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const ctaRef = useRef(null)
   useReveal()
+  useMagnetic(ctaRef, 0.22)
 
   useEffect(() => {
     document.body.classList.add('site-body')
@@ -312,7 +432,7 @@ export default function Site() {
   }, [])
 
   useEffect(() => {
-    if (!menuOpen) return
+    if (!menuOpen) return undefined
     const onKey = (e) => {
       if (e.key === 'Escape') setMenuOpen(false)
     }
@@ -320,115 +440,216 @@ export default function Site() {
     return () => window.removeEventListener('keydown', onKey)
   }, [menuOpen])
 
-  const closeMenu = () => setMenuOpen(false)
+  const goTo = (id) => (e) => {
+    e.preventDefault()
+    setMenuOpen(false)
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      history.replaceState(null, '', `#${id}`)
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      history.replaceState(null, '', '#top')
+    }
+  }
 
   return (
     <div className="site">
-      <div className="site-atmosphere" aria-hidden="true" />
+      <div className="site-atmosphere" aria-hidden="true">
+        <div className="atm-grid" />
+        <div className="atm-glow atm-glow-a" />
+        <div className="atm-glow atm-glow-b" />
+        <div className="atm-glow atm-glow-c" />
+        <div className="atm-grain" />
+      </div>
 
       <header className="site-header">
-        <nav className="site-nav" aria-label="Primary">
-          <a href="#top" className="nav-brand" onClick={closeMenu}>
+        <nav className="pill-nav" aria-label="Primary">
+          <a href="#top" className="pill-brand" onClick={goTo('top')}>
+            <span className="pill-mark" aria-hidden="true" />
             Gabriel Parra
           </a>
+
           <button
             type="button"
-            className={`nav-toggle${menuOpen ? ' open' : ''}`}
+            className={`nav-toggle${menuOpen ? ' is-open' : ''}`}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
-            aria-controls="site-nav-links"
+            aria-controls="pill-links"
             onClick={() => setMenuOpen((o) => !o)}
           >
             <span />
             <span />
           </button>
-          <ul id="site-nav-links" className={`nav-links${menuOpen ? ' open' : ''}`}>
+
+          <ul id="pill-links" className={`pill-links${menuOpen ? ' is-open' : ''}`}>
             <li>
-              <a href="#work" onClick={closeMenu}>
+              <a href="#work" onClick={goTo('work')}>
                 Work
               </a>
             </li>
             <li>
-              <a href="#about" onClick={closeMenu}>
+              <a href="#about" onClick={goTo('about')}>
                 About
               </a>
             </li>
             <li>
-              <a href="#skills" onClick={closeMenu}>
+              <a href="#skills" onClick={goTo('skills')}>
                 Skills
               </a>
             </li>
-            <li>
-              <a href="#contact" className="nav-cta" onClick={closeMenu}>
-                Open to work
-              </a>
-            </li>
           </ul>
+
+          <a href="#contact" className="pill-cta" onClick={goTo('contact')}>
+            Open to work
+          </a>
         </nav>
       </header>
 
       <main id="top">
         <section className="hero">
-          <p className="hero-brand fade-up">Gabriel Parra</p>
-          <h1 className="hero-line fade-up delay-1">
-            Full-stack engineer building enrollment systems, web products, and games from Orlando.
-          </h1>
-          <p className="hero-sub fade-up delay-2">
-            Business Analyst II at UCF Global · Founder of BananaByte LLC · bilingual EN/ES · Space Coast adjacent.
-          </p>
-          <div className="hero-cta fade-up delay-3">
-            <a href="#work" className="btn btn-primary">
-              See selected work
-            </a>
-            <a href="#contact" className="btn btn-ghost">
-              Contact
-            </a>
+          <div className="hero-copy">
+            <p className="hero-eyebrow fade-up">
+              <span className="pulse-dot" aria-hidden="true" />
+              Open to work · Orlando / Space Coast
+            </p>
+            <h1 className="hero-display fade-up delay-1">
+              <span className="hero-line-a">Build systems</span>
+              <span className="hero-line-b">
+                that <em>ship</em>
+              </span>
+              <span className="hero-line-c">and stick.</span>
+            </h1>
+            <p className="hero-sub fade-up delay-2">
+              I&apos;m <strong>Gabriel Parra</strong> — full-stack engineer crafting enrollment
+              platforms, web products, and games. Business Analyst II at UCF Global. Founder of
+              BananaByte LLC. Bilingual EN/ES.
+            </p>
+            <ul className="hero-chips fade-up delay-3">
+              <li>UCF Global</li>
+              <li>BananaByte</li>
+              <li>EN / ES</li>
+              <li>from UCF</li>
+            </ul>
+            <div className="hero-actions fade-up delay-4">
+              <a
+                ref={ctaRef}
+                href="#work"
+                className="btn btn-primary btn-magnetic"
+                onClick={goTo('work')}
+              >
+                See selected work
+              </a>
+              <a href="#contact" className="btn btn-ghost" onClick={goTo('contact')}>
+                Let&apos;s talk
+              </a>
+            </div>
           </div>
+
+          <aside className="hero-aside fade-up delay-2" aria-label="Featured project">
+            <a
+              className="hero-feature"
+              href="https://github.com/gabeparra/portbook"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="hero-feature-media">
+                <img src="/shots/portbook.webp" alt="Portbook screenshot" />
+                <div className="hero-feature-shine" aria-hidden="true" />
+              </div>
+              <div className="hero-feature-meta">
+                <div className="hero-feature-top">
+                  <span className="work-badge">Live</span>
+                  <span className="hero-feature-index">01 / featured</span>
+                </div>
+                <p className="hero-feature-name">Portbook</p>
+                <p className="hero-feature-desc">
+                  Machine · port · ticket map — catch collisions before clients do.
+                </p>
+              </div>
+            </a>
+          </aside>
         </section>
 
         <section id="work" className="section reveal">
           <header className="section-head">
-            <p className="section-kicker">Selected work</p>
-            <h2 className="section-title">Things I&apos;ve shipped</h2>
+            <p className="section-kicker">
+              <span className="sticky-label">01 — Work</span>
+            </p>
+            <h2 className="section-title is-spaced">Selected work</h2>
             <p className="section-lede">
-              Outcome first. Screenshots when they help; private builds stay private.
+              Screenshot-first where it helps. Private builds stay private — no fake links, no empty
+              black boxes.
             </p>
           </header>
-          <div className="work-list">
-            {PROJECTS.map((p, i) => (
-              <ProjectRow key={p.name} project={p} index={i} />
+
+          <div className="work-featured">
+            {FEATURED.map((p) => (
+              <WorkCard key={p.name} project={p} featured />
+            ))}
+          </div>
+
+          <div className="work-grid">
+            {PROJECTS.map((p) => (
+              <WorkCard key={p.name} project={p} />
+            ))}
+          </div>
+
+          <div className="work-more">
+            {MORE.map((p) => (
+              <a
+                key={p.name}
+                className="work-more-row"
+                href={p.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="work-more-status">{p.status}</span>
+                <span className="work-more-name">{p.name}</span>
+                <span className="work-more-desc">{p.outcome}</span>
+                <span className="work-card-arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
             ))}
           </div>
         </section>
 
         <section id="about" className="section reveal">
           <header className="section-head">
-            <p className="section-kicker">About</p>
-            <h2 className="section-title">Hi — I&apos;m Gabriel</h2>
+            <p className="section-kicker">
+              <span className="sticky-label">02 — About</span>
+            </p>
+            <h2 className="section-title is-spaced">Hi — I&apos;m Gabriel</h2>
           </header>
+
           <div className="about-grid">
             <div className="about-bio">
               <p>
-                I work in higher-ed enrollment systems by day and ship web, AI, and game projects the rest of the time.
-                At UCF Global I build and integrate the Slate (Technolutions) systems international students use to reach the university.
+                I work in higher-ed enrollment systems by day and ship web, AI, and game projects the
+                rest of the time. At UCF Global I build and integrate the Slate (Technolutions)
+                systems international students use to reach the university.
               </p>
               <p>
-                My range runs from React/TypeScript front-ends and Python/Java back-ends to enterprise workflow engines,
-                LLM tooling, and Unity. I care about simplifying workflows, killing manual triage, and building tools people actually use.
+                My range runs from React/TypeScript front-ends and Python/Java back-ends to enterprise
+                workflow engines, LLM tooling, and Unity. I care about simplifying workflows, killing
+                manual triage, and building tools people actually use.
               </p>
               <p>
-                B.S. Computer Science from UCF (Aug 2026), plus a B.S. in Information Technology from Chile.
-                Based in Orlando — close enough to the Cape to hear the launches.
+                B.S. Computer Science from UCF (Aug 2026), plus a B.S. in Information Technology from
+                Chile. Based in Orlando — close enough to the Cape to hear the launches.
               </p>
-              <p className="about-cert">
+              <div className="about-cert">
                 <span className="cert-label">Certified</span>
-                Fundamentals of Admissions &amp; Enrollment (2026) · Technolutions Slate
-              </p>
+                <p>Fundamentals of Admissions &amp; Enrollment (2026)</p>
+                <p className="cert-org">Technolutions Slate</p>
+              </div>
             </div>
+
             <div className="about-exp">
               <h3 className="exp-heading">Experience</h3>
               {EXPERIENCE.map((e) => (
-                <article key={e.title} className="exp-entry">
+                <article key={e.title} className="exp-card">
                   <p className="exp-period">{e.period}</p>
                   <h4 className="exp-title">{e.title}</h4>
                   <p className="exp-org">{e.org}</p>
@@ -445,12 +666,14 @@ export default function Site() {
 
         <section id="working" className="section reveal">
           <header className="section-head">
-            <p className="section-kicker">Working with me</p>
-            <h2 className="section-title">What you can expect</h2>
+            <p className="section-kicker">
+              <span className="sticky-label">03 — Working with me</span>
+            </p>
+            <h2 className="section-title is-spaced">What you can expect</h2>
           </header>
           <div className="pillars">
             {PILLARS.map((p, i) => (
-              <article key={p.title} className="pillar">
+              <article key={p.title} className="pillar-card">
                 <span className="pillar-n">{String(i + 1).padStart(2, '0')}</span>
                 <h3>{p.title}</h3>
                 <p>{p.text}</p>
@@ -461,8 +684,10 @@ export default function Site() {
 
         <section id="skills" className="section reveal">
           <header className="section-head">
-            <p className="section-kicker">Capabilities</p>
-            <h2 className="section-title">Stack I reach for</h2>
+            <p className="section-kicker">
+              <span className="sticky-label">04 — Capabilities</span>
+            </p>
+            <h2 className="section-title is-spaced">Stack I reach for</h2>
           </header>
           <div className="skill-rows">
             {SKILLS.map((s) => (
@@ -480,9 +705,15 @@ export default function Site() {
         </section>
 
         <section id="contact" className="section section-contact reveal">
-          <header className="section-head">
-            <p className="section-kicker">Contact</p>
-            <h2 className="section-title">Let&apos;s talk</h2>
+          <header className="section-head section-head-finale">
+            <p className="section-kicker">
+              <span className="sticky-label">05 — Contact</span>
+            </p>
+            <h2 className="finale-title">
+              Let&apos;s build
+              <br />
+              <em>something sharp.</em>
+            </h2>
             <p className="section-lede">
               Open to full-time remote roles. I usually reply within a day.
             </p>
@@ -523,8 +754,9 @@ export default function Site() {
       </main>
 
       <footer className="site-footer">
+        <p className="footer-mark">GP</p>
         <p>© {new Date().getFullYear()} Gabriel Parra</p>
-        <p className="footer-note">Orlando / Space Coast · EN / ES</p>
+        <p className="footer-note">Orlando / Space Coast · EN / ES · Open to work</p>
       </footer>
     </div>
   )
