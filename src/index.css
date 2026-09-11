@@ -1,8 +1,8 @@
 :root {
-  --bg: #121110;
-  --text: #f3efe6;
-  --accent: #c4b5fd;
-  --font: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --bg: #0e100f;
+  --text: #ffffe3;
+  --accent: #a374ff;
+  --font: 'Hanken Grotesk', 'Segoe UI', sans-serif;
 }
 
 * {
@@ -27,7 +27,7 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: #121110;
+  color: #0e100f;
 }
 
 :focus-visible {

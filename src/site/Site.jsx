@@ -115,6 +115,44 @@ const EXPERIENCE = [
   },
 ]
 
+const CAPABILITIES = [
+  {
+    num: '01',
+    title: 'Product & systems',
+    body: 'Enrollment workflows, admin portals, and integrations that cut manual triage — Slate, React, and the glue between them.',
+  },
+  {
+    num: '02',
+    title: 'Full-stack delivery',
+    body: 'TypeScript and React on the front; Python, Java, and Node on the back. Ship the path from whiteboard to production.',
+  },
+  {
+    num: '03',
+    title: 'Studio & clients',
+    body: 'BananaByte: brand-to-deploy sites for Orlando shops on Astro, Tailwind, and Cloudflare — clear scope, flat price.',
+  },
+  {
+    num: '04',
+    title: 'Games & interactive',
+    body: 'Unreal and Unity when the brief needs play — capstone chess, twin-stick shooters, and the occasional engine deep dive.',
+  },
+]
+
+const PILLARS = [
+  {
+    title: 'Clear scope',
+    body: 'I ask what success looks like before writing code. Fewer surprises, fewer rewrites.',
+  },
+  {
+    title: 'Ship in the open',
+    body: 'Working demos and honest status beats polish theater. Private when it has to be; public when it helps.',
+  },
+  {
+    title: 'Own the edges',
+    body: 'Forms, validators, integrations, deploy — the boring parts that decide whether people actually use the thing.',
+  },
+]
+
 const SKILLS = [
   {
     label: 'Languages',
@@ -303,70 +341,114 @@ export default function Site() {
   return (
     <div className="site">
       <header className="site-header">
-        <nav className="nav" aria-label="Primary">
-          <a href="#top" className="nav-name" onClick={goTo('top')}>
-            Gabriel Parra
+        <div className="nav-bar">
+          <a href="#top" className="nav-brand" onClick={goTo('top')}>
+            <span className="nav-dot" aria-hidden="true" />
+            gabrielparra
           </a>
 
-          <button
-            type="button"
-            className={`nav-toggle${menuOpen ? ' is-open' : ''}`}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
-            aria-controls="nav-links"
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            Menu
-          </button>
+          <nav className="nav-pill" aria-label="Primary">
+            <button
+              type="button"
+              className={`nav-toggle${menuOpen ? ' is-open' : ''}`}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+              aria-controls="nav-links"
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              Menu
+            </button>
+            <ul id="nav-links" className={`nav-links${menuOpen ? ' is-open' : ''}`}>
+              <li>
+                <a href="#top" onClick={goTo('top')}>
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="#work" onClick={goTo('work')}>
+                  Work
+                </a>
+              </li>
+              <li>
+                <a href="#about" onClick={goTo('about')}>
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#skills" onClick={goTo('skills')}>
+                  Skills
+                </a>
+              </li>
+            </ul>
+          </nav>
 
-          <ul id="nav-links" className={`nav-links${menuOpen ? ' is-open' : ''}`}>
-            <li>
-              <a href="#work" onClick={goTo('work')}>
-                Work
-              </a>
-            </li>
-            <li>
-              <a href="#about" onClick={goTo('about')}>
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#skills" onClick={goTo('skills')}>
-                Skills
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="nav-contact" onClick={goTo('contact')}>
-                Contact
-              </a>
-            </li>
-          </ul>
-        </nav>
+          <a href="#contact" className="nav-cta" onClick={goTo('contact')}>
+            Contact
+          </a>
+        </div>
       </header>
 
       <main id="top">
         <section className="hero">
-          <p className="hero-status">Open to work · Orlando / Space Coast</p>
+          <p className="hero-hello">Hello, I&apos;m Gabriel.</p>
           <h1 className="hero-name">Gabriel Parra</h1>
-          <p className="hero-line">
-            Full-stack engineer at UCF Global by day. I build enrollment systems, client sites through
-            BananaByte, and the occasional game — bilingual EN/ES, from UCF.
+          <p className="hero-role">
+            Full-stack engineer · Business Analyst II at UCF Global · Founder, BananaByte LLC
           </p>
+          <p className="hero-place">Orlando / Space Coast · EN / ES · from UCF (Aug 2026)</p>
+
+          <p className="hero-position">
+            Building products from zero to one. I pair product thinking with hands-on design and
+            engineering — enrollment systems by day, client sites and the occasional game on the
+            side — so the work ships and people actually use it.
+          </p>
+
+          <div className="hero-reach" aria-label="How to reach me">
+            <a href="mailto:gabriel@gabrielparra.dev">gabriel@gabrielparra.dev</a>
+            <a href="https://github.com/gabeparra" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+            <a href="https://linkedin.com/in/gabeparra" target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+            <a href="https://bananabyte.io" target="_blank" rel="noopener noreferrer">
+              bananabyte.io
+            </a>
+          </div>
+
           <div className="hero-actions">
             <a href="#work" className="btn" onClick={goTo('work')}>
               Selected work
             </a>
             <a href="#contact" className="btn btn-quiet" onClick={goTo('contact')}>
-              Get in touch
+              Open to work
             </a>
+          </div>
+        </section>
+
+        <section className="section section-pillars" aria-labelledby="pillars-title">
+          <header className="section-head">
+            <p className="section-kicker">// Working with me</p>
+            <h2 id="pillars-title" className="section-title">
+              How I show up
+            </h2>
+          </header>
+          <div className="pillar-grid">
+            {PILLARS.map((p) => (
+              <article key={p.title} className="pillar">
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </article>
+            ))}
           </div>
         </section>
 
         <section id="work" className="section">
           <header className="section-head">
-            <h2 className="section-title">Selected work</h2>
+            <p className="section-kicker">// Selected work</p>
+            <h2 className="section-title">Things I&apos;ve shipped</h2>
             <p className="section-lede">
-              Real screenshots when I have them. Private builds stay private — no filler panels.
+              Screenshots when I have them. Private builds stay labeled — no filler panels.
             </p>
           </header>
 
@@ -401,7 +483,8 @@ export default function Site() {
 
         <section id="about" className="section">
           <header className="section-head">
-            <h2 className="section-title">About</h2>
+            <p className="section-kicker">// About</p>
+            <h2 className="section-title">Who I am</h2>
           </header>
 
           <div className="about-grid">
@@ -444,9 +527,32 @@ export default function Site() {
           </div>
         </section>
 
+        <section className="section" aria-labelledby="capabilities-title">
+          <header className="section-head">
+            <p className="section-kicker">// Capabilities</p>
+            <h2 id="capabilities-title" className="section-title">
+              What I bring
+            </h2>
+          </header>
+          <div className="cap-list">
+            {CAPABILITIES.map((c) => (
+              <article key={c.num} className="cap-row">
+                <span className="cap-num" aria-hidden="true">
+                  {c.num}
+                </span>
+                <div className="cap-body">
+                  <h3>{c.title}</h3>
+                  <p>{c.body}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section id="skills" className="section">
           <header className="section-head">
-            <h2 className="section-title">Skills</h2>
+            <p className="section-kicker">// Stack</p>
+            <h2 className="section-title">Tools I use</h2>
           </header>
           <div className="skill-list">
             {SKILLS.map((s) => (
@@ -464,7 +570,8 @@ export default function Site() {
 
         <section id="contact" className="section section-contact">
           <header className="section-head">
-            <h2 className="section-title">Contact</h2>
+            <p className="section-kicker">// Contact</p>
+            <h2 className="section-title">Let&apos;s talk</h2>
             <p className="section-lede">
               Open to full-time remote roles. I usually reply within a day.
             </p>
