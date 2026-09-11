@@ -55,7 +55,7 @@ function About() {
               genuinely help the people using them.
             </p>
             <p className="crew-text">
-              B.S. Computer Science at UCF (Aug 2026) on top of a B.S. in Information Technology from
+              B.S. Computer Science from UCF (Aug 2026) on top of a B.S. in Information Technology from
               Chile. Bilingual English/Spanish. Based in Orlando — close enough to the Cape to hear
               the launches.
             </p>
